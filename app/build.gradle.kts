@@ -37,6 +37,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.activity)
     implementation(libs.play.services.location)
     implementation(libs.lifecycle.common)
     testImplementation(libs.junit)

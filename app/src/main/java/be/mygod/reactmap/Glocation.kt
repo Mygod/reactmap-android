@@ -9,8 +9,9 @@ import android.os.Looper
 import android.util.Log
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
+import androidx.activity.ComponentActivity
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresPermission
-import androidx.core.app.ComponentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -20,7 +21,7 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 
-class Glocation(private val web: WebView, private val permissionRequestCode: Int) : DefaultLifecycleObserver {
+class Glocation(private val web: WebView) : DefaultLifecycleObserver {
     companion object {
         private const val TAG = "Glocation"
         const val PERMISSION_DENIED = 1
@@ -81,12 +82,15 @@ class Glocation(private val web: WebView, private val permissionRequestCode: Int
         activity.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) ==
                 PackageManager.PERMISSION_GRANTED -> true
         else -> {
-            activity.requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), permissionRequestCode)
+            requestLocation.launch(arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION))
             null
         }
     }
 
-    fun onRequestPermissionsResult(granted: Boolean) {
+    private val requestLocation = activity.registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+        val granted = permissions.any { (_, v) -> v }
         if (pendingRequests.isNotEmpty()) {
             getCurrentPosition(granted, pendingRequests.joinToString())
             pendingRequests.clear()

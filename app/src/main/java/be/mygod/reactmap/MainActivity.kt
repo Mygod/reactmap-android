@@ -2,7 +2,6 @@ package be.mygod.reactmap
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
@@ -14,16 +13,14 @@ import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
-import androidx.core.app.ComponentActivity
+import androidx.activity.ComponentActivity
+import androidx.activity.result.contract.ActivityResultContracts
 import java.net.URL
 import java.net.URLDecoder
 import java.util.Locale
 
 class MainActivity : ComponentActivity() {
     companion object {
-        private const val REQUEST_LOCATION = 100
-        private const val REQUEST_FILE_PICKER = 200
-        private const val REQUEST_FILE_SAVE = 201
         private const val HOSTNAME = "www.reactmap.dev"
 
         private val filenameExtractor = "filename=(\"([^\"]+)\"|[^;]+)".toRegex(RegexOption.IGNORE_CASE)
@@ -33,8 +30,18 @@ class MainActivity : ComponentActivity() {
     private lateinit var web: WebView
     private lateinit var glocation: Glocation
     private var isRoot = false
+
     private var pendingFileCallback: ValueCallback<Array<Uri>>? = null
+    private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        pendingFileCallback?.onReceiveValue(if (uri == null) emptyArray() else arrayOf(uri))
+        pendingFileCallback = null
+    }
     private var pendingJson: String? = null
+    private val createDocument = registerForActivityResult(CreateDynamicDocument()) { uri ->
+        val json = pendingJson
+        if (json != null && uri != null) contentResolver.openOutputStream(uri)!!.bufferedWriter().use { it.write(json) }
+        pendingJson = null
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,8 +52,9 @@ class MainActivity : ComponentActivity() {
                 @SuppressLint("SetJavaScriptEnabled")
                 javaScriptEnabled = true
             }
-            glocation = Glocation(this, REQUEST_LOCATION)
+            glocation = Glocation(this)
             webChromeClient = object : WebChromeClient() {
+                @Suppress("KotlinConstantConditions")
                 override fun onConsoleMessage(consoleMessage: ConsoleMessage) = consoleMessage.run {
                     Log.println(when (messageLevel()) {
                         ConsoleMessage.MessageLevel.TIP -> Log.INFO
@@ -61,17 +69,11 @@ class MainActivity : ComponentActivity() {
 
                 override fun onShowFileChooser(webView: WebView, filePathCallback: ValueCallback<Array<Uri>>?,
                                                fileChooserParams: FileChooserParams): Boolean {
-                    check(fileChooserParams.mode == FileChooserParams.MODE_OPEN ||
-                            fileChooserParams.mode == FileChooserParams.MODE_OPEN_MULTIPLE)
+                    check(fileChooserParams.mode == FileChooserParams.MODE_OPEN)
                     pendingFileCallback?.onReceiveValue(null)
                     pendingFileCallback = filePathCallback
-                    startActivityForResult(Intent(Intent.ACTION_GET_CONTENT).apply {
-                        type = "*/*"
-                        putExtra(Intent.EXTRA_ALLOW_MULTIPLE,
-                            fileChooserParams.mode == FileChooserParams.MODE_OPEN_MULTIPLE)
-//                        putExtra(Intent.EXTRA_MIME_TYPES, fileChooserParams.acceptTypes)
-                        addCategory(Intent.CATEGORY_OPENABLE)
-                    }, REQUEST_FILE_PICKER)
+                    // putExtra(Intent.EXTRA_MIME_TYPES, fileChooserParams.acceptTypes)
+                    getContent.launch("*/*")
                     return true
                 }
             }
@@ -112,13 +114,9 @@ class MainActivity : ComponentActivity() {
             setDownloadListener { url, _, contentDisposition, mimetype, _ ->
                 check(url.startsWith("data:", true))
                 pendingJson = URLDecoder.decode(url.split(',', limit = 2)[1], "utf-8")
-                startActivityForResult(Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
-                    type = mimetype
-                    addCategory(Intent.CATEGORY_OPENABLE)
-                    putExtra(Intent.EXTRA_TITLE, filenameExtractor.find(contentDisposition)?.run {
-                        groupValues[2].run { if (isEmpty()) groupValues[1] else this }
-                    } ?: "settings.json")
-                }, REQUEST_FILE_SAVE)
+                createDocument.launch(mimetype to (filenameExtractor.find(contentDisposition)?.run {
+                    groupValues[2].ifEmpty { groupValues[1] }
+                } ?: "settings.json"))
             }
             loadUrl("https://www.reactmap.dev")
         }
@@ -127,28 +125,4 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun onBackPressed() = if (web.canGoBack()) web.goBack() else super.onBackPressed()
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) = when (requestCode) {
-        REQUEST_FILE_PICKER -> {
-            pendingFileCallback?.onReceiveValue(WebChromeClient.FileChooserParams.parseResult(resultCode, data))
-            pendingFileCallback = null
-        }
-        REQUEST_FILE_SAVE -> {
-            val json = pendingJson
-            if (json != null && resultCode == RESULT_OK) {
-                contentResolver.openOutputStream(data?.data!!)!!.bufferedWriter().use { it.write(json) }
-            }
-            pendingJson = null
-        }
-        else -> super.onActivityResult(requestCode, resultCode, data)
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        when (requestCode) {
-            REQUEST_LOCATION -> glocation.onRequestPermissionsResult(grantResults.all {
-                it == PackageManager.PERMISSION_GRANTED
-            })
-            else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        }
-    }
 }
