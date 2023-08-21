@@ -7,7 +7,7 @@ androidx-test-ext-junit = "1.1.5"
 espresso-core = "3.5.1"
 lifecycle = "2.6.1"
 versions = "0.47.0"
-play-services-location = "18.0.0"
+play-services-location = "21.0.1"
 
 [libraries]
 core = { group = "androidx.core", name = "core", version.ref = "core" }

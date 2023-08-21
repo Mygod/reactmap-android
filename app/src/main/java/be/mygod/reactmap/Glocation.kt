@@ -14,10 +14,11 @@ import androidx.core.app.ComponentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
 
 class Glocation(private val web: WebView, private val permissionRequestCode: Int) : DefaultLifecycleObserver {
     companion object {
@@ -52,7 +53,7 @@ class Glocation(private val web: WebView, private val permissionRequestCode: Int
         it.context as ComponentActivity
     }.also { it.lifecycle.addObserver(this) }
     private val jsSetup = activity.resources.openRawResource(R.raw.setup).bufferedReader().readText()
-    private val client = FusedLocationProviderClient(activity)
+    private val client = LocationServices.getFusedLocationProviderClient(activity)
     private val pendingRequests = mutableSetOf<Long>()
     private var pendingWatch = false
     private val activeListeners = mutableSetOf<Long>()
@@ -152,14 +153,13 @@ class Glocation(private val web: WebView, private val permissionRequestCode: Int
     }
 
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
-    private fun requestLocationUpdates() = client.requestLocationUpdates(LocationRequest.create().apply {
-        priority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY // enableHighAccuracy - PRIORITY_HIGH_ACCURACY
+    private fun requestLocationUpdates() = client.requestLocationUpdates(LocationRequest.Builder(Priority.PRIORITY_LOW_POWER, 4000).apply {
+        // enableHighAccuracy - PRIORITY_HIGH_ACCURACY
         // expirationTime = timeout
         // maxWaitTime = maximumAge
-        fastestInterval = 1000
-        interval = 4000
-        smallestDisplacement = 5f
-    }, callback, Looper.getMainLooper()).addOnCompleteListener { task ->
+        setMinUpdateIntervalMillis(1000)
+        setMinUpdateDistanceMeters(5f)
+    }.build(), callback, Looper.getMainLooper()).addOnCompleteListener { task ->
         if (task.isSuccessful) {
             Log.d(TAG, "Start watching location")
         } else web.evaluateJavascript("navigator.geolocation._watchPositionError([${activeListeners.joinToString()}]," +

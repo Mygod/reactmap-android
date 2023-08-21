@@ -7,7 +7,6 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.ViewGroup
 import android.view.WindowManager
 import android.webkit.ConsoleMessage
 import android.webkit.ValueCallback
@@ -16,7 +15,6 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.core.app.ComponentActivity
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import java.net.URL
 import java.net.URLDecoder
 import java.util.Locale
@@ -40,7 +38,6 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val swipeRefreshLayout = SwipeRefreshLayout(this)
         if (BuildConfig.DEBUG) WebView.setWebContentsDebuggingEnabled(true)
         web = WebView(this).apply {
             settings.apply {
@@ -96,10 +93,6 @@ class MainActivity : ComponentActivity() {
                     }
                 }
 
-                override fun onPageFinished(view: WebView?, url: String?) {
-                    swipeRefreshLayout.isRefreshing = false
-                }
-
                 @Deprecated("Deprecated in API level 24")
                 override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
                     val parsed = Uri.parse(url)
@@ -129,10 +122,7 @@ class MainActivity : ComponentActivity() {
             }
             loadUrl("https://www.reactmap.dev")
         }
-        setContentView(swipeRefreshLayout.apply {
-            addView(web, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-            setOnRefreshListener { web.reload() }
-        })
+        setContentView(web)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
