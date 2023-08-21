@@ -69,11 +69,10 @@ class MainActivity : ComponentActivity() {
 
                 override fun onShowFileChooser(webView: WebView, filePathCallback: ValueCallback<Array<Uri>>?,
                                                fileChooserParams: FileChooserParams): Boolean {
-                    check(fileChooserParams.mode == FileChooserParams.MODE_OPEN)
+                    require(fileChooserParams.mode == FileChooserParams.MODE_OPEN)
                     pendingFileCallback?.onReceiveValue(null)
                     pendingFileCallback = filePathCallback
-                    // putExtra(Intent.EXTRA_MIME_TYPES, fileChooserParams.acceptTypes)
-                    getContent.launch("*/*")
+                    getContent.launch(fileChooserParams.acceptTypes.single())
                     return true
                 }
             }
@@ -112,7 +111,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
             setDownloadListener { url, _, contentDisposition, mimetype, _ ->
-                check(url.startsWith("data:", true))
+                require(url.startsWith("data:", true))
                 pendingJson = URLDecoder.decode(url.split(',', limit = 2)[1], "utf-8")
                 createDocument.launch(mimetype to (filenameExtractor.find(contentDisposition)?.run {
                     groupValues[2].ifEmpty { groupValues[1] }
