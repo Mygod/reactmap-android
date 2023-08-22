@@ -1,7 +1,6 @@
 package be.mygod.reactmap
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
@@ -17,6 +16,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import be.mygod.reactmap.App.Companion.app
 import timber.log.Timber
 import java.net.URL
 import java.net.URLDecoder
@@ -114,7 +114,7 @@ class MainActivity : ComponentActivity() {
                     val parsed = request.url
                     return when {
                         parsed.host?.lowercase(Locale.ROOT) !in supportedHosts -> {
-                            startActivity(Intent(Intent.ACTION_VIEW, parsed))
+                            app.launchUrl(this@MainActivity, parsed)
                             true
                         }
                         "http".equals(parsed.scheme, true) -> {
