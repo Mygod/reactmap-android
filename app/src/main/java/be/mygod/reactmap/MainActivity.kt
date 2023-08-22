@@ -14,6 +14,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import timber.log.Timber
 import java.net.URL
@@ -83,7 +84,15 @@ class MainActivity : ComponentActivity() {
                     return true
                 }
             }
+            val onBackPressedCallback = object : OnBackPressedCallback(false) {
+                override fun handleOnBackPressed() = web.goBack()
+            }
+            onBackPressedDispatcher.addCallback(onBackPressedCallback)
             webViewClient = object : WebViewClient() {
+                override fun doUpdateVisitedHistory(view: WebView?, url: String?, isReload: Boolean) {
+                    onBackPressedCallback.isEnabled = web.canGoBack()
+                }
+
                 override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
                     glocation.clear()
                     isRoot = URL(url).run {
@@ -129,6 +138,4 @@ class MainActivity : ComponentActivity() {
         setContentView(web)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
-
-    override fun onBackPressed() = if (web.canGoBack()) web.goBack() else super.onBackPressed()
 }
