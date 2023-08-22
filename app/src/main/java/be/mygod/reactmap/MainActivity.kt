@@ -169,7 +169,7 @@ class MainActivity : ComponentActivity() {
                 val (uri, host) = try {
                     editText.text!!.toString().toUri().run { toString() to host!! }
                 } catch (e: Exception) {
-                    Toast.makeText(this@MainActivity, e.localizedMessage, Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@MainActivity, e.localizedMessage ?: e.javaClass.name, Toast.LENGTH_LONG).show()
                     return@setPositiveButton
                 }
                 pref.edit {
