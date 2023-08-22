@@ -6,7 +6,6 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Build
 import android.os.Looper
-import android.util.Log
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import androidx.activity.ComponentActivity
@@ -15,6 +14,7 @@ import androidx.annotation.RequiresPermission
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import com.google.android.gms.location.LocationAvailability
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
@@ -24,7 +24,6 @@ import timber.log.Timber
 
 class Glocation(private val web: WebView) : DefaultLifecycleObserver {
     companion object {
-        private const val TAG = "Glocation"
         const val PERMISSION_DENIED = 1
         const val POSITION_UNAVAILABLE = 2
         const val TIMEOUT = 3
@@ -60,6 +59,14 @@ class Glocation(private val web: WebView) : DefaultLifecycleObserver {
     private var pendingWatch = false
     private val activeListeners = mutableSetOf<Long>()
     private val callback = object : LocationCallback() {
+        override fun onLocationAvailability(availability: LocationAvailability) {
+            Timber.d("onLocationAvailability $availability")
+            if (availability.isLocationAvailable) return
+            val ids = activeListeners.joinToString()
+            web.evaluateJavascript(
+                "navigator.geolocation._watchPositionSuccess([$ids], { code: $POSITION_UNAVAILABLE }))", null)
+        }
+
         override fun onLocationResult(result: LocationResult) {
             val location = result.lastLocation ?: return
             val ids = activeListeners.joinToString()
@@ -79,9 +86,8 @@ class Glocation(private val web: WebView) : DefaultLifecycleObserver {
 
     fun setupGeolocation() = web.evaluateJavascript(jsSetup, null)
 
-    private fun checkPermissions() = when {
-        activity.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) ==
-                PackageManager.PERMISSION_GRANTED -> true
+    private fun checkPermissions() = when (activity.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
+        PackageManager.PERMISSION_GRANTED -> true
         else -> {
             requestLocation.launch(arrayOf(
                 Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION))
