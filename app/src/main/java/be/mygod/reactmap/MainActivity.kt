@@ -10,6 +10,7 @@ import android.view.WindowManager
 import android.webkit.ConsoleMessage
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
+import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
@@ -48,7 +49,6 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (BuildConfig.DEBUG) WebView.setWebContentsDebuggingEnabled(true)
         web = WebView(this).apply {
             settings.apply {
                 domStorageEnabled = true
@@ -110,9 +110,8 @@ class MainActivity : ComponentActivity() {
                     }
                 }
 
-                @Deprecated("Deprecated in API level 24")
-                override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-                    val parsed = Uri.parse(url)
+                override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
+                    val parsed = request.url
                     return when {
                         parsed.host?.lowercase(Locale.ROOT) !in supportedHosts -> {
                             startActivity(Intent(Intent.ACTION_VIEW, parsed))

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Application
 import android.os.Build
 import android.util.Log
+import android.webkit.WebView
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import timber.log.Timber
 
@@ -31,5 +32,6 @@ class App : Application() {
                 }
             }
         })
+        if (BuildConfig.DEBUG) WebView.setWebContentsDebuggingEnabled(true)
     }
 }
