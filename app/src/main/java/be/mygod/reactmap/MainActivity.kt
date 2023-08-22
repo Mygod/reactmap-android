@@ -1,6 +1,9 @@
 package be.mygod.reactmap
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
@@ -12,10 +15,14 @@ import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.edit
+import androidx.core.net.toUri
 import be.mygod.reactmap.App.Companion.app
 import timber.log.Timber
 import java.net.URL
@@ -24,15 +31,21 @@ import java.util.Locale
 
 class MainActivity : ComponentActivity() {
     companion object {
-        private const val HOSTNAME = "www.reactmap.dev"
+        const val ACTION_CONFIGURE = "be.mygod.reactmap.action.CONFIGURE"
+        private const val PREF_NAME = "reactmap"
+        private const val KEY_ACTIVE_URL = "url.active"
+        private const val KEY_HISTORY_URL = "url.history"
+        private const val URL_DEFAULT = "https://www.reactmap.dev"
 
         private val filenameExtractor = "filename=(\"([^\"]+)\"|[^;]+)".toRegex(RegexOption.IGNORE_CASE)
-        private val supportedHosts = setOf(HOSTNAME, "discordapp.com", "discord.com")
+        private val supportedHosts = setOf("discordapp.com", "discord.com")
     }
 
     private lateinit var web: WebView
     private lateinit var glocation: Glocation
     private lateinit var siteController: SiteController
+    private lateinit var pref: SharedPreferences
+    private lateinit var hostname: String
     private var isRoot = false
 
     private var pendingFileCallback: ValueCallback<Array<Uri>>? = null
@@ -49,6 +62,9 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        pref = getSharedPreferences(PREF_NAME, MODE_PRIVATE)
+        val activeUrl = pref.getString(KEY_ACTIVE_URL, URL_DEFAULT)!!
+        hostname = Uri.parse(activeUrl).host!!
         web = WebView(this).apply {
             settings.apply {
                 domStorageEnabled = true
@@ -97,7 +113,7 @@ class MainActivity : ComponentActivity() {
                     glocation.clear()
                     isRoot = URL(url).run {
                         when {
-                            host != HOSTNAME -> false
+                            host != hostname -> false
                             path == "/" -> {
                                 glocation.setupGeolocation()
                                 true
@@ -113,7 +129,7 @@ class MainActivity : ComponentActivity() {
                 override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
                     val parsed = request.url
                     return when {
-                        parsed.host?.lowercase(Locale.ROOT) !in supportedHosts -> {
+                        parsed.host?.lowercase(Locale.ROOT).let { it != hostname && it !in supportedHosts } -> {
                             app.launchUrl(this@MainActivity, parsed)
                             true
                         }
@@ -132,9 +148,38 @@ class MainActivity : ComponentActivity() {
                     groupValues[2].ifEmpty { groupValues[1] }
                 } ?: "settings.json"))
             }
-            loadUrl("https://www.reactmap.dev")
+            loadUrl(activeUrl)
         }
         setContentView(web)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        if (intent?.action == ACTION_CONFIGURE) AlertDialog.Builder(this).apply {
+            val historyUrl = pref.getStringSet(KEY_HISTORY_URL, null) ?: setOf(URL_DEFAULT)
+            val editText = AutoCompleteTextView(this@MainActivity).apply {
+                setAdapter(ArrayAdapter(this@MainActivity, android.R.layout.select_dialog_item,
+                    historyUrl.toTypedArray()))
+                setText(pref.getString(KEY_ACTIVE_URL, URL_DEFAULT))
+            }
+            setView(editText)
+            setTitle("ReactMap URL:")
+            setPositiveButton(android.R.string.ok) { _, _ ->
+                val (uri, host) = try {
+                    editText.text!!.toString().toUri().run { toString() to host!! }
+                } catch (e: Exception) {
+                    Toast.makeText(this@MainActivity, e.localizedMessage, Toast.LENGTH_LONG).show()
+                    return@setPositiveButton
+                }
+                pref.edit {
+                    putString(KEY_ACTIVE_URL, uri)
+                    putStringSet(KEY_HISTORY_URL, historyUrl + uri)
+                }
+                hostname = host
+                web.loadUrl(uri)
+            }
+            setNegativeButton(android.R.string.cancel, null)
+        }.show()
     }
 }

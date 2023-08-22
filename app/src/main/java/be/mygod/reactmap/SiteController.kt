@@ -36,7 +36,8 @@ class SiteController(private val activity: ComponentActivity) : DefaultLifecycle
             setOngoing(true)
             priority = NotificationCompat.PRIORITY_LOW
             setVisibility(NotificationCompat.VISIBILITY_SECRET)
-            setContentIntent(PendingIntent.getActivity(activity, 0, Intent(activity, MainActivity::class.java),
+            setContentIntent(PendingIntent.getActivity(activity, 0,
+                Intent(activity, MainActivity::class.java).setAction(MainActivity.ACTION_CONFIGURE),
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE))
         }.build())
     }
