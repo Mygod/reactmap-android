@@ -20,6 +20,7 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
+import timber.log.Timber
 
 class Glocation(private val web: WebView) : DefaultLifecycleObserver {
     companion object {
@@ -62,7 +63,7 @@ class Glocation(private val web: WebView) : DefaultLifecycleObserver {
         override fun onLocationResult(result: LocationResult) {
             val location = result.lastLocation ?: return
             val ids = activeListeners.joinToString()
-            Log.d(TAG, "onLocationResult ${location.time}")
+            Timber.d("onLocationResult ${location.time}")
             web.evaluateJavascript(
                 "navigator.geolocation._watchPositionSuccess([$ids], ${location.toGeolocationPosition()})", null)
         }
@@ -103,7 +104,7 @@ class Glocation(private val web: WebView) : DefaultLifecycleObserver {
 
     @JavascriptInterface
     fun getCurrentPosition(i: Long) {
-        Log.d(TAG, "getCurrentPosition($i)")
+        Timber.d("getCurrentPosition($i)")
         when (val granted = checkPermissions()) {
             null -> pendingRequests.add(i)
             else -> getCurrentPosition(granted, i.toString())
@@ -124,7 +125,7 @@ class Glocation(private val web: WebView) : DefaultLifecycleObserver {
 
     @JavascriptInterface
     fun watchPosition(i: Long) {
-        Log.d(TAG, "watchPosition($i)")
+        Timber.d("watchPosition($i)")
         if (!activeListeners.add(i) || requestingLocationUpdates || pendingWatch) return
         when (val granted = checkPermissions()) {
             null -> pendingWatch = true
@@ -142,7 +143,7 @@ class Glocation(private val web: WebView) : DefaultLifecycleObserver {
 
     @JavascriptInterface
     fun clearWatch(i: Long) {
-        Log.d(TAG, "clearWatch($i)")
+        Timber.d("clearWatch($i)")
         if (!activeListeners.remove(i) || activeListeners.isNotEmpty() || !requestingLocationUpdates) return
         requestingLocationUpdates = false
         removeLocationUpdates()
@@ -165,12 +166,12 @@ class Glocation(private val web: WebView) : DefaultLifecycleObserver {
         setMinUpdateDistanceMeters(5f)
     }.build(), callback, Looper.getMainLooper()).addOnCompleteListener { task ->
         if (task.isSuccessful) {
-            Log.d(TAG, "Start watching location")
+            Timber.d("Start watching location")
         } else web.evaluateJavascript("navigator.geolocation._watchPositionError([${activeListeners.joinToString()}]," +
                 " ${task.exception.toGeolocationPositionError()})", null)
     }
     private fun removeLocationUpdates() = client.removeLocationUpdates(callback).addOnCompleteListener { task ->
-        if (task.isSuccessful) Log.d(TAG, "Stop watching location")
-        else Log.w(TAG, "Stop watch failed: ${task.exception}")
+        if (task.isSuccessful) Timber.d("Stop watching location")
+        else Timber.w("Stop watch failed: ${task.exception}")
     }
 }

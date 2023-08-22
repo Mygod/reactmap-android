@@ -1,5 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
+    alias(libs.plugins.firebaseCrashlytics)
+    alias(libs.plugins.googleServices)
     alias(libs.plugins.kotlinAndroid)
 }
 
@@ -37,10 +39,14 @@ android {
 }
 
 dependencies {
+    implementation(platform(libs.firebase.bom))
     implementation(libs.activity)
     implementation(libs.core.ktx)
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
     implementation(libs.play.services.location)
     implementation(libs.lifecycle.common)
+    implementation(libs.timber)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)

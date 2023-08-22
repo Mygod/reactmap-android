@@ -15,6 +15,7 @@ import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
+import timber.log.Timber
 import java.net.URL
 import java.net.URLDecoder
 import java.util.Locale
@@ -58,14 +59,14 @@ class MainActivity : ComponentActivity() {
             webChromeClient = object : WebChromeClient() {
                 @Suppress("KotlinConstantConditions")
                 override fun onConsoleMessage(consoleMessage: ConsoleMessage) = consoleMessage.run {
-                    Log.println(when (messageLevel()) {
+                    Timber.tag("WebConsole").log(when (messageLevel()) {
                         ConsoleMessage.MessageLevel.TIP -> Log.INFO
                         ConsoleMessage.MessageLevel.LOG -> Log.VERBOSE
                         ConsoleMessage.MessageLevel.WARNING -> Log.WARN
                         ConsoleMessage.MessageLevel.ERROR -> Log.ERROR
                         ConsoleMessage.MessageLevel.DEBUG -> Log.DEBUG
                         else -> error(messageLevel())
-                    }, "WebConsole", "${sourceId()}:${lineNumber()} - ${message()}")
+                    }, "${sourceId()}:${lineNumber()} - ${message()}")
                     true
                 }
 

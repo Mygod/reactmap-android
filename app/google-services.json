@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "53628743953",
+    "project_id": "reactmap-android",
+    "storage_bucket": "reactmap-android.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:53628743953:android:ef886035becf4f5adb1cb0",
+        "android_client_info": {
+          "package_name": "be.mygod.reactmap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "53628743953-u05270s2od1es37b9pdrvmn10q6aa3iu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlBEXzi1_Kf0kY6cdxexhHfuxyrxx5ZB0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "53628743953-u05270s2od1es37b9pdrvmn10q6aa3iu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
