@@ -45,6 +45,7 @@ dependencies {
     implementation(libs.core.ktx)
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.crashlytics)
+    implementation(libs.fragment)   // update to 1.3+ to suppress lint
     implementation(libs.play.services.location)
     implementation(libs.lifecycle.common)
     implementation(libs.timber)
