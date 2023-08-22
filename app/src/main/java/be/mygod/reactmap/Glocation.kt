@@ -164,17 +164,21 @@ class Glocation(private val web: WebView) : DefaultLifecycleObserver {
     }
 
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
-    private fun requestLocationUpdates() = client.requestLocationUpdates(LocationRequest.Builder(Priority.PRIORITY_LOW_POWER, 4000).apply {
-        // enableHighAccuracy - PRIORITY_HIGH_ACCURACY
-        // expirationTime = timeout
-        // maxWaitTime = maximumAge
-        setMinUpdateIntervalMillis(1000)
-        setMinUpdateDistanceMeters(5f)
-    }.build(), callback, Looper.getMainLooper()).addOnCompleteListener { task ->
-        if (task.isSuccessful) {
-            Timber.d("Start watching location")
-        } else web.evaluateJavascript("navigator.geolocation._watchPositionError([${activeListeners.joinToString()}]," +
-                " ${task.exception.toGeolocationPositionError()})", null)
+    private fun requestLocationUpdates() {
+        client.requestLocationUpdates(LocationRequest.Builder(Priority.PRIORITY_LOW_POWER, 4000).apply {
+            // enableHighAccuracy - PRIORITY_HIGH_ACCURACY
+            // expirationTime = timeout
+            // maxWaitTime = maximumAge
+            setMinUpdateIntervalMillis(1000)
+            setMinUpdateDistanceMeters(5f)
+        }.build(), callback, Looper.getMainLooper()).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Timber.d("Start watching location")
+            } else web.evaluateJavascript(
+                "navigator.geolocation._watchPositionError([${activeListeners.joinToString()}]," +
+                        " ${task.exception.toGeolocationPositionError()})", null
+            )
+        }
     }
     private fun removeLocationUpdates() = client.removeLocationUpdates(callback).addOnCompleteListener { task ->
         if (task.isSuccessful) Timber.d("Stop watching location")
