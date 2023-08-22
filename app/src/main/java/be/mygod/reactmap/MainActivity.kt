@@ -29,6 +29,7 @@ class MainActivity : ComponentActivity() {
 
     private lateinit var web: WebView
     private lateinit var glocation: Glocation
+    private lateinit var siteController: SiteController
     private var isRoot = false
 
     private var pendingFileCallback: ValueCallback<Array<Uri>>? = null
@@ -53,6 +54,7 @@ class MainActivity : ComponentActivity() {
                 javaScriptEnabled = true
             }
             glocation = Glocation(this)
+            siteController = SiteController(this@MainActivity)
             webChromeClient = object : WebChromeClient() {
                 @Suppress("KotlinConstantConditions")
                 override fun onConsoleMessage(consoleMessage: ConsoleMessage) = consoleMessage.run {
@@ -65,6 +67,10 @@ class MainActivity : ComponentActivity() {
                         else -> error(messageLevel())
                     }, "WebConsole", "${sourceId()}:${lineNumber()} - ${message()}")
                     true
+                }
+
+                override fun onReceivedTitle(view: WebView?, title: String?) {
+                    siteController.title = title
                 }
 
                 override fun onShowFileChooser(webView: WebView, filePathCallback: ValueCallback<Array<Uri>>?,
