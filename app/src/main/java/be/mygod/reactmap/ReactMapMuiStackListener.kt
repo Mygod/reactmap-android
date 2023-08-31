@@ -20,7 +20,9 @@ class ReactMapMuiStackListener(private val web: WebView) : OnApplyWindowInsetsLi
     }
 
     fun apply() = web.evaluateJavascript("""
-        var style = document.createElement('style');
-        style.innerHTML = '.MuiStack-root { margin-top: ' + $topInset / window.devicePixelRatio + 'px}';
-        document.head.appendChild(style);""", null)
+        if (!document._injectedMuiStackStyle) {
+            document.head.appendChild(document._injectedMuiStackStyle = document.createElement('style'));
+        }
+        document._injectedMuiStackStyle.innerHTML =
+            '.MuiStack-root { margin-top: ' + $topInset / window.devicePixelRatio + 'px; }';""", null)
 }
