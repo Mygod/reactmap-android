@@ -107,7 +107,7 @@ class MainActivity : ComponentActivity() {
                 override fun handleOnBackPressed() = web.goBack()
             }
             onBackPressedDispatcher.addCallback(onBackPressedCallback)
-            val muiStack = ReactMapMuiStackListener(this)
+            val muiMargin = ReactMapMuiMarginListener(this)
             webViewClient = object : WebViewClient() {
                 override fun doUpdateVisitedHistory(view: WebView?, url: String?, isReload: Boolean) {
                     onBackPressedCallback.isEnabled = web.canGoBack()
@@ -120,13 +120,13 @@ class MainActivity : ComponentActivity() {
                             host != hostname -> false
                             path == "/" -> {
                                 glocation.setupGeolocation()
-                                muiStack.apply()
+                                muiMargin.apply()
                                 true
                             }
                             else -> {
                                 if (path.startsWith("/@/")) {
                                     glocation.setupGeolocation()
-                                    muiStack.apply()
+                                    muiMargin.apply()
                                 }
                                 false
                             }

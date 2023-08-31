@@ -6,7 +6,7 @@ import androidx.core.view.OnApplyWindowInsetsListener
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
-class ReactMapMuiStackListener(private val web: WebView) : OnApplyWindowInsetsListener {
+class ReactMapMuiMarginListener(private val web: WebView) : OnApplyWindowInsetsListener {
     init {
         ViewCompat.setOnApplyWindowInsetsListener(web, this)
     }
@@ -24,5 +24,6 @@ class ReactMapMuiStackListener(private val web: WebView) : OnApplyWindowInsetsLi
             document.head.appendChild(document._injectedMuiStackStyle = document.createElement('style'));
         }
         document._injectedMuiStackStyle.innerHTML =
-            '.MuiStack-root { margin-top: ' + $topInset / window.devicePixelRatio + 'px; }';""", null)
+            '.MuiDialog-root, .MuiStack-root, .MuiDrawer-paper>:first-child { margin-top: ' +
+            $topInset / window.devicePixelRatio + 'px; }';""", null)
 }
