@@ -137,7 +137,7 @@ class MainActivity : ComponentActivity() {
                 override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
                     val parsed = request.url
                     return when {
-                        parsed.host?.lowercase(Locale.ROOT).let { it != hostname && it !in supportedHosts } -> {
+                        parsed.host?.lowercase(Locale.ENGLISH).let { it != hostname && it !in supportedHosts } -> {
                             app.launchUrl(this@MainActivity, parsed)
                             true
                         }
