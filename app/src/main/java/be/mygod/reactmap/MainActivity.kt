@@ -23,6 +23,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.edit
 import androidx.core.net.toUri
+import androidx.core.view.WindowCompat
 import be.mygod.reactmap.App.Companion.app
 import timber.log.Timber
 import java.net.URL
@@ -62,6 +63,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         pref = getSharedPreferences(PREF_NAME, MODE_PRIVATE)
         val activeUrl = pref.getString(KEY_ACTIVE_URL, URL_DEFAULT)!!
         hostname = Uri.parse(activeUrl).host!!
@@ -104,6 +107,7 @@ class MainActivity : ComponentActivity() {
                 override fun handleOnBackPressed() = web.goBack()
             }
             onBackPressedDispatcher.addCallback(onBackPressedCallback)
+            val muiStack = ReactMapMuiStackListener(this)
             webViewClient = object : WebViewClient() {
                 override fun doUpdateVisitedHistory(view: WebView?, url: String?, isReload: Boolean) {
                     onBackPressedCallback.isEnabled = web.canGoBack()
@@ -116,10 +120,14 @@ class MainActivity : ComponentActivity() {
                             host != hostname -> false
                             path == "/" -> {
                                 glocation.setupGeolocation()
+                                muiStack.apply()
                                 true
                             }
                             else -> {
-                                if (path.startsWith("/@/")) glocation.setupGeolocation()
+                                if (path.startsWith("/@/")) {
+                                    glocation.setupGeolocation()
+                                    muiStack.apply()
+                                }
                                 false
                             }
                         }
@@ -151,7 +159,6 @@ class MainActivity : ComponentActivity() {
             loadUrl(activeUrl)
         }
         setContentView(web)
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     override fun onNewIntent(intent: Intent?) {
