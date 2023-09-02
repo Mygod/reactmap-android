@@ -12,11 +12,13 @@ class ReactMapMuiMarginListener(private val web: WebView) : OnApplyWindowInsetsL
     }
 
     private var topInset = 0
+    private var bottomInset = 0
 
-    override fun onApplyWindowInsets(v: View, insets: WindowInsetsCompat): WindowInsetsCompat {
-        topInset = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
+    override fun onApplyWindowInsets(v: View, insets: WindowInsetsCompat) = insets.apply {
+        val tappable = insets.getInsets(WindowInsetsCompat.Type.tappableElement())
+        topInset = tappable.top
+        bottomInset = tappable.bottom
         apply()
-        return insets
     }
 
     fun apply() = web.evaluateJavascript("""
@@ -25,5 +27,9 @@ class ReactMapMuiMarginListener(private val web: WebView) : OnApplyWindowInsetsL
         }
         document._injectedMuiStackStyle.innerHTML =
             '.MuiDialog-root, .MuiStack-root, .MuiDrawer-paper>:first-child { margin-top: ' +
-            $topInset / window.devicePixelRatio + 'px; }';""", null)
+            $topInset / window.devicePixelRatio + 'px; }' +
+            '.MuiDialog-root, .MuiDrawer-paper>:last-child { margin-bottom: ' +
+            $bottomInset / window.devicePixelRatio + 'px; }' +
+            '.leaflet-control-attribution { min-height: ' +
+            Math.max(0, $bottomInset / window.devicePixelRatio - 10) + 'px; }';""", null)
 }
