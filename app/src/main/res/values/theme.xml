@@ -3,5 +3,7 @@
     <style name="Theme.ReactMap" parent="@android:style/Theme.DeviceDefault.NoActionBar">
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@mipmap/splash</item>
+        <item name="android:windowSplashscreenContent">@mipmap/splash</item>
     </style>
 </resources>
