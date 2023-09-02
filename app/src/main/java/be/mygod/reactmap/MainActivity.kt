@@ -184,6 +184,7 @@ class MainActivity : ComponentActivity() {
                     putStringSet(KEY_HISTORY_URL, historyUrl + uri)
                 }
                 hostname = host
+                web.loadUrl("about:blank")
                 web.loadUrl(uri)
             }
             setNegativeButton(android.R.string.cancel, null)
