@@ -10,9 +10,11 @@ import android.os.Bundle
 import android.util.Log
 import android.view.WindowManager
 import android.webkit.ConsoleMessage
+import android.webkit.CookieManager
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.ArrayAdapter
@@ -24,10 +26,19 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.lifecycleScope
 import be.mygod.reactmap.App.Companion.app
+import kotlinx.coroutines.launch
+import org.json.JSONArray
+import org.json.JSONException
+import org.json.JSONObject
+import org.json.JSONTokener
 import timber.log.Timber
+import java.io.Reader
+import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLDecoder
+import java.nio.charset.Charset
 import java.util.Locale
 
 class MainActivity : ComponentActivity() {
@@ -48,6 +59,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var pref: SharedPreferences
     private lateinit var hostname: String
     private var isRoot = false
+    private val windowInsetsController by lazy { WindowCompat.getInsetsController(window, web) }
 
     private var pendingFileCallback: ValueCallback<Array<Uri>>? = null
     private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
@@ -148,6 +160,15 @@ class MainActivity : ComponentActivity() {
                         else -> false
                     }
                 }
+
+                override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest) =
+                    if (!"https".equals(request.url.scheme, true) || request.url.host != hostname) null
+                    else when (request.url.path) {
+                        // Since CookieManager.getCookie does not return session cookie on main requests,
+                        // we can only edit secondary files
+                        "/api/settings" -> handleSettings(request)
+                        else -> null
+                    }
             }
             setDownloadListener { url, _, contentDisposition, mimetype, _ ->
                 require(url.startsWith("data:", true))
@@ -159,6 +180,44 @@ class MainActivity : ComponentActivity() {
             loadUrl(activeUrl)
         }
         setContentView(web)
+    }
+
+    private fun buildResponse(request: WebResourceRequest, transform: (Reader) -> String): WebResourceResponse {
+        val url = request.url.toString()
+        val conn = URL(url).openConnection() as HttpURLConnection
+        conn.requestMethod = request.method
+        for ((key, value) in request.requestHeaders) conn.addRequestProperty(key, value)
+        conn.addRequestProperty("Cookie", CookieManager.getInstance().getCookie(url))
+        return WebResourceResponse(conn.contentType, conn.contentEncoding, conn.responseCode, conn.responseMessage,
+            conn.headerFields.mapValues { (_, value) -> value.joinToString() },
+            if (conn.responseCode / 100 == 2) {
+                val charset = if (conn.contentEncoding == null) Charsets.UTF_8 else {
+                    Charset.forName(conn.contentEncoding)
+                }
+                transform(conn.inputStream.bufferedReader(charset)).byteInputStream(charset)
+            } else conn.inputStream)
+    }
+    private fun handleSettings(request: WebResourceRequest) = buildResponse(request) { reader ->
+        val response = reader.readText()
+        try {
+            val json = JSONObject(response)
+            val config = json.getJSONObject("serverSettings").getJSONObject("config")
+            val tileServers = config.getJSONObject("tileServers")
+            lifecycleScope.launch {
+                web.evaluateJavascript("JSON.parse(localStorage.getItem('local-state')).state.settings.tileServers") {
+                    windowInsetsController.isAppearanceLightStatusBars =
+                        tileServers.optJSONObject(JSONTokener(it).nextValue() as? String)?.optString("style") != "dark"
+                }
+            }
+            val mapConfig = config.getJSONObject("map")
+            if (mapConfig.optJSONArray("holidayEffects")?.length() != 0) {
+                mapConfig.put("holidayEffects", JSONArray())
+                json.toString()
+            } else response
+        } catch (e: JSONException) {
+            Timber.w(e)
+            response
+        }
     }
 
     override fun onNewIntent(intent: Intent?) {
