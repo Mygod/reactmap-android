@@ -13,18 +13,18 @@ Object.defineProperty(navigator, 'geolocation', {
             window._glocation.getCurrentPosition(i);
         },
         _getCurrentPositionSuccess: function (ids, data) {
-            for (const i of ids) {
+            ids.forEach(i => {
                 const callbacks = this._positionCallbacks[i];
                 delete this._positionCallbacks[i];
                 callbacks.successCallback(data);
-            }
+            })
         },
         _getCurrentPositionError: function (ids, data) {
-            for (const i of ids) {
+            ids.forEach(i => {
                 const callbacks = this._positionCallbacks[i];
                 delete this._positionCallbacks[i];
                 callbacks.errorCallback(data);
-            }
+            })
         },
         watchPosition: function (successCallback, errorCallback, options) {
             const i = this._positionCallbacks.count++;
@@ -37,10 +37,10 @@ Object.defineProperty(navigator, 'geolocation', {
             return i;
         },
         _watchPositionSuccess: function (ids, data) {
-            for (const i of ids) this._positionCallbacks[i].successCallback(data);
+            ids.forEach(i => this._positionCallbacks[i].successCallback(data));
         },
         _watchPositionError: function (ids, data) {
-            for (const i of ids) this._positionCallbacks[i].errorCallback(data);
+            ids.forEach(i => this._positionCallbacks[i].errorCallback(data));
         },
         clearWatch: function (watchId) {
             window._glocation.clearWatch(watchId);
