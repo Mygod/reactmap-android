@@ -26,10 +26,10 @@ class ReactMapMuiMarginListener(private val web: WebView) : OnApplyWindowInsetsL
             document.head.appendChild(document._injectedMuiStackStyle = document.createElement('style'));
         }
         document._injectedMuiStackStyle.innerHTML =
-            '.MuiDialog-root, .MuiStack-root, .MuiDrawer-paper>:first-child { margin-top: ' +
+            '.MuiDialog-root, .MuiStack-root, .MuiDrawer-paperAnchorLeft>:first-child { margin-top: ' +
             $topInset / window.devicePixelRatio + 'px; }' +
             '.MuiDialog-root, .MuiDrawer-paper>:last-child { margin-bottom: ' +
             $bottomInset / window.devicePixelRatio + 'px; }' +
             '.leaflet-control-attribution { min-height: ' +
-            Math.max(0, $bottomInset / window.devicePixelRatio - 10) + 'px; }';""", null)
+            ($bottomInset / window.devicePixelRatio - 10) + 'px; }';""", null)
 }
