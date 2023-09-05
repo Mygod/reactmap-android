@@ -58,7 +58,6 @@ class MainActivity : ComponentActivity() {
     private lateinit var siteController: SiteController
     private lateinit var pref: SharedPreferences
     private lateinit var hostname: String
-    private var isRoot = false
     private val windowInsetsController by lazy { WindowCompat.getInsetsController(window, web) }
 
     private var pendingFileCallback: ValueCallback<Array<Uri>>? = null
@@ -126,24 +125,16 @@ class MainActivity : ComponentActivity() {
                 }
 
                 override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
-                    glocation.clear()
-                    isRoot = URL(url).run {
-                        when {
-                            host != hostname -> false
-                            path == "/" -> {
-                                glocation.setupGeolocation()
-                                muiMargin.apply()
-                                true
-                            }
-                            else -> {
-                                if (path.startsWith("/@/")) {
-                                    glocation.setupGeolocation()
-                                    muiMargin.apply()
-                                }
-                                false
-                            }
-                        }
+                    if (url == "about:blank") {
+                        loadUrl(pref.getString(KEY_ACTIVE_URL, URL_DEFAULT)!!)
+                        return
                     }
+                    glocation.clear()
+                    if (url.toUri().host == hostname) glocation.setupGeolocation()
+                }
+
+                override fun onPageFinished(view: WebView?, url: String) {
+                    if (url.toUri().host == hostname) muiMargin.apply()
                 }
 
                 override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
@@ -233,7 +224,10 @@ class MainActivity : ComponentActivity() {
             setTitle("ReactMap URL:")
             setPositiveButton(android.R.string.ok) { _, _ ->
                 val (uri, host) = try {
-                    editText.text!!.toString().toUri().run { toString() to host!! }
+                    editText.text!!.toString().toUri().run {
+                        require("https".equals(scheme, true)) { "Only HTTPS is allowed" }
+                        toString() to host!!
+                    }
                 } catch (e: Exception) {
                     Toast.makeText(this@MainActivity, e.localizedMessage ?: e.javaClass.name, Toast.LENGTH_LONG).show()
                     return@setPositiveButton
@@ -244,7 +238,6 @@ class MainActivity : ComponentActivity() {
                 }
                 hostname = host
                 web.loadUrl("about:blank")
-                web.loadUrl(uri)
             }
             setNegativeButton(android.R.string.cancel, null)
         }.show()
