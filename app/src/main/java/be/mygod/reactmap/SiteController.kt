@@ -39,6 +39,9 @@ class SiteController(private val activity: ComponentActivity) : DefaultLifecycle
             setContentIntent(PendingIntent.getActivity(activity, 0,
                 Intent(activity, MainActivity::class.java).setAction(MainActivity.ACTION_CONFIGURE),
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE))
+            addAction(android.R.drawable.ic_delete, "Restart game", PendingIntent.getActivity(activity,
+                1, Intent(activity, MainActivity::class.java).setAction(MainActivity.ACTION_RESTART_GAME),
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE))
         }.build())
     }
     private var started = false

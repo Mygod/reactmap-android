@@ -44,6 +44,7 @@ import java.util.Locale
 class MainActivity : ComponentActivity() {
     companion object {
         const val ACTION_CONFIGURE = "be.mygod.reactmap.action.CONFIGURE"
+        const val ACTION_RESTART_GAME = "be.mygod.reactmap.action.RESTART_GAME"
         private const val PREF_NAME = "reactmap"
         private const val KEY_ACTIVE_URL = "url.active"
         private const val KEY_HISTORY_URL = "url.history"
@@ -213,33 +214,51 @@ class MainActivity : ComponentActivity() {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        if (intent?.action == ACTION_CONFIGURE) AlertDialog.Builder(this).apply {
-            val historyUrl = pref.getStringSet(KEY_HISTORY_URL, null) ?: setOf(URL_DEFAULT)
-            val editText = AutoCompleteTextView(this@MainActivity).apply {
-                setAdapter(ArrayAdapter(this@MainActivity, android.R.layout.select_dialog_item,
-                    historyUrl.toTypedArray()))
-                setText(pref.getString(KEY_ACTIVE_URL, URL_DEFAULT))
-            }
-            setView(editText)
-            setTitle("ReactMap URL:")
-            setPositiveButton(android.R.string.ok) { _, _ ->
-                val (uri, host) = try {
-                    editText.text!!.toString().toUri().run {
-                        require("https".equals(scheme, true)) { "Only HTTPS is allowed" }
-                        toString() to host!!
+        when (intent?.action) {
+            ACTION_CONFIGURE -> AlertDialog.Builder(this).apply {
+                val historyUrl = pref.getStringSet(KEY_HISTORY_URL, null) ?: setOf(URL_DEFAULT)
+                val editText = AutoCompleteTextView(this@MainActivity).apply {
+                    setAdapter(ArrayAdapter(this@MainActivity, android.R.layout.select_dialog_item,
+                        historyUrl.toTypedArray()))
+                    setText(pref.getString(KEY_ACTIVE_URL, URL_DEFAULT))
+                }
+                setView(editText)
+                setTitle("ReactMap URL:")
+                setPositiveButton(android.R.string.ok) { _, _ ->
+                    val (uri, host) = try {
+                        editText.text!!.toString().toUri().run {
+                            require("https".equals(scheme, true)) { "Only HTTPS is allowed" }
+                            toString() to host!!
+                        }
+                    } catch (e: Exception) {
+                        Toast.makeText(this@MainActivity, e.localizedMessage ?: e.javaClass.name, Toast.LENGTH_LONG).show()
+                        return@setPositiveButton
                     }
-                } catch (e: Exception) {
-                    Toast.makeText(this@MainActivity, e.localizedMessage ?: e.javaClass.name, Toast.LENGTH_LONG).show()
-                    return@setPositiveButton
+                    pref.edit {
+                        putString(KEY_ACTIVE_URL, uri)
+                        putStringSet(KEY_HISTORY_URL, historyUrl + uri)
+                    }
+                    hostname = host
+                    web.loadUrl("about:blank")
                 }
-                pref.edit {
-                    putString(KEY_ACTIVE_URL, uri)
-                    putStringSet(KEY_HISTORY_URL, historyUrl + uri)
-                }
-                hostname = host
-                web.loadUrl("about:blank")
-            }
-            setNegativeButton(android.R.string.cancel, null)
-        }.show()
+                setNegativeButton(android.R.string.cancel, null)
+            }.show()
+            ACTION_RESTART_GAME -> AlertDialog.Builder(this).apply {
+                setTitle("Pick game version to restart")
+                setMessage("This feature requires root")
+                setPositiveButton("Standard") { _, _ -> restartGame("com.nianticlabs.pokemongo") }
+                setNegativeButton("Samsung") { _, _ -> restartGame("com.nianticlabs.pokemongo.ares") }
+                setNeutralButton(android.R.string.cancel, null)
+            }.show()
+        }
+    }
+    private fun restartGame(packageName: String) {
+        try {
+            ProcessBuilder("su", "-c", "am force-stop $packageName &&" +
+                    "am start -n $packageName/com.nianticproject.holoholo.libholoholo.unity.UnityMainActivity").start()
+        } catch (e: Exception) {
+            Timber.w(e)
+            Toast.makeText(this@MainActivity, e.localizedMessage ?: e.javaClass.name, Toast.LENGTH_LONG).show()
+        }
     }
 }
