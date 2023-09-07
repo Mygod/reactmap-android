@@ -182,7 +182,7 @@ class MainActivity : ComponentActivity() {
         conn.addRequestProperty("Cookie", CookieManager.getInstance().getCookie(url))
         return WebResourceResponse(conn.contentType, conn.contentEncoding, conn.responseCode, conn.responseMessage,
             conn.headerFields.mapValues { (_, value) -> value.joinToString() },
-            if (conn.responseCode / 100 == 2) {
+            if (conn.responseCode in 200..299) {
                 val charset = if (conn.contentEncoding == null) Charsets.UTF_8 else {
                     Charset.forName(conn.contentEncoding)
                 }
