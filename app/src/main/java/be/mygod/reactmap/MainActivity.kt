@@ -179,7 +179,9 @@ class MainActivity : ComponentActivity() {
         val conn = URL(url).openConnection() as HttpURLConnection
         conn.requestMethod = request.method
         for ((key, value) in request.requestHeaders) conn.addRequestProperty(key, value)
-        conn.addRequestProperty("Cookie", CookieManager.getInstance().getCookie(url))
+        val cookie = CookieManager.getInstance()
+        conn.addRequestProperty("Cookie", cookie.getCookie(url))
+        conn.getHeaderField("Set-Cookie")?.let { cookie.setCookie(url, it) }
         return WebResourceResponse(conn.contentType, conn.contentEncoding, conn.responseCode, conn.responseMessage,
             conn.headerFields.mapValues { (_, value) -> value.joinToString() },
             if (conn.responseCode in 200..299) {
