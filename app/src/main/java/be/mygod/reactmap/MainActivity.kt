@@ -46,6 +46,7 @@ class MainActivity : ComponentActivity() {
         const val ACTION_CONFIGURE = "be.mygod.reactmap.action.CONFIGURE"
         const val ACTION_RESTART_GAME = "be.mygod.reactmap.action.RESTART_GAME"
         private const val PREF_NAME = "reactmap"
+        private const val KEY_WELCOME = "welcome"
         private const val KEY_ACTIVE_URL = "url.active"
         private const val KEY_HISTORY_URL = "url.history"
         private const val URL_DEFAULT = "https://www.reactmap.dev"
@@ -172,6 +173,10 @@ class MainActivity : ComponentActivity() {
             loadUrl(activeUrl)
         }
         setContentView(web)
+        if (pref.getBoolean(KEY_WELCOME, true)) {
+            startConfigure()
+            pref.edit { putBoolean(KEY_WELCOME, false) }
+        }
     }
 
     private fun buildResponse(request: WebResourceRequest, transform: (Reader) -> String): WebResourceResponse {
@@ -217,34 +222,7 @@ class MainActivity : ComponentActivity() {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         when (intent?.action) {
-            ACTION_CONFIGURE -> AlertDialog.Builder(this).apply {
-                val historyUrl = pref.getStringSet(KEY_HISTORY_URL, null) ?: setOf(URL_DEFAULT)
-                val editText = AutoCompleteTextView(this@MainActivity).apply {
-                    setAdapter(ArrayAdapter(this@MainActivity, android.R.layout.select_dialog_item,
-                        historyUrl.toTypedArray()))
-                    setText(pref.getString(KEY_ACTIVE_URL, URL_DEFAULT))
-                }
-                setView(editText)
-                setTitle("ReactMap URL:")
-                setPositiveButton(android.R.string.ok) { _, _ ->
-                    val (uri, host) = try {
-                        editText.text!!.toString().toUri().run {
-                            require("https".equals(scheme, true)) { "Only HTTPS is allowed" }
-                            toString() to host!!
-                        }
-                    } catch (e: Exception) {
-                        Toast.makeText(this@MainActivity, e.localizedMessage ?: e.javaClass.name, Toast.LENGTH_LONG).show()
-                        return@setPositiveButton
-                    }
-                    pref.edit {
-                        putString(KEY_ACTIVE_URL, uri)
-                        putStringSet(KEY_HISTORY_URL, historyUrl + uri)
-                    }
-                    hostname = host
-                    web.loadUrl("about:blank")
-                }
-                setNegativeButton(android.R.string.cancel, null)
-            }.show()
+            ACTION_CONFIGURE -> startConfigure()
             ACTION_RESTART_GAME -> AlertDialog.Builder(this).apply {
                 setTitle("Pick game version to restart")
                 setMessage("This feature requires root")
@@ -254,6 +232,35 @@ class MainActivity : ComponentActivity() {
             }.show()
         }
     }
+    private fun startConfigure() = AlertDialog.Builder(this).apply {
+        val historyUrl = pref.getStringSet(KEY_HISTORY_URL, null) ?: setOf(URL_DEFAULT)
+        val editText = AutoCompleteTextView(this@MainActivity).apply {
+            setAdapter(ArrayAdapter(this@MainActivity, android.R.layout.select_dialog_item,
+                historyUrl.toTypedArray()))
+            setText(pref.getString(KEY_ACTIVE_URL, URL_DEFAULT))
+        }
+        setView(editText)
+        setTitle("ReactMap URL:")
+        setMessage("You can return to this dialog later by clicking on the notification.")
+        setPositiveButton(android.R.string.ok) { _, _ ->
+            val (uri, host) = try {
+                editText.text!!.toString().toUri().run {
+                    require("https".equals(scheme, true)) { "Only HTTPS is allowed" }
+                    toString() to host!!
+                }
+            } catch (e: Exception) {
+                Toast.makeText(this@MainActivity, e.localizedMessage ?: e.javaClass.name, Toast.LENGTH_LONG).show()
+                return@setPositiveButton
+            }
+            pref.edit {
+                putString(KEY_ACTIVE_URL, uri)
+                putStringSet(KEY_HISTORY_URL, historyUrl + uri)
+            }
+            hostname = host
+            web.loadUrl("about:blank")
+        }
+        setNegativeButton(android.R.string.cancel, null)
+    }.show()
     private fun restartGame(packageName: String) {
         try {
             ProcessBuilder("su", "-c", "am force-stop $packageName &&" +
