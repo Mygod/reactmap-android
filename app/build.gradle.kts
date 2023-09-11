@@ -13,8 +13,8 @@ android {
         applicationId = "be.mygod.reactmap"
         minSdk = 24
         targetSdk = 34
-        versionCode = 13
-        versionName = "0.4.2"
+        versionCode = 14
+        versionName = "0.4.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
