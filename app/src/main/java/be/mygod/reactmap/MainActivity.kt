@@ -1,6 +1,7 @@
 package be.mygod.reactmap
 
 import android.annotation.SuppressLint
+import android.annotation.TargetApi
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.SharedPreferences
@@ -11,6 +12,7 @@ import android.util.Log
 import android.view.WindowManager
 import android.webkit.ConsoleMessage
 import android.webkit.CookieManager
+import android.webkit.RenderProcessGoneDetail
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
@@ -25,9 +27,11 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.edit
 import androidx.core.net.toUri
+import androidx.core.os.bundleOf
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import be.mygod.reactmap.App.Companion.app
+import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONException
@@ -162,6 +166,17 @@ class MainActivity : ComponentActivity() {
                         "/api/settings" -> handleSettings(request)
                         else -> null
                     }
+
+                @TargetApi(26)
+                override fun onRenderProcessGone(view: WebView, detail: RenderProcessGoneDetail): Boolean {
+                    if (detail.didCrash()) {
+                        Timber.w(Exception("WebView crashed @ priority ${detail.rendererPriorityAtExit()}"))
+                    } else {
+                        FirebaseAnalytics.getInstance(this@MainActivity).logEvent("webviewExit",
+                            bundleOf("priority" to detail.rendererPriorityAtExit()))
+                    }
+                    return false
+                }
             }
             setDownloadListener { url, _, contentDisposition, mimetype, _ ->
                 require(url.startsWith("data:", true))
