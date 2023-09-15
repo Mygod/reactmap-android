@@ -215,19 +215,20 @@ class MainActivity : ComponentActivity() {
     private fun handleSettings(request: WebResourceRequest) = buildResponse(request) { reader ->
         val response = reader.readText()
         try {
-            val json = JSONObject(response)
-            val config = json.getJSONObject("serverSettings").getJSONObject("config")
-            val tileServers = config.getJSONObject("tileServers")
+            val config = JSONObject(response)
+            val tileServers = config.getJSONArray("tileServers")
             lifecycleScope.launch {
                 web.evaluateJavascript("JSON.parse(localStorage.getItem('local-state')).state.settings.tileServers") {
+                    val name = JSONTokener(it).nextValue() as? String
                     windowInsetsController.isAppearanceLightStatusBars =
-                        tileServers.optJSONObject(JSONTokener(it).nextValue() as? String)?.optString("style") != "dark"
+                        (tileServers.length() - 1 downTo 0).asSequence().map { i -> tileServers.getJSONObject(i) }
+                            .firstOrNull { obj -> obj.getString("name") == name }?.optString("style") != "dark"
                 }
             }
             val mapConfig = config.getJSONObject("map")
             if (mapConfig.optJSONArray("holidayEffects")?.length() != 0) {
                 mapConfig.put("holidayEffects", JSONArray())
-                json.toString()
+                config.toString()
             } else response
         } catch (e: JSONException) {
             Timber.w(e)
