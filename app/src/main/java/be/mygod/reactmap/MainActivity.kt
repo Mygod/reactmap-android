@@ -24,6 +24,7 @@ import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.edit
 import androidx.core.net.toUri
@@ -81,7 +82,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+        enableEdgeToEdge()
         pref = getSharedPreferences(PREF_NAME, MODE_PRIVATE)
         val activeUrl = pref.getString(KEY_ACTIVE_URL, URL_DEFAULT)!!
         hostname = Uri.parse(activeUrl).host!!
