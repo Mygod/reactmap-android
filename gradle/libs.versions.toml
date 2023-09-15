@@ -1,6 +1,6 @@
 [versions]
 activity = "1.7.2"
-agp = "8.2.0-beta03"
+agp = "8.3.0-alpha03"
 androidx-test-ext-junit = "1.1.5"
 browser = "1.6.0"
 core = "1.12.0"
