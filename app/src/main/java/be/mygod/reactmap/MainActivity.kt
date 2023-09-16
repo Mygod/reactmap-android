@@ -7,7 +7,11 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.net.Uri
+import android.net.http.ConnectionMigrationOptions
+import android.net.http.HttpEngine
+import android.os.Build
 import android.os.Bundle
+import android.os.ext.SdkExtensions
 import android.util.JsonWriter
 import android.util.Log
 import android.view.WindowManager
@@ -27,6 +31,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresExtension
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
@@ -40,6 +45,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import org.json.JSONTokener
 import timber.log.Timber
+import java.io.File
 import java.io.Reader
 import java.io.StringWriter
 import java.net.HttpURLConnection
@@ -60,6 +66,22 @@ class MainActivity : ComponentActivity() {
 
         private val filenameExtractor = "filename=(\"([^\"]+)\"|[^;]+)".toRegex(RegexOption.IGNORE_CASE)
         private val supportedHosts = setOf("discordapp.com", "discord.com")
+
+        @get:RequiresExtension(Build.VERSION_CODES.S, 7)
+        private val engine by lazy @RequiresExtension(Build.VERSION_CODES.S, 7) {
+            val cache = File(app.cacheDir, "httpEngine")
+            HttpEngine.Builder(app).apply {
+                if (cache.mkdirs() || cache.isDirectory) {
+                    setStoragePath(cache.absolutePath)
+                    setEnableHttpCache(HttpEngine.Builder.HTTP_CACHE_DISK, 1024 * 1024)
+                }
+                setConnectionMigrationOptions(ConnectionMigrationOptions.Builder().apply {
+                    setDefaultNetworkMigration(ConnectionMigrationOptions.MIGRATION_OPTION_ENABLED)
+                    setPathDegradationMigration(ConnectionMigrationOptions.MIGRATION_OPTION_ENABLED)
+                }.build())
+                setEnableBrotli(true)
+            }.build()
+        }
     }
 
     private lateinit var web: WebView
@@ -213,7 +235,10 @@ class MainActivity : ComponentActivity() {
 
     private fun buildResponse(request: WebResourceRequest, transform: (Reader) -> String): WebResourceResponse {
         val url = request.url.toString()
-        val conn = URL(url).openConnection() as HttpURLConnection
+        val conn = (if (Build.VERSION.SDK_INT >= 34 || Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
+            SdkExtensions.getExtensionVersion(Build.VERSION_CODES.S) >= 7) {
+            engine.openConnection(URL(url))
+        } else URL(url).openConnection()) as HttpURLConnection
         conn.requestMethod = request.method
         for ((key, value) in request.requestHeaders) conn.addRequestProperty(key, value)
         val cookie = CookieManager.getInstance()

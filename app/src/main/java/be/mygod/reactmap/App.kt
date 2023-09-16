@@ -5,12 +5,12 @@ import android.app.Application
 import android.content.Context
 import android.net.Uri
 import android.os.Build
+import android.os.ext.SdkExtensions
 import android.util.Log
 import android.webkit.WebView
 import android.widget.Toast
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
-import androidx.core.net.toUri
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import timber.log.Timber
 
@@ -22,7 +22,11 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         app = this
-        FirebaseCrashlytics.getInstance().setCustomKey("build", Build.DISPLAY)
+        FirebaseCrashlytics.getInstance().apply {
+            setCustomKey("build", Build.DISPLAY)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) setCustomKey("extension_s",
+                SdkExtensions.getExtensionVersion(Build.VERSION_CODES.S))
+        }
         Timber.plant(object : Timber.DebugTree() {
             @SuppressLint("LogNotTimber")
             override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
