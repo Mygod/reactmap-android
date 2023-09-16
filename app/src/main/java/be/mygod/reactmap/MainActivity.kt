@@ -8,6 +8,7 @@ import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.util.JsonWriter
 import android.util.Log
 import android.view.WindowManager
 import android.webkit.ConsoleMessage
@@ -40,6 +41,7 @@ import org.json.JSONObject
 import org.json.JSONTokener
 import timber.log.Timber
 import java.io.Reader
+import java.io.StringWriter
 import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLDecoder
@@ -66,6 +68,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var pref: SharedPreferences
     private lateinit var hostname: String
     private val windowInsetsController by lazy { WindowCompat.getInsetsController(window, web) }
+    private var loginText: String? = null
 
     private var pendingFileCallback: ValueCallback<Array<Uri>>? = null
     private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
@@ -127,8 +130,20 @@ class MainActivity : ComponentActivity() {
             onBackPressedDispatcher.addCallback(onBackPressedCallback)
             val muiMargin = ReactMapMuiMarginListener(this)
             webViewClient = object : WebViewClient() {
-                override fun doUpdateVisitedHistory(view: WebView?, url: String?, isReload: Boolean) {
+                override fun doUpdateVisitedHistory(view: WebView?, url: String, isReload: Boolean) {
                     onBackPressedCallback.isEnabled = web.canGoBack()
+                    if (url.toUri().path?.trimEnd('/') == "/login") loginText?.let { login ->
+                        val writer = StringWriter()
+                        writer.write("document.location = document.evaluate('//a[text()=")
+                        JsonWriter(writer).use {
+                            it.isLenient = true
+                            it.value(login)
+                        }
+                        writer.write(
+                            "]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.href;")
+                        Timber.d(writer.toString())
+                        web.evaluateJavascript(writer.toString(), null)
+                    }
                 }
 
                 override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
@@ -161,11 +176,13 @@ class MainActivity : ComponentActivity() {
 
                 override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest) =
                     if (!"https".equals(request.url.scheme, true) || request.url.host != hostname) null
-                    else when (request.url.path) {
+                    else when (val path = request.url.path) {
                         // Since CookieManager.getCookie does not return session cookie on main requests,
                         // we can only edit secondary files
                         "/api/settings" -> handleSettings(request)
-                        else -> null
+                        else -> if (path?.startsWith("/locales/") == true && path.endsWith("/translation.json")) {
+                            handleTranslation(request)
+                        } else null
                     }
 
                 @TargetApi(26)
@@ -234,6 +251,15 @@ class MainActivity : ComponentActivity() {
             Timber.w(e)
             response
         }
+    }
+    private fun handleTranslation(request: WebResourceRequest) = buildResponse(request) { reader ->
+        val response = reader.readText()
+        try {
+            loginText = JSONObject(response).getString("login")
+        } catch (e: JSONException) {
+            Timber.w(e)
+        }
+        response
     }
 
     override fun onNewIntent(intent: Intent?) {
