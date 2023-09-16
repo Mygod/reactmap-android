@@ -141,7 +141,6 @@ class MainActivity : ComponentActivity() {
                         }
                         writer.write(
                             "]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.href;")
-                        Timber.d(writer.toString())
                         web.evaluateJavascript(writer.toString(), null)
                     }
                 }
