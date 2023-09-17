@@ -5,6 +5,7 @@ androidx-test-ext-junit = "1.1.5"
 browser = "1.6.0"
 core = "1.12.0"
 crashlytics = "2.9.9"
+desugar = "2.0.3"
 espresso-core = "3.5.1"
 firebase = "32.3.1"
 fragment = "1.6.1"
@@ -21,6 +22,7 @@ activity = { group = "androidx.activity", name = "activity", version.ref = "acti
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
 browser = { group = "androidx.browser", name = "browser", version.ref = "browser" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core" }
+desugar = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugar" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase" }

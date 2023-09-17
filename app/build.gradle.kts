@@ -39,6 +39,7 @@ android {
 }
 
 dependencies {
+    coreLibraryDesugaring(libs.desugar)
     implementation(platform(libs.firebase.bom))
     implementation(libs.activity)
     implementation(libs.browser)
