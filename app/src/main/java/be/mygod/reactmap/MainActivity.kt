@@ -63,6 +63,7 @@ class MainActivity : ComponentActivity() {
         private const val KEY_ACTIVE_URL = "url.active"
         private const val KEY_HISTORY_URL = "url.history"
         private const val URL_DEFAULT = "https://www.reactmap.dev"
+        private const val URL_RELOADING = "data:text/html;charset=utf-8;base64,PHRpdGxlPlJlbG9hZGluZyBSZWFjdE1hcC4uLjwvdGl0bGU+PGgxIHN0eWxlPSJkaXNwbGF5OmZsZXg7anVzdGlmeS1jb250ZW50OmNlbnRlcjthbGlnbi1pdGVtczpjZW50ZXI7dGV4dC1hbGlnbjpjZW50ZXI7aGVpZ2h0OjEwMHZoIj5SZWxvYWRpbmc8YnI+UmVhY3RNYXAuLi4"
 
         private val filenameExtractor = "filename=(\"([^\"]+)\"|[^;]+)".toRegex(RegexOption.IGNORE_CASE)
         private val supportedHosts = setOf("discordapp.com", "discord.com")
@@ -168,15 +169,15 @@ class MainActivity : ComponentActivity() {
                 }
 
                 override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
-                    if (url == "about:blank") {
-                        loadUrl(pref.getString(KEY_ACTIVE_URL, URL_DEFAULT)!!)
-                        return
-                    }
                     glocation.clear()
                     if (url.toUri().host == hostname) glocation.setupGeolocation()
                 }
 
                 override fun onPageFinished(view: WebView?, url: String) {
+                    if (url == URL_RELOADING) {
+                        loadUrl(pref.getString(KEY_ACTIVE_URL, URL_DEFAULT)!!)
+                        return
+                    }
                     if (url.toUri().host == hostname) muiMargin.apply()
                 }
 
@@ -324,7 +325,7 @@ class MainActivity : ComponentActivity() {
                 putStringSet(KEY_HISTORY_URL, historyUrl + uri)
             }
             hostname = host
-            web.loadUrl("about:blank")
+            web.loadUrl(URL_RELOADING)
         }
         setNegativeButton(android.R.string.cancel, null)
     }.show()
