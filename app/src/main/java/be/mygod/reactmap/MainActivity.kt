@@ -220,7 +220,10 @@ class MainActivity : ComponentActivity() {
                 }
             }
             setDownloadListener { url, _, contentDisposition, mimetype, _ ->
-                require(url.startsWith("data:", true))
+                if (!url.startsWith("data:", true)) {
+                    Toast.makeText(this@MainActivity, "Unsupported download: $url", Toast.LENGTH_LONG).show()
+                    return@setDownloadListener
+                }
                 pendingJson = URLDecoder.decode(url.split(',', limit = 2)[1], "utf-8")
                 createDocument.launch(mimetype to (filenameExtractor.find(contentDisposition)?.run {
                     groupValues[2].ifEmpty { groupValues[1] }
