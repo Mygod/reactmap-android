@@ -46,6 +46,7 @@ import org.json.JSONObject
 import org.json.JSONTokener
 import timber.log.Timber
 import java.io.File
+import java.io.IOException
 import java.io.Reader
 import java.io.StringWriter
 import java.net.HttpURLConnection
@@ -247,11 +248,14 @@ class MainActivity : ComponentActivity() {
         conn.headerFields["Set-Cookie"]?.forEach { cookie.setCookie(url, it) }
         return WebResourceResponse(conn.contentType.split(';', limit = 2)[0], conn.contentEncoding, conn.responseCode,
             conn.responseMessage, conn.headerFields.mapValues { (_, value) -> value.joinToString() },
-            if (conn.responseCode in 200..299) {
+            if (conn.responseCode in 200..299) try {
                 val charset = if (conn.contentEncoding == null) Charsets.UTF_8 else {
                     Charset.forName(conn.contentEncoding)
                 }
                 transform(conn.inputStream.bufferedReader(charset)).byteInputStream(charset)
+            } catch (e: IOException) {
+                Timber.d(e)
+                conn.inputStream
             } else conn.inputStream)
     }
     private fun handleSettings(request: WebResourceRequest) = buildResponse(request) { reader ->
