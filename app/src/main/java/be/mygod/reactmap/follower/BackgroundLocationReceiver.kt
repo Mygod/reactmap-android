@@ -35,6 +35,7 @@ class BackgroundLocationReceiver : BroadcastReceiver() {
         const val MIN_UPDATE_THRESHOLD_METER = 40f
 
         private val componentName by lazy { ComponentName(app, BackgroundLocationReceiver::class.java) }
+        @get:MainThread @set:MainThread
         var enabled: Boolean
             get() = app.packageManager.getComponentEnabledSetting(componentName) ==
                     PackageManager.COMPONENT_ENABLED_STATE_ENABLED
@@ -72,6 +73,7 @@ class BackgroundLocationReceiver : BroadcastReceiver() {
             }
 
         private var active = false
+        @MainThread
         fun setup() {
             if (active || !enabled) return
             if (app.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) !=
@@ -92,7 +94,8 @@ class BackgroundLocationReceiver : BroadcastReceiver() {
                 if (task.isSuccessful) active = true else Timber.w(task.exception)
             }
         }
-        private fun stop() {
+        @MainThread
+        fun stop() {
             if (active) app.fusedLocation.removeLocationUpdates(locationPendingIntent).addOnCompleteListener { task ->
                 if (task.isSuccessful) active = false else Timber.w(task.exception)
             }

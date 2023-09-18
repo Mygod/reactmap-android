@@ -29,6 +29,7 @@ import androidx.core.view.WindowCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import be.mygod.reactmap.App.Companion.app
+import be.mygod.reactmap.follower.BackgroundLocationReceiver
 import be.mygod.reactmap.util.AlertDialogFragment
 import be.mygod.reactmap.util.CreateDynamicDocument
 import be.mygod.reactmap.util.findErrorStream
@@ -148,7 +149,9 @@ class MainActivity : FragmentActivity() {
                         loadUrl(app.activeUrl)
                         return
                     }
-                    if (url.toUri().host == hostname) muiMargin.apply()
+                    if (url.toUri().host != hostname) return
+                    muiMargin.apply()
+                    BackgroundLocationReceiver.setup()  // redo setup in case cookie is updated
                 }
 
                 override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {

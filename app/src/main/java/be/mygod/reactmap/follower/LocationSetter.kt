@@ -85,7 +85,7 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
                 val json = JSONObject(error).getJSONArray("errors")
                 notifyError((0 until json.length()).joinToString { json.getJSONObject(it).getString("message") })
                 if (code == 401 || code == 511) {
-                    // TODO: handle 511 session expired
+                    withContext(Dispatchers.Main) { BackgroundLocationReceiver.stop() }
                     Result.failure()
                 } else Result.retry()
             }
