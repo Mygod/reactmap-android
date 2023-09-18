@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.firebaseCrashlytics)
     alias(libs.plugins.googleServices)
     alias(libs.plugins.kotlinAndroid)
+    id("kotlin-parcelize")
 }
 
 android {
@@ -13,8 +14,8 @@ android {
         applicationId = "be.mygod.reactmap"
         minSdk = 24
         targetSdk = 34
-        versionCode = 16
-        versionName = "0.4.5"
+        versionCode = 50
+        versionName = "0.5.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -46,10 +47,11 @@ dependencies {
     implementation(libs.core.ktx)
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.crashlytics)
-    implementation(libs.fragment)   // update to 1.3+ to suppress lint
+    implementation(libs.fragment.ktx)
     implementation(libs.play.services.location)
     implementation(libs.lifecycle.common)
     implementation(libs.timber)
+    implementation(libs.work.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
