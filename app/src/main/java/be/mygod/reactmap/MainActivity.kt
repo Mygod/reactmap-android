@@ -256,7 +256,7 @@ class MainActivity : ComponentActivity() {
             } catch (e: IOException) {
                 Timber.d(e)
                 conn.inputStream
-            } else conn.inputStream)
+            } else conn.errorStream ?: conn.inputStream)
     }
     private fun handleSettings(request: WebResourceRequest) = buildResponse(request) { reader ->
         val response = reader.readText()
