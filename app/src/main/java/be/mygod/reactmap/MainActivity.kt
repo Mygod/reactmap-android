@@ -250,7 +250,8 @@ class MainActivity : ComponentActivity() {
         cookie.getCookie(url)?.let { conn.addRequestProperty("Cookie", it) }
         conn.headerFields["Set-Cookie"]?.forEach { cookie.setCookie(url, it) }
         return WebResourceResponse(conn.contentType.split(';', limit = 2)[0], conn.contentEncoding, conn.responseCode,
-            conn.responseMessage, conn.headerFields.mapValues { (_, value) -> value.joinToString() },
+            conn.responseMessage.let { if (it.isNullOrBlank()) "N/A" else it },
+            conn.headerFields.mapValues { (_, value) -> value.joinToString() },
             if (conn.responseCode in 200..299) try {
                 val charset = if (conn.contentEncoding == null) Charsets.UTF_8 else {
                     Charset.forName(conn.contentEncoding)
