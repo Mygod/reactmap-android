@@ -33,6 +33,7 @@ import be.mygod.reactmap.follower.BackgroundLocationReceiver
 import be.mygod.reactmap.util.AlertDialogFragment
 import be.mygod.reactmap.util.CreateDynamicDocument
 import be.mygod.reactmap.util.findErrorStream
+import be.mygod.reactmap.util.readableMessage
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.coroutines.launch
 import org.json.JSONArray
@@ -288,7 +289,7 @@ class MainActivity : FragmentActivity() {
                     "am start -n $packageName/com.nianticproject.holoholo.libholoholo.unity.UnityMainActivity").start()
         } catch (e: Exception) {
             Timber.w(e)
-            Toast.makeText(this@MainActivity, e.localizedMessage ?: e.javaClass.name, Toast.LENGTH_LONG).show()
+            Toast.makeText(this@MainActivity, e.readableMessage, Toast.LENGTH_LONG).show()
         }
     }
 }

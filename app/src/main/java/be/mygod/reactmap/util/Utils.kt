@@ -2,8 +2,16 @@ package be.mygod.reactmap.util
 
 import android.os.Parcel
 import android.os.Parcelable
+import android.os.RemoteException
 import androidx.core.os.ParcelCompat
+import java.lang.reflect.InvocationTargetException
 import java.net.HttpURLConnection
+
+tailrec fun Throwable.getRootCause(): Throwable {
+    if (this is InvocationTargetException || this is RemoteException) return (cause ?: return this).getRootCause()
+    return this
+}
+val Throwable.readableMessage: String get() = getRootCause().run { localizedMessage ?: javaClass.name }
 
 inline fun <T> useParcel(block: (Parcel) -> T) = Parcel.obtain().run {
     try {

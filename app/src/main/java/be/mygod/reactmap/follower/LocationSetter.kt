@@ -15,6 +15,7 @@ import be.mygod.reactmap.MainActivity
 import be.mygod.reactmap.R
 import be.mygod.reactmap.ReactMapHttpEngine
 import be.mygod.reactmap.util.findErrorStream
+import be.mygod.reactmap.util.readableMessage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
@@ -110,7 +111,7 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
         Result.retry()
     } catch (e: Exception) {
         Timber.w(e)
-        notifyError(e.localizedMessage ?: e.javaClass.name)
+        notifyError(e.readableMessage)
         Result.failure()
     }
 

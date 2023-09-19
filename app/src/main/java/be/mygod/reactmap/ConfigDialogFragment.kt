@@ -18,6 +18,7 @@ import be.mygod.reactmap.App.Companion.app
 import be.mygod.reactmap.follower.BackgroundLocationReceiver
 import be.mygod.reactmap.util.AlertDialogFragment
 import be.mygod.reactmap.util.Empty
+import be.mygod.reactmap.util.readableMessage
 import kotlinx.parcelize.Parcelize
 
 class ConfigDialogFragment : AlertDialogFragment<Empty, ConfigDialogFragment.Ret>() {
@@ -84,7 +85,7 @@ class ConfigDialogFragment : AlertDialogFragment<Empty, ConfigDialogFragment.Ret
         }
         host
     } catch (e: Exception) {
-        Toast.makeText(requireContext(), e.localizedMessage ?: e.javaClass.name, Toast.LENGTH_LONG).show()
+        Toast.makeText(requireContext(), e.readableMessage, Toast.LENGTH_LONG).show()
         null
     }).also { BackgroundLocationReceiver.enabled = followerSwitch.isChecked == true }
 }
