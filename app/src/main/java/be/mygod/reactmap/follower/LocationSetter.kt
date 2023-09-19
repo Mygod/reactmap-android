@@ -19,6 +19,7 @@ import be.mygod.reactmap.util.readableMessage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
+import org.json.JSONException
 import org.json.JSONObject
 import timber.log.Timber
 import java.io.IOException
@@ -70,12 +71,19 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
                     })
                     // epic graphql query yay >:(
                     put("query", "mutation Webhook(\$data: JSON, \$category: String!, \$status: String!) {" +
-                            "webhook(data: \$data, category: \$category, status: \$status) { __typename } }")
+                            "webhook(data: \$data, category: \$category, status: \$status) { human { name } } }")
                 }.toString())
             }
         }
         when (val code = conn.responseCode) {
             200 -> {
+                val response = conn.inputStream.bufferedReader().readText()
+                val human = try {
+                    JSONObject(response).getJSONObject("data").getJSONObject("webhook").getJSONObject("human")
+                        .getString("name")
+                } catch (e: JSONException) {
+                    throw Exception(response, e)
+                }
                 withContext(Dispatchers.Main) {
                     BackgroundLocationReceiver.onLocationSubmitted(Location("bg").apply {
                         latitude = lat
@@ -86,14 +94,14 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
                     color = app.getColor(R.color.main_blue)
                     setCategory(NotificationCompat.CATEGORY_STATUS)
                     setContentTitle("Location updated")
-                    setContentText("$lat, $lon")
                     setGroup(CHANNEL_ID)
-                    setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                     setSmallIcon(R.drawable.ic_reactmap)
                     priority = NotificationCompat.PRIORITY_MIN
                     setContentIntent(PendingIntent.getActivity(app, 2,
                         Intent(app, MainActivity::class.java).setAction(MainActivity.ACTION_CONFIGURE),
                         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE))
+                    setPublicVersion(build())
+                    setContentText("$lat, $lon for $human")
                 }.build())
                 Result.success()
             }
