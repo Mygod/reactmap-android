@@ -62,7 +62,7 @@ class MainActivity : FragmentActivity() {
     private lateinit var web: WebView
     private lateinit var glocation: Glocation
     private lateinit var siteController: SiteController
-    lateinit var hostname: String
+    private lateinit var hostname: String
     private val windowInsetsController by lazy { WindowCompat.getInsetsController(window, web) }
     private var loginText: String? = null
 

@@ -87,5 +87,5 @@ class ConfigDialogFragment : AlertDialogFragment<Empty, ConfigDialogFragment.Ret
     } catch (e: Exception) {
         Toast.makeText(requireContext(), e.readableMessage, Toast.LENGTH_LONG).show()
         null
-    }).also { BackgroundLocationReceiver.enabled = followerSwitch.isChecked == true }
+    }).also { BackgroundLocationReceiver.enabled = followerSwitch.isChecked }
 }

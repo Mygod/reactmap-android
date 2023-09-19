@@ -33,7 +33,6 @@ import java.util.concurrent.TimeUnit
 
 class BackgroundLocationReceiver : BroadcastReceiver() {
     companion object {
-//        private const val KEY = "backgroundLocation.enabled"
         private const val ACTION_LOCATION = "location"
         const val MIN_UPDATE_THRESHOLD_METER = 40f
 
@@ -48,12 +47,10 @@ class BackgroundLocationReceiver : BroadcastReceiver() {
                 } else PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP)
                 if (value) setup() else stop()
             }
-//        private val userEnabled get() = app.pref.getBoolean(KEY, true)
 
         private val locationPendingIntent by lazy {
-            PendingIntent.getBroadcast(app, 0, Intent(app, BackgroundLocationReceiver::class.java).setAction(
-                ACTION_LOCATION
-            ), PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_CANCEL_CURRENT)
+            PendingIntent.getBroadcast(app, 0, Intent(app, BackgroundLocationReceiver::class.java)
+                .setAction(ACTION_LOCATION), PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_CANCEL_CURRENT)
         }
         private val persistedLastLocationFile = File(app.deviceStorage.noBackupFilesDir, "lastLocation")
         var persistedLastLocation: LastLocation?
