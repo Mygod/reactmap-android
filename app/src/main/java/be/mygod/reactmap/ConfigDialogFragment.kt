@@ -45,7 +45,7 @@ class ConfigDialogFragment : AlertDialogFragment<Empty, ConfigDialogFragment.Ret
             setText(app.activeUrl)
         }
         followerSwitch = Switch(context).apply {
-            text = "Make alerts follow location in background"
+            text = "Make alerts follow location in background\n(beware that you would be sharing your location with the map)"
             isChecked = BackgroundLocationReceiver.enabled
             isGone = true
             setOnCheckedChangeListener { _, isChecked ->
