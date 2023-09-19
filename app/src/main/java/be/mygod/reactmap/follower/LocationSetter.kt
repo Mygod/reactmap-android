@@ -26,16 +26,18 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
     companion object {
         const val CHANNEL_ID = "locationSetter"
         const val CHANNEL_ID_ERROR = "locationSetterError"
+        const val CHANNEL_ID_SUCCESS = "locationSetterSuccess"
         const val KEY_LATITUDE = "latitude"
         const val KEY_LONGITUDE = "longitude"
+        private const val ID_STATUS = 3
 
         fun notifyError(message: CharSequence) {
-            app.nm.notify(3, NotificationCompat.Builder(app, CHANNEL_ID_ERROR).apply {
-                setWhen(0)
+            app.nm.notify(ID_STATUS, NotificationCompat.Builder(app, CHANNEL_ID_ERROR).apply {
                 color = app.getColor(R.color.main_orange)
                 setCategory(NotificationCompat.CATEGORY_ALARM)
                 setContentTitle("Failed to update location")
                 setContentText(message)
+                setGroup(CHANNEL_ID)
                 setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 setSmallIcon(R.drawable.ic_notification_sync_problem)
                 priority = NotificationCompat.PRIORITY_MAX
@@ -72,11 +74,24 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
         when (val code = conn.responseCode) {
             200 -> {
                 withContext(Dispatchers.Main) {
-                    BackgroundLocationReceiver.onLocationSubmitted(Location("").apply {
+                    BackgroundLocationReceiver.onLocationSubmitted(Location("bg").apply {
                         latitude = lat
                         longitude = lon
                     })
                 }
+                app.nm.notify(ID_STATUS, NotificationCompat.Builder(app, CHANNEL_ID_SUCCESS).apply {
+                    color = app.getColor(R.color.main_blue)
+                    setCategory(NotificationCompat.CATEGORY_STATUS)
+                    setContentTitle("Location updated")
+                    setContentText("$lat, $lon")
+                    setGroup(CHANNEL_ID)
+                    setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                    setSmallIcon(R.drawable.ic_reactmap)
+                    priority = NotificationCompat.PRIORITY_MIN
+                    setContentIntent(PendingIntent.getActivity(app, 2,
+                        Intent(app, MainActivity::class.java).setAction(MainActivity.ACTION_CONFIGURE),
+                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE))
+                }.build())
                 Result.success()
             }
             else -> {
@@ -100,12 +115,12 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
     }
 
     override suspend fun getForegroundInfo() = ForegroundInfo(2, NotificationCompat.Builder(app, CHANNEL_ID).apply {
-        setWhen(0)
         color = app.getColor(R.color.main_blue)
         setCategory(NotificationCompat.CATEGORY_SERVICE)
         setContentTitle("Updating location")
         setContentText("${inputData.getDouble(KEY_LATITUDE, Double.NaN)}, " +
                 inputData.getDouble(KEY_LONGITUDE, Double.NaN))
+        setGroup(CHANNEL_ID)
         setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
         setSmallIcon(R.drawable.ic_notification_sync)
         setProgress(0, 0, true)

@@ -81,6 +81,10 @@ class App : Application() {
                 NotificationManager.IMPORTANCE_LOW).apply {
                 lockscreenVisibility = Notification.VISIBILITY_PUBLIC
             },
+            NotificationChannel(LocationSetter.CHANNEL_ID_SUCCESS, "Background location updated",
+                NotificationManager.IMPORTANCE_MIN).apply {
+                lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+            },
             NotificationChannel(LocationSetter.CHANNEL_ID_ERROR, "Background location update failed",
                 NotificationManager.IMPORTANCE_HIGH).apply {
                 lockscreenVisibility = Notification.VISIBILITY_PUBLIC

@@ -24,6 +24,7 @@ class SiteController(private val activity: ComponentActivity) : DefaultLifecycle
             setCategory(NotificationCompat.CATEGORY_SERVICE)
             setContentTitle(title)
             setContentText("Tap to configure")
+            setGroup(CHANNEL_ID)
             setSmallIcon(R.drawable.ic_reactmap)
             setOngoing(true)
             priority = NotificationCompat.PRIORITY_LOW
