@@ -14,7 +14,7 @@ android {
         applicationId = "be.mygod.reactmap"
         minSdk = 24
         targetSdk = 34
-        versionCode = 50
+        versionCode = 51
         versionName = "0.5.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
