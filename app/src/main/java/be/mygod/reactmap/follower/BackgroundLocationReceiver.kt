@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.location.Location
 import androidx.annotation.MainThread
@@ -18,8 +19,10 @@ import androidx.work.OutOfQuotaPolicy
 import androidx.work.WorkRequest
 import androidx.work.workDataOf
 import be.mygod.reactmap.App.Companion.app
+import be.mygod.reactmap.util.readableMessage
 import be.mygod.reactmap.util.toByteArray
 import be.mygod.reactmap.util.toParcelable
+import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.Priority
@@ -91,7 +94,13 @@ class BackgroundLocationReceiver : BroadcastReceiver() {
                 setMinUpdateDistanceMeters(MIN_UPDATE_THRESHOLD_METER)
                 setMinUpdateIntervalMillis(60 * 1000)
             }.build(), locationPendingIntent).addOnCompleteListener { task ->
-                if (task.isSuccessful) active = true else Timber.w(task.exception)
+                if (task.isSuccessful) {
+                    Timber.d("BackgroundLocationReceiver started")
+                    active = true
+                } else if (app.userManager.isUserUnlocked || task.exception !is ApiException) {
+                    LocationSetter.notifyError(task.exception?.readableMessage.toString())
+                    Timber.w(task.exception)
+                } else Timber.d(task.exception) // would retry after unlock
             }
             // for DEV testing:
 //            enqueueSubmission(persistedLastLocation?.location ?: return)
@@ -99,7 +108,10 @@ class BackgroundLocationReceiver : BroadcastReceiver() {
         @MainThread
         fun stop() {
             if (active) app.fusedLocation.removeLocationUpdates(locationPendingIntent).addOnCompleteListener { task ->
-                if (task.isSuccessful) active = false else Timber.w(task.exception)
+                if (task.isSuccessful) {
+                    Timber.d("BackgroundLocationReceiver stopped")
+                    active = false
+                } else Timber.w(task.exception)
             }
         }
 
@@ -122,11 +134,17 @@ class BackgroundLocationReceiver : BroadcastReceiver() {
             }.build())
     }
 
-    override fun onReceive(context: Context?, intent: Intent) {
+    override fun onReceive(context: Context, intent: Intent) {
         when (intent.action) {
-            Intent.ACTION_BOOT_COMPLETED, Intent.ACTION_LOCKED_BOOT_COMPLETED, Intent.ACTION_MY_PACKAGE_REPLACED -> {
+            Intent.ACTION_BOOT_COMPLETED, Intent.ACTION_MY_PACKAGE_REPLACED -> {
                 // already handled during App init
             }
+            Intent.ACTION_LOCKED_BOOT_COMPLETED -> app.registerReceiver(object : BroadcastReceiver() {
+                override fun onReceive(context: Context, intent: Intent?) {
+                    setup()
+                    context.unregisterReceiver(this)
+                }
+            }, IntentFilter(Intent.ACTION_USER_UNLOCKED))
             ACTION_LOCATION -> {
                 val locations = LocationResult.extractResult(intent)?.locations
                 if (locations.isNullOrEmpty()) return

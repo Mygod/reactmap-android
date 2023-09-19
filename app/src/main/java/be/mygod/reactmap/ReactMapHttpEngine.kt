@@ -3,12 +3,10 @@ package be.mygod.reactmap
 import android.net.http.ConnectionMigrationOptions
 import android.net.http.HttpEngine
 import android.os.Build
-import android.os.UserManager
 import android.os.ext.SdkExtensions
 import android.webkit.CookieManager
 import androidx.annotation.RequiresExtension
 import androidx.core.content.edit
-import androidx.core.content.getSystemService
 import be.mygod.reactmap.App.Companion.app
 import be.mygod.reactmap.follower.LocationSetter
 import java.io.File
@@ -17,8 +15,6 @@ import java.net.URL
 
 object ReactMapHttpEngine {
     private const val KEY_COOKIE = "cookie.graphql"
-
-    private val userManager = app.getSystemService<UserManager>()!!
 
     @get:RequiresExtension(Build.VERSION_CODES.S, 7)
     private val engine by lazy @RequiresExtension(Build.VERSION_CODES.S, 7) {
@@ -41,7 +37,7 @@ object ReactMapHttpEngine {
         SdkExtensions.getExtensionVersion(Build.VERSION_CODES.S) >= 7) {
         engine.openConnection(URL(url))
     } else URL(url).openConnection()) as HttpURLConnection).apply {
-        if (userManager.isUserUnlocked) {
+        if (app.userManager.isUserUnlocked) {
             val cookie = CookieManager.getInstance()
             cookie.getCookie(url)?.let { addRequestProperty("Cookie", it) }
             setup()
