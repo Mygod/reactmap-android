@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo
 import android.location.Location
+import android.text.format.DateUtils
 import androidx.core.app.NotificationCompat
 import androidx.core.net.toUri
 import androidx.work.CoroutineWorker
@@ -31,6 +32,7 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
         const val CHANNEL_ID_SUCCESS = "locationSetterSuccess"
         const val KEY_LATITUDE = "latitude"
         const val KEY_LONGITUDE = "longitude"
+        const val KEY_TIME = "time"
         private const val ID_STATUS = 3
 
         val apiUrl get() = app.activeUrl.toUri().buildUpon().apply {
@@ -52,11 +54,32 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE))
             }.build())
         }
+
+        private fun timeSpan(from: Long): String {
+            var t = (System.currentTimeMillis() - from) * .001
+            if (t < 60) return "${t}s"
+            if (t < 60 * 60) {
+                val s = (t % 60).toInt()
+                if (s == 0) return "${t.toInt()}m"
+                return "${t.toInt()}m ${s}s"
+            }
+            t /= 60
+            if (t < 24 * 60) {
+                val m = (t % 60).toInt()
+                if (m == 0) return "${t.toInt()}h"
+                return "${t.toInt()}h ${m}m"
+            }
+            t /= 60
+            val h = (t % 24).toInt()
+            if (h == 0) return "${t.toInt()}d"
+            return "${t.toInt()}d ${h}h"
+        }
     }
 
     override suspend fun doWork() = try {
         val lat = inputData.getDouble(KEY_LATITUDE, Double.NaN)
         val lon = inputData.getDouble(KEY_LONGITUDE, Double.NaN)
+        val time = inputData.getLong(KEY_TIME, 0)
         val conn = ReactMapHttpEngine.openConnection(apiUrl) {
             doOutput = true
             requestMethod = "POST"
@@ -71,7 +94,7 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
                     })
                     // epic graphql query yay >:(
                     put("query", "mutation Webhook(\$data: JSON, \$category: String!, \$status: String!) {" +
-                            "webhook(data: \$data, category: \$category, status: \$status) { human { name } } }")
+                            "webhook(data: \$data, category: \$category, status: \$status) { human { name type } } }")
                 }.toString())
             }
         }
@@ -79,8 +102,8 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
             200 -> {
                 val response = conn.inputStream.bufferedReader().readText()
                 val human = try {
-                    JSONObject(response).getJSONObject("data").getJSONObject("webhook").getJSONObject("human")
-                        .getString("name")
+                    val o = JSONObject(response).getJSONObject("data").getJSONObject("webhook").getJSONObject("human")
+                    o.getString("type") + ' ' + o.getString("name")
                 } catch (e: JSONException) {
                     throw Exception(response, e)
                 }
@@ -101,7 +124,7 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
                         Intent(app, MainActivity::class.java).setAction(MainActivity.ACTION_CONFIGURE),
                         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE))
                     setPublicVersion(build())
-                    setContentText("$lat, $lon for $human")
+                    setContentText("$lat, $lon (stale ${timeSpan(time)}) for $human")
                 }.build())
                 Result.success()
             }
@@ -132,7 +155,9 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
         setCategory(NotificationCompat.CATEGORY_SERVICE)
         setContentTitle("Updating location")
         setContentText("${inputData.getDouble(KEY_LATITUDE, Double.NaN)}, " +
-                inputData.getDouble(KEY_LONGITUDE, Double.NaN))
+                inputData.getDouble(KEY_LONGITUDE, Double.NaN) + " from " +
+                DateUtils.getRelativeTimeSpanString(inputData.getLong(KEY_TIME, 0),
+                    System.currentTimeMillis(), 0, DateUtils.FORMAT_ABBREV_RELATIVE))
         setGroup(CHANNEL_ID)
         setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
         setSmallIcon(R.drawable.ic_notification_sync)

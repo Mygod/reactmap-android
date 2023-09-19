@@ -130,7 +130,7 @@ class BackgroundLocationReceiver : BroadcastReceiver() {
                 }.build())
                 setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
                 setInputData(workDataOf(LocationSetter.KEY_LATITUDE to location.latitude,
-                    LocationSetter.KEY_LONGITUDE to location.longitude))
+                    LocationSetter.KEY_LONGITUDE to location.longitude, LocationSetter.KEY_TIME to location.time))
             }.build())
     }
 
