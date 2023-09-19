@@ -32,6 +32,10 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
         const val KEY_LONGITUDE = "longitude"
         private const val ID_STATUS = 3
 
+        val apiUrl get() = app.activeUrl.toUri().buildUpon().apply {
+            path("/graphql")
+        }.build().toString()
+
         fun notifyError(message: CharSequence) {
             app.nm.notify(ID_STATUS, NotificationCompat.Builder(app, CHANNEL_ID_ERROR).apply {
                 color = app.getColor(R.color.main_orange)
@@ -52,9 +56,7 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
     override suspend fun doWork() = try {
         val lat = inputData.getDouble(KEY_LATITUDE, Double.NaN)
         val lon = inputData.getDouble(KEY_LONGITUDE, Double.NaN)
-        val conn = ReactMapHttpEngine.openConnection(app.activeUrl.toUri().buildUpon().apply {
-            path("/graphql")
-        }.build().toString()) {
+        val conn = ReactMapHttpEngine.openConnection(apiUrl) {
             doOutput = true
             requestMethod = "POST"
             addRequestProperty("Content-Type", "application/json")

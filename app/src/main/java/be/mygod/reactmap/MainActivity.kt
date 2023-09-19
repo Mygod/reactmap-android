@@ -154,6 +154,7 @@ class MainActivity : FragmentActivity() {
                     if (url.toUri().host != hostname) return
                     muiMargin.apply()
                     BackgroundLocationReceiver.setup()  // redo setup in case cookie is updated
+                    ReactMapHttpEngine.updateCookie()
                 }
 
                 override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {

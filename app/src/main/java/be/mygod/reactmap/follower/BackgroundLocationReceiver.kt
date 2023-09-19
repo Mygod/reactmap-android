@@ -93,6 +93,8 @@ class BackgroundLocationReceiver : BroadcastReceiver() {
             }.build(), locationPendingIntent).addOnCompleteListener { task ->
                 if (task.isSuccessful) active = true else Timber.w(task.exception)
             }
+            // for DEV testing:
+//            enqueueSubmission(persistedLastLocation?.location ?: return)
         }
         @MainThread
         fun stop() {
@@ -105,6 +107,19 @@ class BackgroundLocationReceiver : BroadcastReceiver() {
         fun onLocationSubmitted(location: Location) {
             persistedLastLocation = LastLocation(persistedLastLocation?.location ?: location, location)
         }
+
+        private fun enqueueSubmission(location: Location) = app.work.enqueueUniqueWork("LocationSetter",
+            ExistingWorkPolicy.REPLACE, OneTimeWorkRequestBuilder<LocationSetter>().apply {
+                setBackoffCriteria(BackoffPolicy.LINEAR, WorkRequest.MIN_BACKOFF_MILLIS, TimeUnit.MILLISECONDS)
+                setConstraints(Constraints.Builder().apply {
+                    setRequiredNetworkType(NetworkType.CONNECTED)
+                    // Expedited jobs only support network and storage constraints
+//                    setRequiresBatteryNotLow(true)
+                }.build())
+                setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
+                setInputData(workDataOf(LocationSetter.KEY_LATITUDE to location.latitude,
+                    LocationSetter.KEY_LONGITUDE to location.longitude))
+            }.build())
     }
 
     override fun onReceive(context: Context?, intent: Intent) {
@@ -134,18 +149,7 @@ class BackgroundLocationReceiver : BroadcastReceiver() {
                     ?.run { distanceTo(bestLocation) < MIN_UPDATE_THRESHOLD_METER } != true
                 Timber.d("Updating $lastLocation -> $bestLocation (submitting $shouldSet)")
                 persistedLastLocation = LastLocation(bestLocation, lastLocation?.submittedLocation)
-                if (shouldSet) app.work.enqueueUniqueWork("LocationSetter", ExistingWorkPolicy.REPLACE,
-                    OneTimeWorkRequestBuilder<LocationSetter>().apply {
-                        setBackoffCriteria(BackoffPolicy.LINEAR, WorkRequest.MIN_BACKOFF_MILLIS, TimeUnit.MILLISECONDS)
-                        setConstraints(Constraints.Builder().apply {
-                            setRequiredNetworkType(NetworkType.CONNECTED)
-                            // Expedited jobs only support network and storage constraints
-//                            setRequiresBatteryNotLow(true)
-                        }.build())
-                        setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
-                        setInputData(workDataOf(LocationSetter.KEY_LATITUDE to bestLocation.latitude,
-                            LocationSetter.KEY_LONGITUDE to bestLocation.longitude))
-                    }.build())
+                if (shouldSet) enqueueSubmission(bestLocation)
             }
         }
     }
