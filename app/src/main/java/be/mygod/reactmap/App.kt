@@ -10,7 +10,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.ext.SdkExtensions
 import android.util.Log
-import android.webkit.WebView
 import android.widget.Toast
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
@@ -72,7 +71,6 @@ class App : Application() {
                 }
             }
         })
-        if (BuildConfig.DEBUG) WebView.setWebContentsDebuggingEnabled(true)
 
         if (Build.VERSION.SDK_INT >= 26) nm.createNotificationChannels(listOf(
             NotificationChannel(SiteController.CHANNEL_ID, "Full screen site controls",

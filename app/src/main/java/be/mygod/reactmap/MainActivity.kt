@@ -81,6 +81,7 @@ class MainActivity : FragmentActivity() {
         super.onCreate(savedInstanceState)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         enableEdgeToEdge()
+        if (BuildConfig.DEBUG) WebView.setWebContentsDebuggingEnabled(true)
         val activeUrl = app.activeUrl
         hostname = Uri.parse(activeUrl).host!!
         web = WebView(this).apply {
