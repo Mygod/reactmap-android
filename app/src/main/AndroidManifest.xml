@@ -45,9 +45,51 @@
         </receiver>
 
         <service
+            android:name="androidx.work.impl.background.systemalarm.SystemAlarmService"
+            android:directBootAware="true"
+            tools:replace="android:directBootAware"/>
+        <service
+            android:name="androidx.work.impl.background.systemjob.SystemJobService"
+            android:directBootAware="true"
+            tools:replace="android:directBootAware"/>
+        <service
             android:name="androidx.work.impl.foreground.SystemForegroundService"
+            android:directBootAware="true"
             android:foregroundServiceType="dataSync"
+            tools:replace="android:directBootAware"
             tools:node="merge"/>
+        <receiver
+            android:name="androidx.work.impl.utils.ForceStopRunnable$BroadcastReceiver"
+            android:directBootAware="true"
+            tools:replace="android:directBootAware"/>
+        <receiver
+            android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryChargingProxy"
+            android:directBootAware="true"
+            tools:replace="android:directBootAware"/>
+        <receiver
+            android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryNotLowProxy"
+            android:directBootAware="true"
+            tools:replace="android:directBootAware"/>
+        <receiver
+            android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$StorageNotLowProxy"
+            android:directBootAware="true"
+            tools:replace="android:directBootAware"/>
+        <receiver
+            android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$NetworkStateProxy"
+            android:directBootAware="true"
+            tools:replace="android:directBootAware"/>
+        <receiver
+            android:name="androidx.work.impl.background.systemalarm.RescheduleReceiver"
+            android:directBootAware="true"
+            tools:replace="android:directBootAware"/>
+        <receiver
+            android:name="androidx.work.impl.background.systemalarm.ConstraintProxyUpdateReceiver"
+            android:directBootAware="true"
+            tools:replace="android:directBootAware"/>
+        <receiver
+            android:name="androidx.work.impl.diagnostics.DiagnosticsReceiver"
+            android:directBootAware="true"
+            tools:replace="android:directBootAware"/>
         <provider
             android:name="androidx.startup.InitializationProvider"
             tools:node="remove"/>
