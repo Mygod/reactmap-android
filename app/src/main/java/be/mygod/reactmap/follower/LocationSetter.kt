@@ -95,7 +95,8 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
                     })
                     // epic graphql query yay >:(
                     put("query", "mutation Webhook(\$data: JSON, \$category: String!, \$status: String!) {" +
-                            "webhook(data: \$data, category: \$category, status: \$status) { human { name type } } }")
+                            "webhook(data: \$data, category: \$category, status: \$status) {" +
+                            "human { current_profile_no name type } } }")
                 }.toString())
             }
         }
@@ -104,7 +105,7 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
                 val response = conn.inputStream.bufferedReader().readText()
                 val human = try {
                     val o = JSONObject(response).getJSONObject("data").getJSONObject("webhook").getJSONObject("human")
-                    o.getString("type") + ' ' + o.getString("name")
+                    o.getString("type") + ' ' + o.getString("name") + " profile#" + o.getLong("current_profile_no")
                 } catch (e: JSONException) {
                     throw Exception(response, e)
                 }
