@@ -99,13 +99,15 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
             }
             else -> {
                 val error = conn.findErrorStream.bufferedReader().readText()
-                Timber.w(Exception(error))
                 val json = JSONObject(error).getJSONArray("errors")
                 notifyError((0 until json.length()).joinToString { json.getJSONObject(it).getString("message") })
                 if (code == 401 || code == 511) {
                     withContext(Dispatchers.Main) { BackgroundLocationReceiver.stop() }
                     Result.failure()
-                } else Result.retry()
+                } else {
+                    Timber.w(Exception(error + code))
+                    Result.retry()
+                }
             }
         }
     } catch (e: IOException) {
