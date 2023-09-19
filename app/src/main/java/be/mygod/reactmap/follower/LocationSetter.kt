@@ -62,18 +62,18 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
             if (t < 60 * 60) {
                 val s = (t % 60).toInt()
                 if (s == 0) return "${t.toInt()}m"
-                return "${t.toInt()}m ${s}s"
+                return "${(t / 60).toInt()}m ${s}s"
             }
             t /= 60
             if (t < 24 * 60) {
                 val m = (t % 60).toInt()
                 if (m == 0) return "${t.toInt()}h"
-                return "${t.toInt()}h ${m}m"
+                return "${(t / 60).toInt()}h ${m}m"
             }
             t /= 60
             val h = (t % 24).toInt()
             if (h == 0) return "${t.toInt()}d"
-            return "${t.toInt()}d ${h}h"
+            return "${(t / 24).toInt()}d ${h}h"
         }
     }
 
