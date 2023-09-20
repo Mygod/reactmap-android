@@ -4,6 +4,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo
+import android.icu.text.DecimalFormat
 import android.location.Location
 import android.text.format.DateUtils
 import androidx.core.app.NotificationCompat
@@ -56,9 +57,10 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
             }.build())
         }
 
+        private val secondFormat = DecimalFormat(".###")
         private fun timeSpan(from: Long): String {
             var t = (System.currentTimeMillis() - from) * .001
-            if (t < 60) return "${t}s"
+            if (t < 60) return "${secondFormat.format(t)}s"
             if (t < 60 * 60) {
                 val s = (t % 60).toInt()
                 if (s == 0) return "${t.toInt()}m"
@@ -126,7 +128,7 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
                         Intent(app, MainActivity::class.java).setAction(MainActivity.ACTION_CONFIGURE),
                         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE))
                     setPublicVersion(build())
-                    setContentText("$lat, $lon (stale ${timeSpan(time)}) for $human")
+                    setContentText("$lat,$lon (stale ${timeSpan(time)}) > $human")
                 }.build())
                 Result.success()
             }
