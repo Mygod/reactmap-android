@@ -2,26 +2,57 @@ package be.mygod.reactmap
 
 import android.annotation.SuppressLint
 import android.app.Application
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.net.Uri
 import android.os.Build
+import android.os.UserManager
 import android.os.ext.SdkExtensions
 import android.util.Log
-import android.webkit.WebView
 import android.widget.Toast
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.content.getSystemService
+import androidx.work.WorkManager
+import be.mygod.reactmap.follower.BackgroundLocationReceiver
+import be.mygod.reactmap.follower.LocationSetter
+import be.mygod.reactmap.util.DeviceStorageApp
+import com.google.android.gms.location.LocationServices
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.ktx.initialize
+import kotlinx.coroutines.DEBUG_PROPERTY_NAME
+import kotlinx.coroutines.DEBUG_PROPERTY_VALUE_ON
 import timber.log.Timber
 
 class App : Application() {
     companion object {
+        private const val PREF_NAME = "reactmap"
+        const val KEY_ACTIVE_URL = "url.active"
+        const val URL_DEFAULT = "https://www.reactmap.dev"
+
         lateinit var app: App
     }
+
+    lateinit var deviceStorage: Application
+    lateinit var work: WorkManager
+    val pref by lazy { deviceStorage.getSharedPreferences(PREF_NAME, MODE_PRIVATE) }
+    val fusedLocation by lazy { LocationServices.getFusedLocationProviderClient(deviceStorage) }
+    val nm by lazy { getSystemService<NotificationManager>()!! }
+    val userManager by lazy { getSystemService<UserManager>()!! }
+
+    val activeUrl get() = pref.getString(KEY_ACTIVE_URL, URL_DEFAULT) ?: URL_DEFAULT
 
     override fun onCreate() {
         super.onCreate()
         app = this
+        deviceStorage = DeviceStorageApp(this)
+        deviceStorage.moveSharedPreferencesFrom(this, PREF_NAME)
+        // overhead of debug mode is minimal: https://github.com/Kotlin/kotlinx.coroutines/blob/f528898/docs/debugging.md#debug-mode
+        System.setProperty(DEBUG_PROPERTY_NAME, DEBUG_PROPERTY_VALUE_ON)
+        Firebase.initialize(deviceStorage)
         FirebaseCrashlytics.getInstance().apply {
             setCustomKey("build", Build.DISPLAY)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) setCustomKey("extension_s",
@@ -42,7 +73,25 @@ class App : Application() {
                 }
             }
         })
-        if (BuildConfig.DEBUG) WebView.setWebContentsDebuggingEnabled(true)
+
+        if (Build.VERSION.SDK_INT >= 26) nm.createNotificationChannels(listOf(
+            NotificationChannel(SiteController.CHANNEL_ID, "Full screen site controls",
+                NotificationManager.IMPORTANCE_LOW).apply {
+                lockscreenVisibility = Notification.VISIBILITY_SECRET
+            },
+            NotificationChannel(LocationSetter.CHANNEL_ID, "Background location updating",
+                NotificationManager.IMPORTANCE_LOW).apply {
+                lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+            },
+            NotificationChannel(LocationSetter.CHANNEL_ID_SUCCESS, "Background location updated",
+                NotificationManager.IMPORTANCE_MIN),
+            NotificationChannel(LocationSetter.CHANNEL_ID_ERROR, "Background location update failed",
+                NotificationManager.IMPORTANCE_HIGH).apply {
+                lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+            },
+        ))
+        work = WorkManager.getInstance(deviceStorage)
+        BackgroundLocationReceiver.setup()
     }
 
     private val customTabsIntent by lazy {

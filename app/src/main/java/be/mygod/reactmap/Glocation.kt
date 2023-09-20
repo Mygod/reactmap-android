@@ -14,11 +14,11 @@ import androidx.annotation.RequiresPermission
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import be.mygod.reactmap.App.Companion.app
 import com.google.android.gms.location.LocationAvailability
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import timber.log.Timber
 
@@ -54,7 +54,6 @@ class Glocation(private val web: WebView) : DefaultLifecycleObserver {
         it.context as ComponentActivity
     }.also { it.lifecycle.addObserver(this) }
     private val jsSetup = activity.resources.openRawResource(R.raw.setup).bufferedReader().readText()
-    private val client = LocationServices.getFusedLocationProviderClient(activity)
     private val pendingRequests = mutableSetOf<Long>()
     private var pendingWatch = false
     private val activeListeners = mutableSetOf<Long>()
@@ -119,7 +118,7 @@ class Glocation(private val web: WebView) : DefaultLifecycleObserver {
 
     private fun getCurrentPosition(granted: Boolean, ids: String) {
         @SuppressLint("MissingPermission")
-        if (granted) client.lastLocation.addOnCompleteListener { task ->
+        if (granted) app.fusedLocation.lastLocation.addOnCompleteListener { task ->
             val location = task.result
             web.evaluateJavascript(if (location == null) {
                 "navigator.geolocation._getCurrentPositionError([$ids], ${task.exception.toGeolocationPositionError()})"
@@ -165,12 +164,12 @@ class Glocation(private val web: WebView) : DefaultLifecycleObserver {
 
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
     private fun requestLocationUpdates() {
-        client.requestLocationUpdates(LocationRequest.Builder(Priority.PRIORITY_LOW_POWER, 4000).apply {
+        app.fusedLocation.requestLocationUpdates(LocationRequest.Builder(Priority.PRIORITY_LOW_POWER, 4000).apply {
             // enableHighAccuracy - PRIORITY_HIGH_ACCURACY
             // expirationTime = timeout
             // maxWaitTime = maximumAge
-            setMinUpdateIntervalMillis(1000)
             setMinUpdateDistanceMeters(5f)
+            setMinUpdateIntervalMillis(1000)
         }.build(), callback, Looper.getMainLooper()).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 Timber.d("Start watching location")
@@ -180,8 +179,8 @@ class Glocation(private val web: WebView) : DefaultLifecycleObserver {
             )
         }
     }
-    private fun removeLocationUpdates() = client.removeLocationUpdates(callback).addOnCompleteListener { task ->
-        if (task.isSuccessful) Timber.d("Stop watching location")
-        else Timber.w("Stop watch failed: ${task.exception}")
+    private fun removeLocationUpdates() = app.fusedLocation.removeLocationUpdates(callback).addOnCompleteListener {
+        if (it.isSuccessful) Timber.d("Stop watching location")
+        else Timber.w("Stop watch failed: ${it.exception}")
     }
 }

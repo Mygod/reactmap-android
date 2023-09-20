@@ -1,37 +1,30 @@
 package be.mygod.reactmap
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
-import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.NotificationCompat
-import androidx.core.content.getSystemService
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import be.mygod.reactmap.App.Companion.app
 
 class SiteController(private val activity: ComponentActivity) : DefaultLifecycleObserver {
     companion object {
-        private const val CHANNEL_ID = "control"
+        const val CHANNEL_ID = "control"
     }
-    private val nm = activity.getSystemService<NotificationManager>()!!
     init {
         activity.lifecycle.addObserver(this)
-        if (Build.VERSION.SDK_INT >= 26) nm.createNotificationChannel(
-            NotificationChannel(CHANNEL_ID, "Full screen site controls", NotificationManager.IMPORTANCE_LOW).apply {
-                lockscreenVisibility = NotificationCompat.VISIBILITY_SECRET
-            })
     }
 
     private val requestPermission = activity.registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-        if (it && started) nm.notify(1, NotificationCompat.Builder(activity, CHANNEL_ID).apply {
+        if (it && started) app.nm.notify(1, NotificationCompat.Builder(activity, CHANNEL_ID).apply {
             setWhen(0)
             color = activity.getColor(R.color.main_blue)
             setCategory(NotificationCompat.CATEGORY_SERVICE)
             setContentTitle(title)
             setContentText("Tap to configure")
+            setGroup(CHANNEL_ID)
             setSmallIcon(R.drawable.ic_reactmap)
             setOngoing(true)
             priority = NotificationCompat.PRIORITY_LOW
@@ -39,7 +32,7 @@ class SiteController(private val activity: ComponentActivity) : DefaultLifecycle
             setContentIntent(PendingIntent.getActivity(activity, 0,
                 Intent(activity, MainActivity::class.java).setAction(MainActivity.ACTION_CONFIGURE),
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE))
-            addAction(android.R.drawable.ic_delete, "Restart game", PendingIntent.getActivity(activity,
+            addAction(R.drawable.ic_notification_sync, "Restart game", PendingIntent.getActivity(activity,
                 1, Intent(activity, MainActivity::class.java).setAction(MainActivity.ACTION_RESTART_GAME),
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE))
         }.build())
@@ -59,6 +52,6 @@ class SiteController(private val activity: ComponentActivity) : DefaultLifecycle
 
     override fun onStop(owner: LifecycleOwner) {
         started = false
-        nm.cancel(1)
+        app.nm.cancel(1)
     }
 }

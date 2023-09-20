@@ -4,19 +4,13 @@ import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.AlertDialog
 import android.content.Intent
-import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.net.Uri
-import android.net.http.ConnectionMigrationOptions
-import android.net.http.HttpEngine
-import android.os.Build
 import android.os.Bundle
-import android.os.ext.SdkExtensions
 import android.util.JsonWriter
 import android.util.Log
 import android.view.WindowManager
 import android.webkit.ConsoleMessage
-import android.webkit.CookieManager
 import android.webkit.RenderProcessGoneDetail
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
@@ -24,20 +18,22 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
 import android.widget.Toast
-import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresExtension
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.core.view.WindowCompat
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import be.mygod.reactmap.App.Companion.app
+import be.mygod.reactmap.follower.BackgroundLocationReceiver
+import be.mygod.reactmap.util.AlertDialogFragment
+import be.mygod.reactmap.util.CreateDynamicDocument
+import be.mygod.reactmap.util.findErrorStream
+import be.mygod.reactmap.util.readableMessage
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.coroutines.launch
 import org.json.JSONArray
@@ -45,51 +41,27 @@ import org.json.JSONException
 import org.json.JSONObject
 import org.json.JSONTokener
 import timber.log.Timber
-import java.io.File
 import java.io.IOException
 import java.io.Reader
 import java.io.StringWriter
-import java.net.HttpURLConnection
-import java.net.URL
 import java.net.URLDecoder
 import java.nio.charset.Charset
 import java.util.Locale
 
-class MainActivity : ComponentActivity() {
+class MainActivity : FragmentActivity() {
     companion object {
         const val ACTION_CONFIGURE = "be.mygod.reactmap.action.CONFIGURE"
         const val ACTION_RESTART_GAME = "be.mygod.reactmap.action.RESTART_GAME"
-        private const val PREF_NAME = "reactmap"
         private const val KEY_WELCOME = "welcome"
-        private const val KEY_ACTIVE_URL = "url.active"
-        private const val KEY_HISTORY_URL = "url.history"
-        private const val URL_DEFAULT = "https://www.reactmap.dev"
         private const val URL_RELOADING = "data:text/html;charset=utf-8,%3Ctitle%3ELoading...%3C%2Ftitle%3E%3Ch1%20style%3D%22display%3Aflex%3Bjustify-content%3Acenter%3Balign-items%3Acenter%3Btext-align%3Acenter%3Bheight%3A100vh%22%3ELoading..."
 
         private val filenameExtractor = "filename=(\"([^\"]+)\"|[^;]+)".toRegex(RegexOption.IGNORE_CASE)
-        private val supportedHosts = setOf("discordapp.com", "discord.com")
-
-        @get:RequiresExtension(Build.VERSION_CODES.S, 7)
-        private val engine by lazy @RequiresExtension(Build.VERSION_CODES.S, 7) {
-            val cache = File(app.cacheDir, "httpEngine")
-            HttpEngine.Builder(app).apply {
-                if (cache.mkdirs() || cache.isDirectory) {
-                    setStoragePath(cache.absolutePath)
-                    setEnableHttpCache(HttpEngine.Builder.HTTP_CACHE_DISK, 1024 * 1024)
-                }
-                setConnectionMigrationOptions(ConnectionMigrationOptions.Builder().apply {
-                    setDefaultNetworkMigration(ConnectionMigrationOptions.MIGRATION_OPTION_ENABLED)
-                    setPathDegradationMigration(ConnectionMigrationOptions.MIGRATION_OPTION_ENABLED)
-                }.build())
-                setEnableBrotli(true)
-            }.build()
-        }
+        private val supportedHosts = setOf("discordapp.com", "discord.com", "telegram.org", "oauth.telegram.org")
     }
 
     private lateinit var web: WebView
     private lateinit var glocation: Glocation
     private lateinit var siteController: SiteController
-    private lateinit var pref: SharedPreferences
     private lateinit var hostname: String
     private val windowInsetsController by lazy { WindowCompat.getInsetsController(window, web) }
     private var loginText: String? = null
@@ -110,8 +82,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         enableEdgeToEdge()
-        pref = getSharedPreferences(PREF_NAME, MODE_PRIVATE)
-        val activeUrl = pref.getString(KEY_ACTIVE_URL, URL_DEFAULT)!!
+        if (BuildConfig.DEBUG) WebView.setWebContentsDebuggingEnabled(true)
+        val activeUrl = app.activeUrl
         hostname = Uri.parse(activeUrl).host!!
         web = WebView(this).apply {
             settings.apply {
@@ -176,10 +148,13 @@ class MainActivity : ComponentActivity() {
 
                 override fun onPageFinished(view: WebView?, url: String) {
                     if (url == URL_RELOADING) {
-                        loadUrl(pref.getString(KEY_ACTIVE_URL, URL_DEFAULT)!!)
+                        loadUrl(app.activeUrl)
                         return
                     }
-                    if (url.toUri().host == hostname) muiMargin.apply()
+                    if (url.toUri().host != hostname) return
+                    muiMargin.apply()
+                    BackgroundLocationReceiver.setup()  // redo setup in case cookie is updated
+                    ReactMapHttpEngine.updateCookie()
                 }
 
                 override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
@@ -216,7 +191,8 @@ class MainActivity : ComponentActivity() {
                         FirebaseAnalytics.getInstance(this@MainActivity).logEvent("webviewExit",
                             bundleOf("priority" to detail.rendererPriorityAtExit()))
                     }
-                    return false
+                    finish()    // WebView cannot be reused but keep the process alive if possible
+                    return true
                 }
             }
             setDownloadListener { url, _, contentDisposition, mimetype, _ ->
@@ -232,23 +208,22 @@ class MainActivity : ComponentActivity() {
             loadUrl(activeUrl)
         }
         setContentView(web)
-        if (pref.getBoolean(KEY_WELCOME, true)) {
+        if (app.pref.getBoolean(KEY_WELCOME, true)) {
             startConfigure()
-            pref.edit { putBoolean(KEY_WELCOME, false) }
+            app.pref.edit { putBoolean(KEY_WELCOME, false) }
+        }
+        AlertDialogFragment.setResultListener<ConfigDialogFragment, ConfigDialogFragment.Ret>(this) { _, ret ->
+            hostname = ret?.hostname ?: return@setResultListener
+            web.loadUrl(URL_RELOADING)
         }
     }
 
     private fun buildResponse(request: WebResourceRequest, transform: (Reader) -> String): WebResourceResponse {
         val url = request.url.toString()
-        val conn = (if (Build.VERSION.SDK_INT >= 34 || Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
-            SdkExtensions.getExtensionVersion(Build.VERSION_CODES.S) >= 7) {
-            engine.openConnection(URL(url))
-        } else URL(url).openConnection()) as HttpURLConnection
-        conn.requestMethod = request.method
-        for ((key, value) in request.requestHeaders) conn.addRequestProperty(key, value)
-        val cookie = CookieManager.getInstance()
-        cookie.getCookie(url)?.let { conn.addRequestProperty("Cookie", it) }
-        conn.headerFields["Set-Cookie"]?.forEach { cookie.setCookie(url, it) }
+        val conn = ReactMapHttpEngine.openConnection(url) {
+            requestMethod = request.method
+            for ((key, value) in request.requestHeaders) addRequestProperty(key, value)
+        }
         return WebResourceResponse(conn.contentType.split(';', limit = 2)[0], conn.contentEncoding, conn.responseCode,
             conn.responseMessage.let { if (it.isNullOrBlank()) "N/A" else it },
             conn.headerFields.mapValues { (_, value) -> value.joinToString() },
@@ -260,7 +235,7 @@ class MainActivity : ComponentActivity() {
             } catch (e: IOException) {
                 Timber.d(e)
                 conn.inputStream
-            } else conn.errorStream ?: conn.inputStream)
+            } else conn.findErrorStream)
     }
     private fun handleSettings(request: WebResourceRequest) = buildResponse(request) { reader ->
         val response = reader.readText()
@@ -308,42 +283,14 @@ class MainActivity : ComponentActivity() {
             }.show()
         }
     }
-    private fun startConfigure() = AlertDialog.Builder(this).apply {
-        val historyUrl = pref.getStringSet(KEY_HISTORY_URL, null) ?: setOf(URL_DEFAULT)
-        val editText = AutoCompleteTextView(this@MainActivity).apply {
-            setAdapter(ArrayAdapter(this@MainActivity, android.R.layout.select_dialog_item,
-                historyUrl.toTypedArray()))
-            setText(pref.getString(KEY_ACTIVE_URL, URL_DEFAULT))
-        }
-        setView(editText)
-        setTitle("ReactMap URL:")
-        setMessage("You can return to this dialog later by clicking on the notification.")
-        setPositiveButton(android.R.string.ok) { _, _ ->
-            val (uri, host) = try {
-                editText.text!!.toString().toUri().run {
-                    require("https".equals(scheme, true)) { "Only HTTPS is allowed" }
-                    toString() to host!!
-                }
-            } catch (e: Exception) {
-                Toast.makeText(this@MainActivity, e.localizedMessage ?: e.javaClass.name, Toast.LENGTH_LONG).show()
-                return@setPositiveButton
-            }
-            pref.edit {
-                putString(KEY_ACTIVE_URL, uri)
-                putStringSet(KEY_HISTORY_URL, historyUrl + uri)
-            }
-            hostname = host
-            web.loadUrl(URL_RELOADING)
-        }
-        setNegativeButton(android.R.string.cancel, null)
-    }.show()
+    private fun startConfigure() = ConfigDialogFragment().apply { key() }.show(supportFragmentManager, null)
     private fun restartGame(packageName: String) {
         try {
             ProcessBuilder("su", "-c", "am force-stop $packageName &&" +
                     "am start -n $packageName/com.nianticproject.holoholo.libholoholo.unity.UnityMainActivity").start()
         } catch (e: Exception) {
             Timber.w(e)
-            Toast.makeText(this@MainActivity, e.localizedMessage ?: e.javaClass.name, Toast.LENGTH_LONG).show()
+            Toast.makeText(this@MainActivity, e.readableMessage, Toast.LENGTH_LONG).show()
         }
     }
 }
