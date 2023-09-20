@@ -56,7 +56,7 @@ class MainActivity : FragmentActivity() {
         private const val URL_RELOADING = "data:text/html;charset=utf-8,%3Ctitle%3ELoading...%3C%2Ftitle%3E%3Ch1%20style%3D%22display%3Aflex%3Bjustify-content%3Acenter%3Balign-items%3Acenter%3Btext-align%3Acenter%3Bheight%3A100vh%22%3ELoading..."
 
         private val filenameExtractor = "filename=(\"([^\"]+)\"|[^;]+)".toRegex(RegexOption.IGNORE_CASE)
-        private val supportedHosts = setOf("discordapp.com", "discord.com")
+        private val supportedHosts = setOf("discordapp.com", "discord.com", "telegram.org", "oauth.telegram.org")
     }
 
     private lateinit var web: WebView
