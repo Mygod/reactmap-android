@@ -79,10 +79,12 @@ class ConfigDialogFragment : AlertDialogFragment<Empty, ConfigDialogFragment.Ret
             require("https".equals(it.scheme, true)) { "Only HTTPS is allowed" }
             it.toString() to it.host!!
         }
+        val oldApiUrl = ReactMapHttpEngine.apiUrl
         app.pref.edit {
             putString(App.KEY_ACTIVE_URL, uri)
             putStringSet(KEY_HISTORY_URL, historyUrl + uri)
         }
+        if (oldApiUrl != ReactMapHttpEngine.apiUrl) BackgroundLocationReceiver.onApiChanged()
         host
     } catch (e: Exception) {
         Toast.makeText(requireContext(), e.readableMessage, Toast.LENGTH_LONG).show()

@@ -8,7 +8,6 @@ import android.icu.text.DecimalFormat
 import android.location.Location
 import android.text.format.DateUtils
 import androidx.core.app.NotificationCompat
-import androidx.core.net.toUri
 import androidx.work.CoroutineWorker
 import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
@@ -35,11 +34,8 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
         const val KEY_LATITUDE = "latitude"
         const val KEY_LONGITUDE = "longitude"
         const val KEY_TIME = "time"
+        const val KEY_API_URL = "apiUrl"
         private const val ID_STATUS = 3
-
-        val apiUrl get() = app.activeUrl.toUri().buildUpon().apply {
-            path("/graphql")
-        }.build().toString()
 
         fun notifyError(message: CharSequence) {
             app.nm.notify(ID_STATUS, NotificationCompat.Builder(app, CHANNEL_ID_ERROR).apply {
@@ -58,7 +54,7 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
         }
 
         private val secondFormat = DecimalFormat(".###")
-        private fun timeSpan(from: Long): String {
+        private fun formatTimeSpanFrom(from: Long): String {
             var t = (System.currentTimeMillis() - from) * .001
             if (t < 60) return "${secondFormat.format(t)}s"
             if (t < 60 * 60) {
@@ -83,6 +79,7 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
         val lat = inputData.getDouble(KEY_LATITUDE, Double.NaN)
         val lon = inputData.getDouble(KEY_LONGITUDE, Double.NaN)
         val time = inputData.getLong(KEY_TIME, 0)
+        val apiUrl = inputData.getString(KEY_API_URL)!!
         val conn = ReactMapHttpEngine.openConnection(apiUrl) {
             doOutput = true
             requestMethod = "POST"
@@ -112,7 +109,7 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
                     throw Exception(response, e)
                 }
                 withContext(Dispatchers.Main) {
-                    BackgroundLocationReceiver.onLocationSubmitted(Location("bg").apply {
+                    BackgroundLocationReceiver.onLocationSubmitted(apiUrl, Location("bg").apply {
                         latitude = lat
                         longitude = lon
                     })
@@ -128,7 +125,7 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
                         Intent(app, MainActivity::class.java).setAction(MainActivity.ACTION_CONFIGURE),
                         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE))
                     setPublicVersion(build())
-                    setContentText("$lat,$lon (stale ${timeSpan(time)}) > $human")
+                    setContentText("$lat,$lon (stale ${formatTimeSpanFrom(time)}) > $human")
                 }.build())
                 Result.success()
             }

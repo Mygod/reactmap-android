@@ -19,6 +19,7 @@ import androidx.work.OutOfQuotaPolicy
 import androidx.work.WorkRequest
 import androidx.work.workDataOf
 import be.mygod.reactmap.App.Companion.app
+import be.mygod.reactmap.ReactMapHttpEngine
 import be.mygod.reactmap.util.readableMessage
 import be.mygod.reactmap.util.toByteArray
 import be.mygod.reactmap.util.toParcelable
@@ -113,8 +114,14 @@ class BackgroundLocationReceiver : BroadcastReceiver() {
         }
 
         @MainThread
-        fun onLocationSubmitted(location: Location) {
+        fun onLocationSubmitted(apiUrl: String, location: Location) {
+            if (apiUrl != ReactMapHttpEngine.apiUrl) return
             persistedLastLocation = LastLocation(persistedLastLocation?.location ?: location, location)
+        }
+
+        fun onApiChanged() {
+            stop()
+            persistedLastLocation = null
         }
 
         private fun enqueueSubmission(location: Location) = app.work.enqueueUniqueWork("LocationSetter",
@@ -126,8 +133,11 @@ class BackgroundLocationReceiver : BroadcastReceiver() {
 //                    setRequiresBatteryNotLow(true)
                 }.build())
                 setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
-                setInputData(workDataOf(LocationSetter.KEY_LATITUDE to location.latitude,
-                    LocationSetter.KEY_LONGITUDE to location.longitude, LocationSetter.KEY_TIME to location.time))
+                setInputData(workDataOf(
+                    LocationSetter.KEY_LATITUDE to location.latitude,
+                    LocationSetter.KEY_LONGITUDE to location.longitude,
+                    LocationSetter.KEY_TIME to location.time,
+                    LocationSetter.KEY_API_URL to ReactMapHttpEngine.apiUrl))
             }.build())
     }
 
