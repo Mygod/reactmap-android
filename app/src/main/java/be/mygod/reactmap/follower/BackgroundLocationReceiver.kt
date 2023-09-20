@@ -35,7 +35,7 @@ import java.util.concurrent.TimeUnit
 class BackgroundLocationReceiver : BroadcastReceiver() {
     companion object {
         private const val ACTION_LOCATION = "location"
-        const val MIN_UPDATE_THRESHOLD_METER = 40f
+        const val MIN_UPDATE_THRESHOLD_METER = 20f
 
         private val componentName by lazy { ComponentName(app, BackgroundLocationReceiver::class.java) }
         @get:MainThread @set:MainThread
