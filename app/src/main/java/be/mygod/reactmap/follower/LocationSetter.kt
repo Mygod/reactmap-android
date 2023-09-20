@@ -107,7 +107,7 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
                 val response = conn.inputStream.bufferedReader().readText()
                 val human = try {
                     val o = JSONObject(response).getJSONObject("data").getJSONObject("webhook").getJSONObject("human")
-                    o.getString("type") + ' ' + o.getString("name") + " profile#" + o.getLong("current_profile_no")
+                    o.getString("type") + '/' + o.getString("name") + '/' + o.getLong("current_profile_no")
                 } catch (e: JSONException) {
                     throw Exception(response, e)
                 }
