@@ -152,9 +152,10 @@ class BackgroundLocationReceiver : BroadcastReceiver() {
                         if (bestLocation.time > location.time) continue
                         if (bestLocation.hasAccuracy()) {
                             if (!location.hasAccuracy()) continue
-                            // keep the old more accurate location if new estimate does not contradict old estimate
-                            if (bestLocation.accuracy < location.accuracy &&
-                                location.distanceTo(bestLocation) <= bestLocation.accuracy + location.accuracy) continue
+                            // keep the old more accurate location if the new estimate does not contradict
+                            // the old estimate by up to 3 sigma
+                            if (bestLocation.accuracy < location.accuracy && location.distanceTo(bestLocation) <=
+                                3 * (bestLocation.accuracy + location.accuracy)) continue
                         }
                     }
                     bestLocation = location
