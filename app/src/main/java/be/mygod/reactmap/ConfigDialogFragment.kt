@@ -13,7 +13,6 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.edit
 import androidx.core.net.toUri
-import androidx.core.view.isGone
 import be.mygod.reactmap.App.Companion.app
 import be.mygod.reactmap.follower.BackgroundLocationReceiver
 import be.mygod.reactmap.util.AlertDialogFragment
@@ -33,8 +32,17 @@ class ConfigDialogFragment : AlertDialogFragment<Empty, ConfigDialogFragment.Ret
     private lateinit var urlEdit: AutoCompleteTextView
     private lateinit var followerSwitch: Switch
 
-    private val requestPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-        if (!it) followerSwitch.isChecked = false
+    private val requestLocation = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+        if (it.any { (_, v) -> v }) {
+            requestBackground.launch(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+        } else missingLocationPermissions()
+    }
+    private val requestBackground = registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+        if (!granted) missingLocationPermissions()
+    }
+    private fun missingLocationPermissions() {
+        Toast.makeText(requireContext(), "Missing location permission", Toast.LENGTH_LONG).show()
+        followerSwitch.isChecked = false
     }
 
     override fun AlertDialog.Builder.prepare(listener: DialogInterface.OnClickListener) {
@@ -46,10 +54,15 @@ class ConfigDialogFragment : AlertDialogFragment<Empty, ConfigDialogFragment.Ret
         }
         followerSwitch = Switch(context).apply {
             text = "Make alerts follow location in background\n(beware that you would be sharing your location with the map)"
-            isChecked = BackgroundLocationReceiver.enabled
-            isGone = true
+            isChecked = BackgroundLocationReceiver.enabled && (context.checkSelfPermission(
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+                    context.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) ==
+                    PackageManager.PERMISSION_GRANTED) &&
+                    context.checkSelfPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION) ==
+                    PackageManager.PERMISSION_GRANTED
             setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) requestPermission.launch(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+                if (isChecked) requestLocation.launch(arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION))
             }
         }
         setView(LinearLayout(context).apply {
@@ -63,15 +76,6 @@ class ConfigDialogFragment : AlertDialogFragment<Empty, ConfigDialogFragment.Ret
         setMessage("You can return to this dialog later by clicking on the notification.")
         setPositiveButton(android.R.string.ok, listener)
         setNegativeButton(android.R.string.cancel, null)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        val context = requireContext()
-        followerSwitch.isGone = context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED ||
-                context.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED
     }
 
     override val ret get() = Ret(try {
