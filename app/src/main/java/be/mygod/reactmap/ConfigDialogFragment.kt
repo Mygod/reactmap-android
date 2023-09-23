@@ -16,16 +16,17 @@ import androidx.core.net.toUri
 import be.mygod.reactmap.App.Companion.app
 import be.mygod.reactmap.follower.BackgroundLocationReceiver
 import be.mygod.reactmap.util.AlertDialogFragment
-import be.mygod.reactmap.util.Empty
 import be.mygod.reactmap.util.readableMessage
 import be.mygod.reactmap.webkit.ReactMapHttpEngine
 import kotlinx.parcelize.Parcelize
 
-class ConfigDialogFragment : AlertDialogFragment<Empty, ConfigDialogFragment.Ret>() {
+class ConfigDialogFragment : AlertDialogFragment<ConfigDialogFragment.Arg, ConfigDialogFragment.Ret>() {
     companion object {
         private const val KEY_HISTORY_URL = "url.history"
     }
 
+    @Parcelize
+    data class Arg(val welcome: Boolean) : Parcelable
     @Parcelize
     data class Ret(val hostname: String?) : Parcelable
 
@@ -74,7 +75,7 @@ class ConfigDialogFragment : AlertDialogFragment<Empty, ConfigDialogFragment.Ret
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT))
         })
         setTitle("ReactMap URL:")
-        setMessage("You can return to this dialog later by clicking on the notification.")
+        if (arg.welcome) setMessage("You can return to this dialog later by clicking on the notification.")
         setPositiveButton(android.R.string.ok, listener)
         setNegativeButton(android.R.string.cancel, null)
     }

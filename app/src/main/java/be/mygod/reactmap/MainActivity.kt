@@ -32,7 +32,7 @@ class MainActivity : FragmentActivity() {
         setContentView(R.layout.layout_main)
         reactMapFragment()
         if (app.pref.getBoolean(KEY_WELCOME, true)) {
-            startConfigure()
+            startConfigure(true)
             app.pref.edit { putBoolean(KEY_WELCOME, false) }
         }
         AlertDialogFragment.setResultListener<ConfigDialogFragment, ConfigDialogFragment.Ret>(this) { which, _ ->
@@ -50,7 +50,7 @@ class MainActivity : FragmentActivity() {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         when (intent?.action) {
-            ACTION_CONFIGURE -> startConfigure()
+            ACTION_CONFIGURE -> startConfigure(false)
             ACTION_RESTART_GAME -> AlertDialog.Builder(this).apply {
                 setTitle("Pick game version to restart")
                 setMessage("This feature requires root")
@@ -60,7 +60,10 @@ class MainActivity : FragmentActivity() {
             }.show()
         }
     }
-    private fun startConfigure() = ConfigDialogFragment().apply { key() }.show(supportFragmentManager, null)
+    private fun startConfigure(welcome: Boolean) = ConfigDialogFragment().apply {
+        arg(ConfigDialogFragment.Arg(welcome))
+        key()
+    }.show(supportFragmentManager, null)
     private fun restartGame(packageName: String) {
         try {
             ProcessBuilder("su", "-c", "am force-stop $packageName &&" +
