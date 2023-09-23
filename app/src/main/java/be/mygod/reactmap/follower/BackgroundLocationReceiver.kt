@@ -19,10 +19,10 @@ import androidx.work.OutOfQuotaPolicy
 import androidx.work.WorkRequest
 import androidx.work.workDataOf
 import be.mygod.reactmap.App.Companion.app
-import be.mygod.reactmap.webkit.ReactMapHttpEngine
 import be.mygod.reactmap.util.readableMessage
 import be.mygod.reactmap.util.toByteArray
 import be.mygod.reactmap.util.toParcelable
+import be.mygod.reactmap.webkit.ReactMapHttpEngine
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
@@ -171,11 +171,11 @@ class BackgroundLocationReceiver : BroadcastReceiver() {
                     bestLocation = location
                 }
                 if (bestLocation!! == lastLocation?.location) return
-                val shouldSet = lastLocation?.submittedLocation
-                    ?.run { distanceTo(bestLocation) < MIN_UPDATE_THRESHOLD_METER } != true
-                Timber.d("Updating $lastLocation -> $bestLocation (submitting $shouldSet)")
-                persistedLastLocation = LastLocation(bestLocation, lastLocation?.submittedLocation)
-                if (shouldSet) enqueueSubmission(bestLocation)
+                val submitted = lastLocation?.submittedLocation
+                    ?.run { if (distanceTo(bestLocation) < MIN_UPDATE_THRESHOLD_METER) this else null }
+                Timber.d("Updating $lastLocation -> $bestLocation (submitting ${submitted == null})")
+                persistedLastLocation = LastLocation(bestLocation, submitted)
+                if (submitted == null) enqueueSubmission(bestLocation)
             }
         }
     }

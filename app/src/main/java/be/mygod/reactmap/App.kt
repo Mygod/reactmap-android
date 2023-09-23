@@ -76,8 +76,7 @@ class App : Application() {
         })
 
         if (Build.VERSION.SDK_INT >= 26) nm.createNotificationChannels(listOf(
-            NotificationChannel(
-                SiteController.CHANNEL_ID, "Full screen site controls",
+            NotificationChannel(SiteController.CHANNEL_ID, "Full screen site controls",
                 NotificationManager.IMPORTANCE_LOW).apply {
                 lockscreenVisibility = Notification.VISIBILITY_SECRET
             },
