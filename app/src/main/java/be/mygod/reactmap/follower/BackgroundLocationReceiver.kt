@@ -19,7 +19,7 @@ import androidx.work.OutOfQuotaPolicy
 import androidx.work.WorkRequest
 import androidx.work.workDataOf
 import be.mygod.reactmap.App.Companion.app
-import be.mygod.reactmap.ReactMapHttpEngine
+import be.mygod.reactmap.webkit.ReactMapHttpEngine
 import be.mygod.reactmap.util.readableMessage
 import be.mygod.reactmap.util.toByteArray
 import be.mygod.reactmap.util.toParcelable

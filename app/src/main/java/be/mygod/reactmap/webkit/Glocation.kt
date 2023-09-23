@@ -1,4 +1,4 @@
-package be.mygod.reactmap
+package be.mygod.reactmap.webkit
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -8,13 +8,14 @@ import android.os.Build
 import android.os.Looper
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
-import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresPermission
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import be.mygod.reactmap.App.Companion.app
+import be.mygod.reactmap.R
 import com.google.android.gms.location.LocationAvailability
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -22,7 +23,7 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.Priority
 import timber.log.Timber
 
-class Glocation(private val web: WebView) : DefaultLifecycleObserver {
+class Glocation(private val web: WebView, private val fragment: Fragment) : DefaultLifecycleObserver {
     companion object {
         const val PERMISSION_DENIED = 1
         const val POSITION_UNAVAILABLE = 2
@@ -49,11 +50,12 @@ class Glocation(private val web: WebView) : DefaultLifecycleObserver {
         }"""
     }
 
-    private val activity = web.let {
+    private val context = web.let {
         it.addJavascriptInterface(this, "_glocation")
-        it.context as ComponentActivity
-    }.also { it.lifecycle.addObserver(this) }
-    private val jsSetup = activity.resources.openRawResource(R.raw.setup).bufferedReader().readText()
+        fragment.lifecycle.addObserver(this)
+        it.context
+    }
+    private val jsSetup = fragment.resources.openRawResource(R.raw.setup).bufferedReader().readText()
     private val pendingRequests = mutableSetOf<Long>()
     private var pendingWatch = false
     private val activeListeners = mutableSetOf<Long>()
@@ -85,7 +87,7 @@ class Glocation(private val web: WebView) : DefaultLifecycleObserver {
 
     fun setupGeolocation() = web.evaluateJavascript(jsSetup, null)
 
-    private fun checkPermissions() = when (activity.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
+    private fun checkPermissions() = when (context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
         PackageManager.PERMISSION_GRANTED -> true
         else -> {
             requestLocation.launch(arrayOf(
@@ -94,7 +96,7 @@ class Glocation(private val web: WebView) : DefaultLifecycleObserver {
         }
     }
 
-    private val requestLocation = activity.registerForActivityResult(
+    private val requestLocation = fragment.registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
         val granted = permissions.any { (_, v) -> v }
         if (pendingRequests.isNotEmpty()) {
@@ -141,7 +143,7 @@ class Glocation(private val web: WebView) : DefaultLifecycleObserver {
     private fun watchPosition(granted: Boolean) {
         if (granted) @SuppressLint("MissingPermission") {
             requestingLocationUpdates = true
-            if (activity.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) requestLocationUpdates()
+            if (fragment.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) requestLocationUpdates()
         } else web.evaluateJavascript("navigator.geolocation._watchPositionError([${activeListeners.joinToString()}]," +
                 " { code: $PERMISSION_DENIED })", null)
     }

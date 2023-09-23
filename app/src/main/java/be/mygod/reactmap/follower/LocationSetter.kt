@@ -14,7 +14,7 @@ import androidx.work.WorkerParameters
 import be.mygod.reactmap.App.Companion.app
 import be.mygod.reactmap.MainActivity
 import be.mygod.reactmap.R
-import be.mygod.reactmap.ReactMapHttpEngine
+import be.mygod.reactmap.webkit.ReactMapHttpEngine
 import be.mygod.reactmap.util.findErrorStream
 import be.mygod.reactmap.util.readableMessage
 import kotlinx.coroutines.CancellationException

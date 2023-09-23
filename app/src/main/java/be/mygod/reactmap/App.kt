@@ -19,6 +19,7 @@ import androidx.work.WorkManager
 import be.mygod.reactmap.follower.BackgroundLocationReceiver
 import be.mygod.reactmap.follower.LocationSetter
 import be.mygod.reactmap.util.DeviceStorageApp
+import be.mygod.reactmap.webkit.SiteController
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.ktx.Firebase
@@ -75,7 +76,8 @@ class App : Application() {
         })
 
         if (Build.VERSION.SDK_INT >= 26) nm.createNotificationChannels(listOf(
-            NotificationChannel(SiteController.CHANNEL_ID, "Full screen site controls",
+            NotificationChannel(
+                SiteController.CHANNEL_ID, "Full screen site controls",
                 NotificationManager.IMPORTANCE_LOW).apply {
                 lockscreenVisibility = Notification.VISIBILITY_SECRET
             },

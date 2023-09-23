@@ -18,6 +18,7 @@ import be.mygod.reactmap.follower.BackgroundLocationReceiver
 import be.mygod.reactmap.util.AlertDialogFragment
 import be.mygod.reactmap.util.Empty
 import be.mygod.reactmap.util.readableMessage
+import be.mygod.reactmap.webkit.ReactMapHttpEngine
 import kotlinx.parcelize.Parcelize
 
 class ConfigDialogFragment : AlertDialogFragment<Empty, ConfigDialogFragment.Ret>() {

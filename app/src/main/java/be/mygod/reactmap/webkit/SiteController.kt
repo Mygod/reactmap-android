@@ -1,26 +1,30 @@
-package be.mygod.reactmap
+package be.mygod.reactmap.webkit
 
 import android.app.PendingIntent
 import android.content.Intent
-import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.NotificationCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import be.mygod.reactmap.App.Companion.app
+import be.mygod.reactmap.MainActivity
+import be.mygod.reactmap.R
 
-class SiteController(private val activity: ComponentActivity) : DefaultLifecycleObserver {
+class SiteController(private val fragment: Fragment) : DefaultLifecycleObserver {
     companion object {
         const val CHANNEL_ID = "control"
     }
     init {
-        activity.lifecycle.addObserver(this)
+        fragment.lifecycle.addObserver(this)
     }
 
-    private val requestPermission = activity.registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-        if (it && started) app.nm.notify(1, NotificationCompat.Builder(activity, CHANNEL_ID).apply {
+    private val requestPermission = fragment.registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+        if (!it || !started) return@registerForActivityResult
+        val context = fragment.requireContext()
+        app.nm.notify(1, NotificationCompat.Builder(context, CHANNEL_ID).apply {
             setWhen(0)
-            color = activity.getColor(R.color.main_blue)
+            color = context.getColor(R.color.main_blue)
             setCategory(NotificationCompat.CATEGORY_SERVICE)
             setContentTitle(title)
             setContentText("Tap to configure")
@@ -29,11 +33,12 @@ class SiteController(private val activity: ComponentActivity) : DefaultLifecycle
             setOngoing(true)
             priority = NotificationCompat.PRIORITY_LOW
             setVisibility(NotificationCompat.VISIBILITY_SECRET)
-            setContentIntent(PendingIntent.getActivity(activity, 0,
-                Intent(activity, MainActivity::class.java).setAction(MainActivity.ACTION_CONFIGURE),
+            setContentIntent(PendingIntent.getActivity(context, 0,
+                Intent(context, MainActivity::class.java).setAction(MainActivity.ACTION_CONFIGURE),
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE))
-            addAction(R.drawable.ic_notification_sync, "Restart game", PendingIntent.getActivity(activity,
-                1, Intent(activity, MainActivity::class.java).setAction(MainActivity.ACTION_RESTART_GAME),
+            addAction(
+                R.drawable.ic_notification_sync, "Restart game", PendingIntent.getActivity(context,
+                1, Intent(context, MainActivity::class.java).setAction(MainActivity.ACTION_RESTART_GAME),
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE))
         }.build())
     }

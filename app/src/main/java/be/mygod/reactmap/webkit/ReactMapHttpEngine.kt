@@ -1,4 +1,4 @@
-package be.mygod.reactmap
+package be.mygod.reactmap.webkit
 
 import android.net.http.ConnectionMigrationOptions
 import android.net.http.HttpEngine
