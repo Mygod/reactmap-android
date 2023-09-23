@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.commit
 import be.mygod.reactmap.App.Companion.app
 import be.mygod.reactmap.util.AlertDialogFragment
+import be.mygod.reactmap.util.Empty
 import be.mygod.reactmap.util.readableMessage
 import be.mygod.reactmap.webkit.ReactMapFragment
 import timber.log.Timber
@@ -35,7 +36,7 @@ class MainActivity : FragmentActivity() {
             startConfigure(true)
             app.pref.edit { putBoolean(KEY_WELCOME, false) }
         }
-        AlertDialogFragment.setResultListener<ConfigDialogFragment, ConfigDialogFragment.Ret>(this) { which, _ ->
+        AlertDialogFragment.setResultListener<ConfigDialogFragment, Empty>(this) { which, _ ->
             if (which == DialogInterface.BUTTON_POSITIVE && currentFragment?.terminate() != true) reactMapFragment()
         }
         supportFragmentManager.setFragmentResultListener("ReactMapFragment", this) { _, _ ->

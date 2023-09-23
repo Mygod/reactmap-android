@@ -16,19 +16,18 @@ import androidx.core.net.toUri
 import be.mygod.reactmap.App.Companion.app
 import be.mygod.reactmap.follower.BackgroundLocationReceiver
 import be.mygod.reactmap.util.AlertDialogFragment
+import be.mygod.reactmap.util.Empty
 import be.mygod.reactmap.util.readableMessage
 import be.mygod.reactmap.webkit.ReactMapHttpEngine
 import kotlinx.parcelize.Parcelize
 
-class ConfigDialogFragment : AlertDialogFragment<ConfigDialogFragment.Arg, ConfigDialogFragment.Ret>() {
+class ConfigDialogFragment : AlertDialogFragment<ConfigDialogFragment.Arg, Empty>() {
     companion object {
         private const val KEY_HISTORY_URL = "url.history"
     }
 
     @Parcelize
     data class Arg(val welcome: Boolean) : Parcelable
-    @Parcelize
-    data class Ret(val hostname: String?) : Parcelable
 
     private lateinit var historyUrl: Set<String?>
     private lateinit var urlEdit: AutoCompleteTextView
@@ -80,10 +79,11 @@ class ConfigDialogFragment : AlertDialogFragment<ConfigDialogFragment.Arg, Confi
         setNegativeButton(android.R.string.cancel, null)
     }
 
-    override val ret get() = Ret(try {
-        val (uri, host) = urlEdit.text!!.toString().toUri().let {
+    override val ret get() = try {
+        val uri = urlEdit.text!!.toString().toUri().let {
             require("https".equals(it.scheme, true)) { "Only HTTPS is allowed" }
-            it.toString() to it.host!!
+            it.host!!
+            it.toString()
         }
         val oldApiUrl = ReactMapHttpEngine.apiUrl
         app.pref.edit {
@@ -91,9 +91,9 @@ class ConfigDialogFragment : AlertDialogFragment<ConfigDialogFragment.Arg, Confi
             putStringSet(KEY_HISTORY_URL, historyUrl + uri)
         }
         if (oldApiUrl != ReactMapHttpEngine.apiUrl) BackgroundLocationReceiver.onApiChanged()
-        host
+        Empty()
     } catch (e: Exception) {
         Toast.makeText(requireContext(), e.readableMessage, Toast.LENGTH_LONG).show()
         null
-    }).also { BackgroundLocationReceiver.enabled = followerSwitch.isChecked }
+    }.also { BackgroundLocationReceiver.enabled = followerSwitch.isChecked }
 }
