@@ -37,7 +37,9 @@ class MainActivity : FragmentActivity() {
             app.pref.edit { putBoolean(KEY_WELCOME, false) }
         }
         AlertDialogFragment.setResultListener<ConfigDialogFragment, Empty>(this) { which, _ ->
-            if (which == DialogInterface.BUTTON_POSITIVE && currentFragment?.terminate() != true) reactMapFragment()
+            if (which != DialogInterface.BUTTON_POSITIVE) return@setResultListener
+            currentFragment?.terminate()
+            reactMapFragment()
         }
         supportFragmentManager.setFragmentResultListener("ReactMapFragment", this) { _, _ ->
             reactMapFragment()

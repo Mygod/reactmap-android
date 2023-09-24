@@ -180,7 +180,7 @@ class ReactMapFragment : Fragment() {
                 override fun onRenderProcessGone(view: WebView, detail: RenderProcessGoneDetail): Boolean {
                     if (detail.didCrash()) {
                         Timber.w(Exception("WebView crashed @ priority ${detail.rendererPriorityAtExit()}"))
-                    } else {
+                    } else if (isAdded) {
                         FirebaseAnalytics.getInstance(context).logEvent("webviewExit",
                             bundleOf("priority" to detail.rendererPriorityAtExit()))
                     }
@@ -261,9 +261,9 @@ class ReactMapFragment : Fragment() {
         web.destroy()
     }
 
-    fun terminate() = (Build.VERSION.SDK_INT >= 29 && web.webViewRenderProcess?.terminate()?.also {
-        if (!it) Timber.w(Exception("Termination failed"))
-    } == true).also {
-        if (!it) web.destroy()
+    fun terminate() {
+        if (Build.VERSION.SDK_INT >= 29 && web.webViewRenderProcess?.terminate() == false) Timber.w(Exception(
+            "Termination failed"))
+        web.destroy()
     }
 }
