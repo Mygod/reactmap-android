@@ -194,7 +194,7 @@ class ReactMapFragment : Fragment() {
                     Toast.makeText(context, "Unsupported download: $url", Toast.LENGTH_LONG).show()
                     return@setDownloadListener
                 }
-                pendingJson = URLDecoder.decode(url.split(',', limit = 2)[1], "utf-8")
+                pendingJson = URLDecoder.decode(url.substringAfter(','), "utf-8")
                 createDocument.launch(mimetype to (filenameExtractor.find(contentDisposition)?.run {
                     groupValues[2].ifEmpty { groupValues[1] }
                 } ?: "settings.json"))
@@ -210,7 +210,7 @@ class ReactMapFragment : Fragment() {
             requestMethod = request.method
             for ((key, value) in request.requestHeaders) addRequestProperty(key, value)
         }
-        return WebResourceResponse(conn.contentType.split(';', limit = 2)[0], conn.contentEncoding, conn.responseCode,
+        return WebResourceResponse(conn.contentType?.substringBefore(';'), conn.contentEncoding, conn.responseCode,
             conn.responseMessage.let { if (it.isNullOrBlank()) "N/A" else it },
             conn.headerFields.mapValues { (_, value) -> value.joinToString() },
             if (conn.responseCode in 200..299) try {
