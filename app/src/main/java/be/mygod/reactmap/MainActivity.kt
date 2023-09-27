@@ -11,11 +11,14 @@ import androidx.activity.enableEdgeToEdge
 import androidx.core.content.edit
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.commit
+import androidx.lifecycle.lifecycleScope
 import be.mygod.reactmap.App.Companion.app
 import be.mygod.reactmap.util.AlertDialogFragment
 import be.mygod.reactmap.util.Empty
 import be.mygod.reactmap.util.readableMessage
 import be.mygod.reactmap.webkit.ReactMapFragment
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class MainActivity : FragmentActivity() {
@@ -68,12 +71,17 @@ class MainActivity : FragmentActivity() {
         key()
     }.show(supportFragmentManager, null)
     private fun restartGame(packageName: String) {
-        try {
-            ProcessBuilder("su", "-c", "am force-stop $packageName &&" +
-                    "am start -n $packageName/com.nianticproject.holoholo.libholoholo.unity.UnityMainActivity").start()
-        } catch (e: Exception) {
-            Timber.w(e)
-            Toast.makeText(this@MainActivity, e.readableMessage, Toast.LENGTH_LONG).show()
+        val intent = packageManager.getLaunchIntentForPackage(packageName) ?: return
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val process = ProcessBuilder("su", "-c", "am force-stop $packageName").start()
+                val exit = process.waitFor()
+                if (exit != 0) Timber.w("su exited with $exit")
+                startActivity(intent)
+            } catch (e: Exception) {
+                Timber.w(e)
+                Toast.makeText(this@MainActivity, e.readableMessage, Toast.LENGTH_LONG).show()
+            }
         }
     }
 }
