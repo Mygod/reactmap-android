@@ -7,6 +7,6 @@
     </style>
     <style name="Theme.ReactMap" parent="@style/Theme.DeviceDefault.DayNight.NoActionBar">
         <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="s">@mipmap/splash</item>
-        <item name="android:windowSplashscreenContent" tools:targetApi="o">@mipmap/splash</item>
+        <item name="android:windowSplashscreenContent">@mipmap/splash</item>
     </style>
 </resources>

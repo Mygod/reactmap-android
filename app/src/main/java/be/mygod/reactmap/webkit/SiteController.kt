@@ -1,9 +1,10 @@
 package be.mygod.reactmap.webkit
 
+import android.app.Notification
 import android.app.PendingIntent
 import android.content.Intent
+import android.graphics.drawable.Icon
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.NotificationCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
@@ -22,24 +23,23 @@ class SiteController(private val fragment: Fragment) : DefaultLifecycleObserver 
     private val requestPermission = fragment.registerForActivityResult(ActivityResultContracts.RequestPermission()) {
         if (!it || !started) return@registerForActivityResult
         val context = fragment.requireContext()
-        app.nm.notify(1, NotificationCompat.Builder(context, CHANNEL_ID).apply {
+        app.nm.notify(1, Notification.Builder(context, CHANNEL_ID).apply {
             setWhen(0)
-            color = context.getColor(R.color.main_blue)
-            setCategory(NotificationCompat.CATEGORY_SERVICE)
+            setCategory(Notification.CATEGORY_SERVICE)
             setContentTitle(title)
             setContentText("Tap to configure")
+            setColor(context.getColor(R.color.main_blue))
             setGroup(CHANNEL_ID)
             setSmallIcon(R.drawable.ic_reactmap)
             setOngoing(true)
-            priority = NotificationCompat.PRIORITY_LOW
-            setVisibility(NotificationCompat.VISIBILITY_SECRET)
+            setVisibility(Notification.VISIBILITY_SECRET)
             setContentIntent(PendingIntent.getActivity(context, 0,
                 Intent(context, MainActivity::class.java).setAction(MainActivity.ACTION_CONFIGURE),
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE))
-            addAction(
-                R.drawable.ic_notification_sync, "Restart game", PendingIntent.getActivity(context,
-                1, Intent(context, MainActivity::class.java).setAction(MainActivity.ACTION_RESTART_GAME),
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE))
+            addAction(Notification.Action.Builder(Icon.createWithResource(context, R.drawable.ic_notification_sync),
+                "Restart game", PendingIntent.getActivity(context, 1,
+                    Intent(context, MainActivity::class.java).setAction(MainActivity.ACTION_RESTART_GAME),
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)).build())
         }.build())
     }
     private var started = false

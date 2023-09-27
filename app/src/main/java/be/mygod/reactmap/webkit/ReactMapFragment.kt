@@ -1,7 +1,6 @@
 package be.mygod.reactmap.webkit
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
@@ -176,7 +175,6 @@ class ReactMapFragment : Fragment() {
                         } else null
                     }
 
-                @TargetApi(26)
                 override fun onRenderProcessGone(view: WebView, detail: RenderProcessGoneDetail): Boolean {
                     if (detail.didCrash()) {
                         Timber.w(Exception("WebView crashed @ priority ${detail.rendererPriorityAtExit()}"))

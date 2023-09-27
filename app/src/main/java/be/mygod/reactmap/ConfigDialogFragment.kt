@@ -50,6 +50,7 @@ class ConfigDialogFragment : AlertDialogFragment<ConfigDialogFragment.Arg, Empty
         historyUrl = app.pref.getStringSet(KEY_HISTORY_URL, null) ?: setOf(App.URL_DEFAULT)
         val context = requireContext()
         urlEdit = AutoCompleteTextView(context).apply {
+            isFocusedByDefault = true
             setAdapter(ArrayAdapter(context, android.R.layout.select_dialog_item, historyUrl.toTypedArray()))
             setText(app.activeUrl)
         }

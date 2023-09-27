@@ -4,7 +4,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.location.Location
-import android.os.Build
 import android.os.Looper
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
@@ -35,9 +34,7 @@ class Glocation(private val web: WebView, private val fragment: Fragment) : Defa
                 longitude: $longitude,
                 altitude: ${if (hasAltitude()) altitude else null},
                 accuracy: $accuracy,
-                altitudeAccuracy: ${
-                    if (Build.VERSION.SDK_INT >= 26 && hasVerticalAccuracy()) verticalAccuracyMeters else null
-                },
+                altitudeAccuracy: ${if (hasVerticalAccuracy()) verticalAccuracyMeters else null},
                 heading: ${if (hasBearing()) bearing else null},
                 speed: ${if (hasSpeed()) speed else null},
             },

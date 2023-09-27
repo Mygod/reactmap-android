@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "be.mygod.reactmap"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 52
         versionName = "0.5.1"
