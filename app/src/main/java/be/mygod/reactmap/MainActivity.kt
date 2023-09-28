@@ -19,6 +19,7 @@ import be.mygod.reactmap.util.readableMessage
 import be.mygod.reactmap.webkit.ReactMapFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 class MainActivity : FragmentActivity() {
@@ -80,7 +81,9 @@ class MainActivity : FragmentActivity() {
                 startActivity(intent)
             } catch (e: Exception) {
                 Timber.w(e)
-                Toast.makeText(this@MainActivity, e.readableMessage, Toast.LENGTH_LONG).show()
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@MainActivity, e.readableMessage, Toast.LENGTH_LONG).show()
+                }
             }
         }
     }
