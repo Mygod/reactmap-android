@@ -15,4 +15,5 @@ Other features:
 ## Guide for custom build
 
 1. Put your domain inside `default_domain` of `app/src/main/res/values/strings.xml`.
-2. Build.
+2. If you want to support more domains, edit `app/src/main/AndroidManifest.xml`: find the line `<data android:host="@string/default_domain" />` and add more domains by adding lines like `<data android:host="www.reactmap.dev" />`.
+3. Build.
