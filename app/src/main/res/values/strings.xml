@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ReactMap</string>
+    <string name="default_domain" translatable="false">www.reactmap.dev</string>
 </resources>

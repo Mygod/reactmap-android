@@ -3,6 +3,7 @@ package be.mygod.reactmap
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.WindowManager
 import android.webkit.WebView
@@ -35,7 +36,8 @@ class MainActivity : FragmentActivity() {
         enableEdgeToEdge()
         if (BuildConfig.DEBUG) WebView.setWebContentsDebuggingEnabled(true)
         setContentView(R.layout.layout_main)
-        reactMapFragment()
+        handleIntent(intent)
+        if (currentFragment == null) reactMapFragment(null)
         if (app.pref.getBoolean(KEY_WELCOME, true)) {
             startConfigure(true)
             app.pref.edit { putBoolean(KEY_WELCOME, false) }
@@ -43,19 +45,23 @@ class MainActivity : FragmentActivity() {
         AlertDialogFragment.setResultListener<ConfigDialogFragment, Empty>(this) { which, _ ->
             if (which != DialogInterface.BUTTON_POSITIVE) return@setResultListener
             currentFragment?.terminate()
-            reactMapFragment()
+            reactMapFragment(null)
         }
         supportFragmentManager.setFragmentResultListener("ReactMapFragment", this) { _, _ ->
-            reactMapFragment()
+            reactMapFragment(null)
         }
     }
-    private var currentFragment: ReactMapFragment? = null
-    private fun reactMapFragment() = supportFragmentManager.commit {
-        replace(R.id.content, ReactMapFragment().also { currentFragment = it })
-    }
-
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
+        handleIntent(intent)
+    }
+
+    private var currentFragment: ReactMapFragment? = null
+    private fun reactMapFragment(overrideUri: Uri?) = supportFragmentManager.commit {
+        replace(R.id.content, ReactMapFragment(overrideUri).also { currentFragment = it })
+    }
+
+    private fun handleIntent(intent: Intent?) {
         when (intent?.action) {
             ACTION_CONFIGURE -> startConfigure(false)
             ACTION_RESTART_GAME -> AlertDialog.Builder(this).apply {
@@ -65,6 +71,10 @@ class MainActivity : FragmentActivity() {
                 setNegativeButton("Samsung") { _, _ -> restartGame("com.nianticlabs.pokemongo.ares") }
                 setNeutralButton(android.R.string.cancel, null)
             }.show()
+            Intent.ACTION_VIEW -> {
+                val currentFragment = currentFragment
+                if (currentFragment == null) reactMapFragment(intent.data) else currentFragment.handleUri(intent.data)
+            }
         }
     }
     private fun startConfigure(welcome: Boolean) = ConfigDialogFragment().apply {
