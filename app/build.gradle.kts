@@ -22,6 +22,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
+        if (extra.has("reactmap.appName")) resValue("string", "app_name", extra["reactmap.appName"] as String)
         extra["reactmap.defaultDomain"]!!.let { defaultDomain ->
             manifestPlaceholders["defaultDomain"] = defaultDomain
             buildConfigField("String", "DEFAULT_DOMAIN", "\"$defaultDomain\"")
