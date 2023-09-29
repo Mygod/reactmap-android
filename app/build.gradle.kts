@@ -1,9 +1,11 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.firebaseCrashlytics)
-//    alias(libs.plugins.googleServices)
     alias(libs.plugins.kotlinAndroid)
     id("kotlin-parcelize")
+
+    // https://developers.google.com/android/guides/google-services-plugin#processing_the_json_file
+//    alias(libs.plugins.googleServices)
 }
 
 android {
