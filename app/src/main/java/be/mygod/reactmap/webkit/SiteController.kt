@@ -7,6 +7,7 @@ import android.graphics.drawable.Icon
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import be.mygod.reactmap.App.Companion.app
 import be.mygod.reactmap.MainActivity
@@ -21,7 +22,7 @@ class SiteController(private val fragment: Fragment) : DefaultLifecycleObserver 
     }
 
     private val requestPermission = fragment.registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-        if (!it || !started) return@registerForActivityResult
+        if (!it || !fragment.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) return@registerForActivityResult
         val context = fragment.requireContext()
         app.nm.notify(1, Notification.Builder(context, CHANNEL_ID).apply {
             setWhen(0)
@@ -42,21 +43,20 @@ class SiteController(private val fragment: Fragment) : DefaultLifecycleObserver 
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)).build())
         }.build())
     }
-    private var started = false
 
     var title: String? = null
         set(value) {
             field = value
-            if (started) requestPermission.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+            if (fragment.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+                requestPermission.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+            }
         }
 
     override fun onStart(owner: LifecycleOwner) {
-        started = true
         if (title != null) requestPermission.launch(android.Manifest.permission.POST_NOTIFICATIONS)
     }
 
     override fun onStop(owner: LifecycleOwner) {
-        started = false
         app.nm.cancel(1)
     }
 }
