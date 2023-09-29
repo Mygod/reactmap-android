@@ -18,6 +18,11 @@ android {
         versionName = "0.6.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        extra["reactmap.defaultDomain"]!!.let { defaultDomain ->
+            manifestPlaceholders["defaultDomain"] = defaultDomain
+            buildConfigField("String", "DEFAULT_DOMAIN", "\"$defaultDomain\"")
+        }
     }
 
     buildTypes {

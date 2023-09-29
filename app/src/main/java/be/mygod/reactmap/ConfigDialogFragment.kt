@@ -47,8 +47,7 @@ class ConfigDialogFragment : AlertDialogFragment<ConfigDialogFragment.Arg, Empty
     }
 
     override fun AlertDialog.Builder.prepare(listener: DialogInterface.OnClickListener) {
-        historyUrl = app.pref.getStringSet(KEY_HISTORY_URL, null) ?: setOf(
-            "https://" + getString(R.string.default_domain))
+        historyUrl = app.pref.getStringSet(KEY_HISTORY_URL, null) ?: setOf("https://${BuildConfig.DEFAULT_DOMAIN}")
         val context = requireContext()
         urlEdit = AutoCompleteTextView(context).apply {
             isFocusedByDefault = true

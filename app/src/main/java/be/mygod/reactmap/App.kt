@@ -43,7 +43,7 @@ class App : Application() {
     val nm by lazy { getSystemService<NotificationManager>()!! }
     val userManager by lazy { getSystemService<UserManager>()!! }
 
-    val activeUrl get() = pref.getString(KEY_ACTIVE_URL, null) ?: ("https://" + getString(R.string.default_domain))
+    val activeUrl get() = pref.getString(KEY_ACTIVE_URL, null) ?: "https://${BuildConfig.DEFAULT_DOMAIN}"
 
     override fun onCreate() {
         super.onCreate()
