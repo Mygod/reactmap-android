@@ -47,7 +47,7 @@ import java.net.URLDecoder
 import java.nio.charset.Charset
 import java.util.Locale
 
-class ReactMapFragment(private val overrideUri: Uri?) : Fragment() {
+class ReactMapFragment @JvmOverloads constructor(private val overrideUri: Uri? = null) : Fragment() {
     companion object {
         private val filenameExtractor = "filename=(\"([^\"]+)\"|[^;]+)".toRegex(RegexOption.IGNORE_CASE)
         private val vendorJsMatcher = "/vendor-[0-9a-f]{8}\\.js".toRegex()
