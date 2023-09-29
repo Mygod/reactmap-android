@@ -1,11 +1,12 @@
+import com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension
+
 plugins {
     alias(libs.plugins.androidApplication)
+    // https://developers.google.com/android/guides/google-services-plugin#processing_the_json_file
+//    alias(libs.plugins.googleServices)
     alias(libs.plugins.firebaseCrashlytics)
     alias(libs.plugins.kotlinAndroid)
     id("kotlin-parcelize")
-
-    // https://developers.google.com/android/guides/google-services-plugin#processing_the_json_file
-//    alias(libs.plugins.googleServices)
 }
 
 android {
@@ -34,6 +35,9 @@ android {
         release {
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            if (!pluginManager.hasPlugin("com.google.gms.google-services")) {
+                the<CrashlyticsExtension>().mappingFileUploadEnabled = false
+            }
         }
     }
     buildFeatures.buildConfig = true
