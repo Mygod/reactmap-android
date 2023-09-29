@@ -14,6 +14,6 @@ Other features:
 
 ## Guide for custom build
 
-1. Put your domain inside `reactmap.defaultDomain` of `gradle.properties`.
-2. If you want to support more domains, edit `app/src/main/AndroidManifest.xml`: find the line `<data android:host="@string/default_domain" />` and add more domains by adding lines like `<data android:host="www.reactmap.dev" />`.
+1. Customize `reactmap.defaultDomain` and `reactmap.packageName` in `gradle.properties`.
+2. If you want to support more domains, edit `app/src/main/AndroidManifest.xml`: find the line `<data android:host="${defaultDomain}" />` and add more domains by adding lines like `<data android:host="www.reactmap.dev" />`.
 3. Build.

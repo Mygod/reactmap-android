@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">53628743953-u05270s2od1es37b9pdrvmn10q6aa3iu.apps.googleusercontent.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">53628743953</string>
+    <string name="google_api_key" translatable="false">AIzaSyDlBEXzi1_Kf0kY6cdxexhHfuxyrxx5ZB0</string>
+    <string name="google_app_id" translatable="false">1:53628743953:android:ef886035becf4f5adb1cb0</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyDlBEXzi1_Kf0kY6cdxexhHfuxyrxx5ZB0</string>
+    <string name="google_storage_bucket" translatable="false">reactmap-android.appspot.com</string>
+    <string name="project_id" translatable="false">reactmap-android</string>
+</resources>

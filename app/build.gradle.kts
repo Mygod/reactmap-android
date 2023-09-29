@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.firebaseCrashlytics)
-    alias(libs.plugins.googleServices)
+//    alias(libs.plugins.googleServices)
     alias(libs.plugins.kotlinAndroid)
     id("kotlin-parcelize")
 }
@@ -11,7 +11,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "be.mygod.reactmap"
+        applicationId = extra["reactmap.packageName"] as String?
         minSdk = 26
         targetSdk = 34
         versionCode = 60
