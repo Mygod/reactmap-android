@@ -27,7 +27,7 @@ class SiteController(private val fragment: Fragment) : DefaultLifecycleObserver 
         app.nm.notify(1, Notification.Builder(context, CHANNEL_ID).apply {
             setWhen(0)
             setCategory(Notification.CATEGORY_SERVICE)
-            setContentTitle(title)
+            setContentTitle(title ?: "Loading…")
             setContentText("Tap to configure")
             setColor(context.getColor(R.color.main_blue))
             setGroup(CHANNEL_ID)
@@ -52,11 +52,7 @@ class SiteController(private val fragment: Fragment) : DefaultLifecycleObserver 
             }
         }
 
-    override fun onStart(owner: LifecycleOwner) {
-        if (title != null) requestPermission.launch(android.Manifest.permission.POST_NOTIFICATIONS)
-    }
-
-    override fun onStop(owner: LifecycleOwner) {
-        app.nm.cancel(1)
-    }
+    override fun onStart(owner: LifecycleOwner) =
+        requestPermission.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+    override fun onStop(owner: LifecycleOwner) = app.nm.cancel(1)
 }
