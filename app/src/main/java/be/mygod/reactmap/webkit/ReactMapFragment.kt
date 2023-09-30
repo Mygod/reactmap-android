@@ -207,13 +207,13 @@ class ReactMapFragment @JvmOverloads constructor(private val overrideUri: Uri? =
         return web
     }
 
-    private fun buildResponse(request: WebResourceRequest, transform: (Reader) -> String): WebResourceResponse {
+    private fun buildResponse(request: WebResourceRequest, transform: (Reader) -> String) = try {
         val url = request.url.toString()
         val conn = ReactMapHttpEngine.openConnection(url) {
             requestMethod = request.method
             for ((key, value) in request.requestHeaders) addRequestProperty(key, value)
         }
-        return WebResourceResponse(conn.contentType?.substringBefore(';'), conn.contentEncoding, conn.responseCode,
+        WebResourceResponse(conn.contentType?.substringBefore(';'), conn.contentEncoding, conn.responseCode,
             conn.responseMessage.let { if (it.isNullOrBlank()) "N/A" else it },
             conn.headerFields.mapValues { (_, value) -> value.joinToString() },
             if (conn.responseCode in 200..299) try {
@@ -225,6 +225,9 @@ class ReactMapFragment @JvmOverloads constructor(private val overrideUri: Uri? =
                 Timber.d(e)
                 conn.inputStream
             } else conn.findErrorStream)
+    } catch (e: IOException) {
+        Timber.d(e)
+        null
     }
     private fun handleSettings(request: WebResourceRequest) = buildResponse(request) { reader ->
         val response = reader.readText()
