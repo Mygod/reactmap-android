@@ -268,7 +268,7 @@ class ReactMapFragment @JvmOverloads constructor(private val overrideUri: Uri? =
     }
 
     fun handleUri(uri: Uri?) = uri?.host?.let { host ->
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             withCreated { }
             if (host != hostname) {
                 hostname = host
