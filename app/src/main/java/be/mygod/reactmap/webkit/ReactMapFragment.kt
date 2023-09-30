@@ -270,6 +270,7 @@ class ReactMapFragment @JvmOverloads constructor(private val overrideUri: Uri? =
     fun handleUri(uri: Uri?) = uri?.host?.let { host ->
         viewLifecycleOwner.lifecycleScope.launch {
             withCreated { }
+            Timber.d("Handling URI $uri")
             if (host != hostname) {
                 hostname = host
                 return@launch web.loadUrl(uri.toString())
