@@ -21,7 +21,7 @@ Other features:
 
 1. If you have not already, generate a signing key with [`keytool`](https://developer.android.com/build/building-cmdline#sign_cmdline).
    Using [RSA with a key length of 4096, 8192, or 16384 bits](https://github.com/google/bundletool/blob/0b9149c283e2df73850da670f2130a732639283d/src/main/java/com/android/tools/build/bundletool/commands/AddTransparencyCommand.java#L97) is recommended.
-2. Create the following file at `https://mymap.com/.well-known/assetlinks.json` by creating the file in `/path/to/reactmap/public/.well-known/assetlinks.json`:
+2. (Required for deep link support on Android 12+) Create the following file at `https://mymap.com/.well-known/assetlinks.json` by creating the file in `/path/to/reactmap/public/.well-known/assetlinks.json`:
    ```json
    [
      {
