@@ -12,10 +12,13 @@ import androidx.activity.enableEdgeToEdge
 import androidx.core.content.edit
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.commit
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import be.mygod.reactmap.App.Companion.app
 import be.mygod.reactmap.util.AlertDialogFragment
 import be.mygod.reactmap.util.Empty
+import be.mygod.reactmap.util.UpdateChecker
 import be.mygod.reactmap.util.readableMessage
 import be.mygod.reactmap.webkit.ReactMapFragment
 import kotlinx.coroutines.Dispatchers
@@ -50,6 +53,7 @@ class MainActivity : FragmentActivity() {
         supportFragmentManager.setFragmentResultListener("ReactMapFragment", this) { _, _ ->
             reactMapFragment(null)
         }
+        lifecycleScope.launch { repeatOnLifecycle(Lifecycle.State.STARTED) { UpdateChecker.check() } }
     }
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)

@@ -9,9 +9,16 @@ import androidx.annotation.RequiresExtension
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import be.mygod.reactmap.App.Companion.app
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 object ReactMapHttpEngine {
     private const val KEY_COOKIE = "cookie.graphql"
@@ -36,20 +43,39 @@ object ReactMapHttpEngine {
         path("/graphql")
     }.build().toString()
 
-    fun openConnection(url: String, setup: HttpURLConnection.() -> Unit) = ((if (Build.VERSION.SDK_INT >= 34 ||
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
-        SdkExtensions.getExtensionVersion(Build.VERSION_CODES.S) >= 7) {
-        engine.openConnection(URL(url))
-    } else URL(url).openConnection()) as HttpURLConnection).apply {
+    suspend fun <T> connectCancellable(url: String, block: suspend (HttpURLConnection) -> T): T {
+        val conn = (if (Build.VERSION.SDK_INT >= 34 || Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
+            SdkExtensions.getExtensionVersion(Build.VERSION_CODES.S) >= 7) {
+            engine.openConnection(URL(url))
+        } else @Suppress("BlockingMethodInNonBlockingContext") URL(url).openConnection()) as HttpURLConnection
+        return suspendCancellableCoroutine { cont ->
+            val job = GlobalScope.launch(Dispatchers.IO) {
+                try {
+                    cont.resume(block(conn))
+                } catch (e: Throwable) {
+                    cont.resumeWithException(e)
+                } finally {
+                    conn.disconnect()
+                }
+            }
+            cont.invokeOnCancellation {
+                job.cancel(it as? CancellationException)
+                conn.disconnect()
+            }
+        }
+    }
+
+    suspend fun connectWithCookie(url: String, setup: (HttpURLConnection) -> Unit) = connectCancellable(url) { conn ->
         if (app.userManager.isUserUnlocked) {
             val cookie = CookieManager.getInstance()
-            cookie.getCookie(url)?.let { addRequestProperty("Cookie", it) }
-            setup()
-            headerFields["Set-Cookie"]?.forEach { cookie.setCookie(url, it) }
+            cookie.getCookie(url)?.let { conn.addRequestProperty("Cookie", it) }
+            setup(conn)
+            conn.headerFields["Set-Cookie"]?.forEach { cookie.setCookie(url, it) }
         } else {
-            app.pref.getString(KEY_COOKIE, null)?.let { addRequestProperty("Cookie", it) }
-            setup()
+            app.pref.getString(KEY_COOKIE, null)?.let { conn.addRequestProperty("Cookie", it) }
+            setup(conn)
         }
+        conn
     }
 
     fun updateCookie() = app.pref.edit {

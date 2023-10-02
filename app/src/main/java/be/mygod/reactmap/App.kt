@@ -19,6 +19,7 @@ import androidx.work.WorkManager
 import be.mygod.reactmap.follower.BackgroundLocationReceiver
 import be.mygod.reactmap.follower.LocationSetter
 import be.mygod.reactmap.util.DeviceStorageApp
+import be.mygod.reactmap.util.UpdateChecker
 import be.mygod.reactmap.webkit.SiteController
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -74,7 +75,7 @@ class App : Application() {
             }
         })
 
-        nm.createNotificationChannels(listOf(
+        nm.createNotificationChannels(mutableListOf(
             NotificationChannel(SiteController.CHANNEL_ID, "Full screen site controls",
                 NotificationManager.IMPORTANCE_LOW).apply {
                 lockscreenVisibility = Notification.VISIBILITY_SECRET
@@ -95,12 +96,19 @@ class App : Application() {
                 lightColor = getColor(R.color.main_orange)
                 lockscreenVisibility = Notification.VISIBILITY_PUBLIC
             },
-        ))
+        ).apply {
+            if (BuildConfig.GITHUB_RELEASES != null) add(NotificationChannel(UpdateChecker.CHANNEL_ID,
+                "Update available", NotificationManager.IMPORTANCE_HIGH).apply {
+                enableLights(true)
+                lightColor = getColor(R.color.main_blue)
+                lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+            })
+        })
         work = WorkManager.getInstance(deviceStorage)
         BackgroundLocationReceiver.setup()
     }
 
-    private val customTabsIntent by lazy {
+    val customTabsIntent by lazy {
         CustomTabsIntent.Builder().apply {
             setColorScheme(CustomTabsIntent.COLOR_SCHEME_SYSTEM)
             setColorSchemeParams(CustomTabsIntent.COLOR_SCHEME_LIGHT, CustomTabColorSchemeParams.Builder().apply {

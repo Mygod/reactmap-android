@@ -80,11 +80,11 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
         val lon = inputData.getDouble(KEY_LONGITUDE, Double.NaN)
         val time = inputData.getLong(KEY_TIME, 0)
         val apiUrl = inputData.getString(KEY_API_URL)!!
-        val conn = ReactMapHttpEngine.openConnection(apiUrl) {
-            doOutput = true
-            requestMethod = "POST"
-            addRequestProperty("Content-Type", "application/json")
-            outputStream.bufferedWriter().use {
+        val conn = ReactMapHttpEngine.connectWithCookie(apiUrl) { conn ->
+            conn.doOutput = true
+            conn.requestMethod = "POST"
+            conn.addRequestProperty("Content-Type", "application/json")
+            conn.outputStream.bufferedWriter().use {
                 it.write(JSONObject().apply {
                     put("operationName", "Webhook")
                     put("variables", JSONObject().apply {

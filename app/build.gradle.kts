@@ -17,8 +17,8 @@ android {
         applicationId = extra["reactmap.packageName"] as String?
         minSdk = 26
         targetSdk = 34
-        versionCode = 60
-        versionName = "0.6.0"
+        versionCode = (extra["reactmap.versionCode"] as String?)?.toInt()
+        versionName = extra["reactmap.versionName"] as String?
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -27,6 +27,9 @@ android {
             manifestPlaceholders["defaultDomain"] = defaultDomain
             buildConfigField("String", "DEFAULT_DOMAIN", "\"$defaultDomain\"")
         }
+        buildConfigField("String", "GITHUB_RELEASES", if (extra.has("reactmap.githubReleases")) {
+            extra["reactmap.githubReleases"] as String
+        } else "null")
     }
 
     buildTypes {
