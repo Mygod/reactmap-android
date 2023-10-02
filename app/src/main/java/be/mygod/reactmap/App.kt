@@ -78,13 +78,17 @@ class App : Application() {
             NotificationChannel(SiteController.CHANNEL_ID, "Full screen site controls",
                 NotificationManager.IMPORTANCE_LOW).apply {
                 lockscreenVisibility = Notification.VISIBILITY_SECRET
+                setShowBadge(false)
             },
             NotificationChannel(LocationSetter.CHANNEL_ID, "Background location updating",
                 NotificationManager.IMPORTANCE_LOW).apply {
                 lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+                setShowBadge(false)
             },
             NotificationChannel(LocationSetter.CHANNEL_ID_SUCCESS, "Background location updated",
-                NotificationManager.IMPORTANCE_MIN),
+                NotificationManager.IMPORTANCE_MIN).apply {
+                setShowBadge(false)
+            },
             NotificationChannel(LocationSetter.CHANNEL_ID_ERROR, "Background location update failed",
                 NotificationManager.IMPORTANCE_HIGH).apply {
                 enableLights(true)
