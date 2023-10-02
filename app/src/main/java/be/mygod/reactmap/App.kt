@@ -32,7 +32,6 @@ class App : Application() {
     companion object {
         private const val PREF_NAME = "reactmap"
         const val KEY_ACTIVE_URL = "url.active"
-        const val URL_DEFAULT = "https://www.reactmap.dev"
 
         lateinit var app: App
     }
@@ -44,7 +43,7 @@ class App : Application() {
     val nm by lazy { getSystemService<NotificationManager>()!! }
     val userManager by lazy { getSystemService<UserManager>()!! }
 
-    val activeUrl get() = pref.getString(KEY_ACTIVE_URL, URL_DEFAULT) ?: URL_DEFAULT
+    val activeUrl get() = pref.getString(KEY_ACTIVE_URL, null) ?: "https://${BuildConfig.DEFAULT_DOMAIN}"
 
     override fun onCreate() {
         super.onCreate()
@@ -79,13 +78,17 @@ class App : Application() {
             NotificationChannel(SiteController.CHANNEL_ID, "Full screen site controls",
                 NotificationManager.IMPORTANCE_LOW).apply {
                 lockscreenVisibility = Notification.VISIBILITY_SECRET
+                setShowBadge(false)
             },
             NotificationChannel(LocationSetter.CHANNEL_ID, "Background location updating",
                 NotificationManager.IMPORTANCE_LOW).apply {
                 lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+                setShowBadge(false)
             },
             NotificationChannel(LocationSetter.CHANNEL_ID_SUCCESS, "Background location updated",
-                NotificationManager.IMPORTANCE_MIN),
+                NotificationManager.IMPORTANCE_MIN).apply {
+                setShowBadge(false)
+            },
             NotificationChannel(LocationSetter.CHANNEL_ID_ERROR, "Background location update failed",
                 NotificationManager.IMPORTANCE_HIGH).apply {
                 enableLights(true)

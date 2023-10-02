@@ -29,6 +29,7 @@ import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.withCreated
 import be.mygod.reactmap.App.Companion.app
 import be.mygod.reactmap.follower.BackgroundLocationReceiver
 import be.mygod.reactmap.util.CreateDynamicDocument
@@ -47,9 +48,12 @@ import java.net.URLDecoder
 import java.nio.charset.Charset
 import java.util.Locale
 
-class ReactMapFragment : Fragment() {
+class ReactMapFragment @JvmOverloads constructor(private val overrideUri: Uri? = null) : Fragment() {
     companion object {
         private val filenameExtractor = "filename=(\"([^\"]+)\"|[^;]+)".toRegex(RegexOption.IGNORE_CASE)
+        private val vendorJsMatcher = "/vendor-[0-9a-f]{8}\\.js".toRegex()
+        private val flyToMatcher = "/@/([0-9.-]+)/([0-9.-]+)(?:/([0-9.-]+))?/?".toRegex()
+        private val mapHijacker = ",this.callInitHooks\\(\\),this._zoomAnimated=".toRegex()
         private val supportedHosts = setOf("discordapp.com", "discord.com", "telegram.org", "oauth.telegram.org")
     }
 
@@ -76,8 +80,8 @@ class ReactMapFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         Timber.d("Creating ReactMapFragment")
-        val activeUrl = app.activeUrl
-        hostname = Uri.parse(activeUrl).host!!
+        val activeUrl = overrideUri?.toString() ?: app.activeUrl
+        hostname = if (overrideUri == null) Uri.parse(activeUrl).host!! else overrideUri.host!!
         val activity = requireActivity()
         web = WebView(activity).apply {
             settings.apply {
@@ -170,9 +174,10 @@ class ReactMapFragment : Fragment() {
                         // Since CookieManager.getCookie does not return session cookie on main requests,
                         // we can only edit secondary files
                         "/api/settings" -> handleSettings(request)
-                        else -> if (path?.startsWith("/locales/") == true && path.endsWith("/translation.json")) {
+                        null -> null
+                        else -> if (path.startsWith("/locales/") && path.endsWith("/translation.json")) {
                             handleTranslation(request)
-                        } else null
+                        } else if (vendorJsMatcher.matchEntire(path) != null) handleVendorJs(request) else null
                     }
 
                 override fun onRenderProcessGone(view: WebView, detail: RenderProcessGoneDetail): Boolean {
@@ -202,13 +207,13 @@ class ReactMapFragment : Fragment() {
         return web
     }
 
-    private fun buildResponse(request: WebResourceRequest, transform: (Reader) -> String): WebResourceResponse {
+    private fun buildResponse(request: WebResourceRequest, transform: (Reader) -> String) = try {
         val url = request.url.toString()
         val conn = ReactMapHttpEngine.openConnection(url) {
             requestMethod = request.method
             for ((key, value) in request.requestHeaders) addRequestProperty(key, value)
         }
-        return WebResourceResponse(conn.contentType?.substringBefore(';'), conn.contentEncoding, conn.responseCode,
+        WebResourceResponse(conn.contentType?.substringBefore(';'), conn.contentEncoding, conn.responseCode,
             conn.responseMessage.let { if (it.isNullOrBlank()) "N/A" else it },
             conn.headerFields.mapValues { (_, value) -> value.joinToString() },
             if (conn.responseCode in 200..299) try {
@@ -220,6 +225,9 @@ class ReactMapFragment : Fragment() {
                 Timber.d(e)
                 conn.inputStream
             } else conn.findErrorStream)
+    } catch (e: IOException) {
+        Timber.d(e)
+        null
     }
     private fun handleSettings(request: WebResourceRequest) = buildResponse(request) { reader ->
         val response = reader.readText()
@@ -253,12 +261,32 @@ class ReactMapFragment : Fragment() {
         }
         response
     }
+    private fun handleVendorJs(request: WebResourceRequest) = buildResponse(request) { reader ->
+        mapHijacker.replace(reader.readText(), ",(window._hijackedMap=this).callInitHooks(),this._zoomAnimated=")
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
         web.destroy()
     }
 
+    fun handleUri(uri: Uri?) = uri?.host?.let { host ->
+        viewLifecycleOwner.lifecycleScope.launch {
+            withCreated { }
+            Timber.d("Handling URI $uri")
+            if (host != hostname) {
+                hostname = host
+                return@launch web.loadUrl(uri.toString())
+            }
+            val path = uri.path
+            if (path.isNullOrEmpty() || path == "/") return@launch
+            val match = flyToMatcher.matchEntire(path) ?: return@launch web.loadUrl(uri.toString())
+            val script = StringBuilder("window._hijackedMap.flyTo([${match.groupValues[1]}, ${match.groupValues[2]}]")
+            match.groups[3]?.let { script.append(", ${it.value}") }
+            script.append(')')
+            web.evaluateJavascript(script.toString(), null)
+        }
+    }
     fun terminate() {
         if (Build.VERSION.SDK_INT >= 29 && web.webViewRenderProcess?.terminate() == false) Timber.w(Exception(
             "Termination failed"))

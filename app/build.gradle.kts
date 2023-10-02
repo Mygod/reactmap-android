@@ -1,7 +1,10 @@
+import com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.firebaseCrashlytics)
-    alias(libs.plugins.googleServices)
+    // https://developers.google.com/android/guides/google-services-plugin#processing_the_json_file
+//    alias(libs.plugins.googleServices)
     alias(libs.plugins.kotlinAndroid)
     id("kotlin-parcelize")
 }
@@ -11,13 +14,19 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "be.mygod.reactmap"
+        applicationId = extra["reactmap.packageName"] as String?
         minSdk = 26
         targetSdk = 34
-        versionCode = 53
-        versionName = "0.5.2"
+        versionCode = 60
+        versionName = "0.6.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        if (extra.has("reactmap.appName")) resValue("string", "app_name", extra["reactmap.appName"] as String)
+        extra["reactmap.defaultDomain"]!!.let { defaultDomain ->
+            manifestPlaceholders["defaultDomain"] = defaultDomain
+            buildConfigField("String", "DEFAULT_DOMAIN", "\"$defaultDomain\"")
+        }
     }
 
     buildTypes {
@@ -27,6 +36,9 @@ android {
         release {
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            if (!pluginManager.hasPlugin("com.google.gms.google-services")) {
+                the<CrashlyticsExtension>().mappingFileUploadEnabled = false
+            }
         }
     }
     buildFeatures.buildConfig = true
