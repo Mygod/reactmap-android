@@ -55,7 +55,7 @@ Build with [injected properties](https://stackoverflow.com/a/47356720/2245107) (
  -Preactmap.packageName=be.mygod.reactmap.com.mymap
 ```
 
-Optionally you can also inject `reactmap.appName`.
+See `gradle.properties` for a complete list of supported properties.
 An alternative to using `-P` switches is to adding your properties to the `gradle.properties` file in the root directory.
 
 Success! Find your apk in `app/build/outputs/apk/release`.
