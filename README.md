@@ -1,5 +1,7 @@
 # ReactMap for Android
 
+[![API](https://img.shields.io/badge/API-26%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=26)
+
 Use ReactMap as an Android app with battery improvements, including:
 
 * Use Google location services to follow location.
