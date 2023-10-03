@@ -36,7 +36,6 @@ import be.mygod.reactmap.util.CreateDynamicDocument
 import be.mygod.reactmap.util.findErrorStream
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -210,11 +209,9 @@ class ReactMapFragment @JvmOverloads constructor(private val overrideUri: Uri? =
 
     private fun buildResponse(request: WebResourceRequest, transform: (Reader) -> String) = try {
         val url = request.url.toString()
-        val conn = runBlocking {
-            ReactMapHttpEngine.connectWithCookie(url) { conn ->
-                conn.requestMethod = request.method
-                for ((key, value) in request.requestHeaders) conn.addRequestProperty(key, value)
-            }
+        val conn = ReactMapHttpEngine.connectWithCookie(url) { conn ->
+            conn.requestMethod = request.method
+            for ((key, value) in request.requestHeaders) conn.addRequestProperty(key, value)
         }
         WebResourceResponse(conn.contentType?.substringBefore(';'), conn.contentEncoding, conn.responseCode,
             conn.responseMessage.let { if (it.isNullOrBlank()) "N/A" else it },

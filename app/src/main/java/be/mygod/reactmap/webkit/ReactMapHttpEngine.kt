@@ -43,11 +43,12 @@ object ReactMapHttpEngine {
         path("/graphql")
     }.build().toString()
 
+    private fun openConnection(url: String) = (if (Build.VERSION.SDK_INT >= 34 || Build.VERSION.SDK_INT >=
+        Build.VERSION_CODES.S && SdkExtensions.getExtensionVersion(Build.VERSION_CODES.S) >= 7) {
+        engine.openConnection(URL(url))
+    } else URL(url).openConnection()) as HttpURLConnection
     suspend fun <T> connectCancellable(url: String, block: suspend (HttpURLConnection) -> T): T {
-        val conn = (if (Build.VERSION.SDK_INT >= 34 || Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
-            SdkExtensions.getExtensionVersion(Build.VERSION_CODES.S) >= 7) {
-            engine.openConnection(URL(url))
-        } else @Suppress("BlockingMethodInNonBlockingContext") URL(url).openConnection()) as HttpURLConnection
+        val conn = openConnection(url)
         return suspendCancellableCoroutine { cont ->
             val job = GlobalScope.launch(Dispatchers.IO) {
                 try {
@@ -65,7 +66,7 @@ object ReactMapHttpEngine {
         }
     }
 
-    suspend fun connectWithCookie(url: String, setup: (HttpURLConnection) -> Unit) = connectCancellable(url) { conn ->
+    fun connectWithCookie(url: String, setup: (HttpURLConnection) -> Unit) = openConnection(url).also { conn ->
         if (app.userManager.isUserUnlocked) {
             val cookie = CookieManager.getInstance()
             cookie.getCookie(url)?.let { conn.addRequestProperty("Cookie", it) }
@@ -75,7 +76,6 @@ object ReactMapHttpEngine {
             app.pref.getString(KEY_COOKIE, null)?.let { conn.addRequestProperty("Cookie", it) }
             setup(conn)
         }
-        conn
     }
 
     fun updateCookie() = app.pref.edit {

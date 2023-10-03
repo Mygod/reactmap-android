@@ -39,7 +39,7 @@ Other features:
    ]
    ```
    where the fingerprint can be obtained via `keytool -list -v -keystore /path/to/keystore`.
-   (If you prefer to using Android Studio to create this file with a wizard, see [here]( https://developer.android.com/studio/write/app-link-indexing#associatesite) for instructions.)
+   (If you prefer to using Android Studio to create this file with a wizard, see [here](https://developer.android.com/studio/write/app-link-indexing#associatesite) for instructions.)
 3. (Optional) Make modifications to the source code if you wish.
 
 ### Build instructions
