@@ -3,7 +3,6 @@ package be.mygod.reactmap.webkit
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.util.JsonWriter
 import android.util.Log
@@ -287,9 +286,5 @@ class ReactMapFragment @JvmOverloads constructor(private val overrideUri: Uri? =
             web.evaluateJavascript(script.toString(), null)
         }
     }
-    fun terminate() {
-        if (Build.VERSION.SDK_INT >= 29 && web.webViewRenderProcess?.terminate() == false) Timber.w(Exception(
-            "Termination failed"))
-        web.destroy()
-    }
+    fun terminate() = web.destroy()
 }
