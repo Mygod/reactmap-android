@@ -15,6 +15,9 @@ Other features:
 * You could make alerts follow location in background.
 * Handle links to the map without opening a new tab (requires custom build for custom domains).
 
+For best experiences, ReactMap should be updated to this commit or later:
+https://github.com/WatWowMap/ReactMap/commit/addb5f3b27c49fe9d7165c8b76f54a5b10912f67
+
 ## Guide for custom build
 
 ### Setup instructions
