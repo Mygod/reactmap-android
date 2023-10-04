@@ -55,6 +55,7 @@ class App : Application() {
         System.setProperty(DEBUG_PROPERTY_NAME, DEBUG_PROPERTY_VALUE_ON)
         Firebase.initialize(deviceStorage)
         FirebaseCrashlytics.getInstance().apply {
+            setCustomKey("applicationId", BuildConfig.APPLICATION_ID)
             setCustomKey("build", Build.DISPLAY)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) setCustomKey("extension_s",
                 SdkExtensions.getExtensionVersion(Build.VERSION_CODES.S))
