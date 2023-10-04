@@ -124,7 +124,6 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
                     setContentIntent(PendingIntent.getActivity(app, 2,
                         Intent(app, MainActivity::class.java).setAction(MainActivity.ACTION_CONFIGURE),
                         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE))
-                    setVisibility(Notification.VISIBILITY_PUBLIC)
                     setPublicVersion(build().clone())
                     setContentText("$lat,$lon (stale ${formatTimeSpanFrom(time)}) > $human")
                 }.build())

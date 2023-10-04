@@ -16,6 +16,7 @@ import be.mygod.reactmap.R
 class SiteController(private val fragment: Fragment) : DefaultLifecycleObserver {
     companion object {
         const val CHANNEL_ID = "control"
+        private const val NOTIFICATION_ID = 1
     }
     init {
         fragment.lifecycle.addObserver(this)
@@ -24,7 +25,7 @@ class SiteController(private val fragment: Fragment) : DefaultLifecycleObserver 
     private val requestPermission = fragment.registerForActivityResult(ActivityResultContracts.RequestPermission()) {
         if (!it || !fragment.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) return@registerForActivityResult
         val context = fragment.requireContext()
-        app.nm.notify(1, Notification.Builder(context, CHANNEL_ID).apply {
+        app.nm.notify(NOTIFICATION_ID, Notification.Builder(context, CHANNEL_ID).apply {
             setWhen(0)
             setCategory(Notification.CATEGORY_SERVICE)
             setContentTitle(title ?: "Loading…")
@@ -54,5 +55,5 @@ class SiteController(private val fragment: Fragment) : DefaultLifecycleObserver 
 
     override fun onStart(owner: LifecycleOwner) =
         requestPermission.launch(android.Manifest.permission.POST_NOTIFICATIONS)
-    override fun onStop(owner: LifecycleOwner) = app.nm.cancel(1)
+    override fun onStop(owner: LifecycleOwner) = app.nm.cancel(NOTIFICATION_ID)
 }
