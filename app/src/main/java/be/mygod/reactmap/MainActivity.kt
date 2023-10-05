@@ -22,6 +22,7 @@ import be.mygod.reactmap.util.UpdateChecker
 import be.mygod.reactmap.util.readableMessage
 import be.mygod.reactmap.webkit.ReactMapFragment
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -87,11 +88,16 @@ class MainActivity : FragmentActivity() {
     }.show(supportFragmentManager, null)
     private fun restartGame(packageName: String) {
         val intent = packageManager.getLaunchIntentForPackage(packageName) ?: return
+        val wasMultiWindow = isInMultiWindowMode
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val process = ProcessBuilder("su", "-c", "am force-stop $packageName").start()
                 val exit = process.waitFor()
                 if (exit != 0) Timber.w("su exited with $exit")
+                if (wasMultiWindow) {
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT)
+                    delay(1000) // wait a second for animations
+                }
                 startActivity(intent)
             } catch (e: Exception) {
                 Timber.w(e)
