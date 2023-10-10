@@ -95,7 +95,6 @@ class App : Application() {
                 NotificationManager.IMPORTANCE_HIGH).apply {
                 enableLights(true)
                 lightColor = getColor(R.color.main_orange)
-                lockscreenVisibility = Notification.VISIBILITY_PUBLIC
             },
         ).apply {
             if (BuildConfig.GITHUB_RELEASES != null) add(NotificationChannel(UpdateChecker.CHANNEL_ID,

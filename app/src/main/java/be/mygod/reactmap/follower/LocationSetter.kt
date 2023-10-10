@@ -44,12 +44,12 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
                 setContentTitle("Failed to update location")
                 setContentText(message)
                 setGroup(CHANNEL_ID)
-                setVisibility(Notification.VISIBILITY_PUBLIC)
                 setSmallIcon(R.drawable.ic_notification_sync_problem)
                 setShowWhen(true)
                 setContentIntent(PendingIntent.getActivity(app, 2,
                     Intent(app, MainActivity::class.java).setAction(MainActivity.ACTION_CONFIGURE),
                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE))
+                style = Notification.BigTextStyle().bigText(message)
             }.build())
         }
 
