@@ -1,6 +1,6 @@
 [versions]
-activity = "1.8.0-rc01"
-agp = "8.3.0-alpha06"
+activity = "1.8.0"
+agp = "8.3.0-alpha07"
 androidx-test-ext-junit = "1.1.5"
 browser = "1.6.0"
 core = "1.12.0"
@@ -16,7 +16,7 @@ google-services = "4.4.0"
 play-services-location = "21.0.1"
 timber = "5.0.1"
 work = "2.8.1"
-gradle-versions = "0.48.0"
+gradle-versions = "0.49.0"
 
 [libraries]
 activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
