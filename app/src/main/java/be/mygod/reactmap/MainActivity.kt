@@ -4,11 +4,16 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.system.ErrnoException
+import android.system.Os
+import android.system.OsConstants
 import android.view.WindowManager
 import android.webkit.WebView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.core.content.edit
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.commit
@@ -18,6 +23,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import be.mygod.reactmap.App.Companion.app
 import be.mygod.reactmap.util.AlertDialogFragment
 import be.mygod.reactmap.util.Empty
+import be.mygod.reactmap.util.UnblockCentral
 import be.mygod.reactmap.util.UpdateChecker
 import be.mygod.reactmap.util.readableMessage
 import be.mygod.reactmap.webkit.ReactMapFragment
@@ -26,12 +32,21 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
+import java.io.File
+import java.io.FileDescriptor
+import java.io.IOException
+import java.net.InetSocketAddress
 
 class MainActivity : FragmentActivity() {
     companion object {
         const val ACTION_CONFIGURE = "be.mygod.reactmap.action.CONFIGURE"
         const val ACTION_RESTART_GAME = "be.mygod.reactmap.action.RESTART_GAME"
         private const val KEY_WELCOME = "welcome"
+
+        private val setInt by lazy { FileDescriptor::class.java.getDeclaredMethod("setInt$", Int::class.java) }
+        @get:RequiresApi(29)
+        private val os by lazy { Class.forName("libcore.io.Libcore").getDeclaredField("os").get(null) }
+        private val nullFd by lazy { Os.open("/dev/null", OsConstants.O_RDONLY, 0) }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,6 +64,43 @@ class MainActivity : FragmentActivity() {
         AlertDialogFragment.setResultListener<ConfigDialogFragment, Empty>(this) { which, _ ->
             if (which != DialogInterface.BUTTON_POSITIVE) return@setResultListener
             currentFragment?.terminate()
+            try {
+                for (file in File("/proc/self/fd").listFiles() ?: emptyArray()) try {
+                    val fdInt = file.name.toInt()
+                    val fd = FileDescriptor().apply { setInt(this, fdInt) }
+                    val endpoint = try {
+                        Os.getsockname(fd)
+                    } catch (e: ErrnoException) {
+                        if (e.errno == OsConstants.EBADF || e.errno == OsConstants.ENOTSOCK) continue else throw e
+                    }
+                    if (endpoint !is InetSocketAddress) continue
+                    val isTcp = when (val type = UnblockCentral.getsockoptInt(null, fd, OsConstants.SOL_SOCKET,
+                        OsConstants.SO_TYPE)) {
+                        OsConstants.SOCK_STREAM -> true
+                        OsConstants.SOCK_DGRAM -> false
+                        else -> {
+                            Timber.w(Exception("Unknown $type to $endpoint"))
+                            continue
+                        }
+                    }
+                    val ownerTag = if (Build.VERSION.SDK_INT >= 29) try {
+                        UnblockCentral.fdsanGetOwnerTag(os, fd) as Long
+                    } catch (e: Exception) {
+                        Timber.w(e)
+                        0
+                    } else 0
+                    Timber.d("Resetting $fdInt owned by $ownerTag if is 0 -> $endpoint $isTcp")
+                    if (ownerTag != 0L) continue
+                    if (isTcp) {
+                        UnblockCentral.setsockoptLinger(null, fd, OsConstants.SOL_SOCKET,
+                            OsConstants.SO_LINGER, UnblockCentral.lingerReset)
+                    } else Os.dup2(nullFd, fdInt)
+                } catch (e: Exception) {
+                    Timber.w(e)
+                }
+            } catch (e: IOException) {
+                Timber.d(e)
+            }
             reactMapFragment(null)
         }
         supportFragmentManager.setFragmentResultListener("ReactMapFragment", this) { _, _ ->

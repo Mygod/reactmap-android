@@ -63,6 +63,7 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.crashlytics)
     implementation(libs.fragment.ktx)
+    implementation(libs.hiddenapibypass)
     implementation(libs.play.services.location)
     implementation(libs.lifecycle.common)
     implementation(libs.timber)
