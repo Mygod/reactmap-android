@@ -78,7 +78,9 @@ object ReactMapHttpEngine {
         }
     }
 
-    fun updateCookie() = app.pref.edit {
-        putString(KEY_COOKIE, CookieManager.getInstance().getCookie(apiUrl))
+    fun updateCookie() {
+        val cookie = CookieManager.getInstance()
+        app.pref.edit { putString(KEY_COOKIE, cookie.getCookie(apiUrl)) }
+        cookie.flush()
     }
 }
