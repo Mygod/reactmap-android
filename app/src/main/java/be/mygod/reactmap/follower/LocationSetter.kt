@@ -103,7 +103,13 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
             200 -> {
                 val response = conn.inputStream.bufferedReader().readText()
                 val human = try {
-                    val o = JSONObject(response).getJSONObject("data").getJSONObject("webhook").getJSONObject("human")
+                    val webhook = JSONObject(response).getJSONObject("data").getJSONObject("webhook")
+                    if (webhook.opt("human") == null) {
+                        withContext(Dispatchers.Main) { BackgroundLocationReceiver.stop() }
+                        notifyError("human not found")
+                        throw CancellationException()
+                    }
+                    val o = webhook.getJSONObject("human")
                     o.getString("type") + '/' + o.getString("name") + '/' + o.getLong("current_profile_no")
                 } catch (e: JSONException) {
                     throw Exception(response, e)
