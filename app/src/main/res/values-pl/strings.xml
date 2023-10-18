@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ReactMap</string>
+    <string name="notification_channel_site_controller">Sterowanie na pełnym ekranie</string>
+    <string name="notification_channel_webhook_failed">Niepowodzenie aktualizacji lokalizacji w tle</string>
+    <string name="notification_channel_webhook_updated">Aktualizacja lokalizacji w tle</string>
+    <string name="notification_channel_webhook_updating">Trwa aktualizacja lokalizacji w tle</string>
+    <string name="notification_channel_update_available">Dostępna aktualizacja</string>
+    <string name="notification_site_controller_message">Kliknij, aby skonfigurować</string>
+    <string name="notification_action_restart_game">Zrestartuj grę</string>
+    <string name="notification_update_available_title">Dostępna aktualizacja: %1$s</string>
+    <string name="notification_update_available_message">Nie masz aktualnej wersji od %1$s</string>
+    <string name="notification_webhook_failed_title">Niepowodzenie aktualizacji lokalizacji</string>
+    <string name="notification_webhook_updated_title">Lokalizacja zaktualizowana</string>
+    <string name="notification_webhook_updated_message"><![CDATA[%1$f,%2$f (przedawniony od %3$s) > %4$s]]></string>
+    <string name="notification_webhook_updating_title">Aktualizowanie lokalizacji</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f od %3$s</string>
+    <string name="config_dialog_title">Ustawienia aplikacji:</string>
+    <string name="config_welcome">Możesz wrócić do tego menu klikając w powiadomienie.</string>
+    <string name="config_switch_webhook_follow_location">Aktualizacja lokalizacji w tle\n(`location` w powiadomieniach)</string>
+    <string name="restart_game_dialog_title">Wybierz wersję gry do zrestartowania</string>
+    <string name="restart_game_dialog_message">Wymagany root urządzenia</string>
+    <string name="restart_game_standard">Standard</string>
+    <string name="restart_game_samsung">Samsung</string>
+    <string name="title_loading">Ładowanie…</string>
+    <string name="error_https_only">Tylko protokół HTTPS jest dozwolony</string>
+    <string name="error_missing_bg_location_permission">Brak uprawnień do lokalizacji w tle</string>
+    <string name="error_missing_location_permission">Brak uprawnień do lokalizacji</string>
+    <string name="error_unrecognized_version">Nierozpoznana wersja %1$s</string>
+    <string name="error_unsupported_download">Nieobsługiwane pobranie: %1$s</string>
+    <string name="error_webhook_human_not_found">Użytkownik nieznaleziony - brak dostępu do powiadomień</string>
+</resources>
