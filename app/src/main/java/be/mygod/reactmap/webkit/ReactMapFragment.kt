@@ -30,6 +30,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.withCreated
 import be.mygod.reactmap.App.Companion.app
+import be.mygod.reactmap.R
 import be.mygod.reactmap.follower.BackgroundLocationReceiver
 import be.mygod.reactmap.util.CreateDynamicDocument
 import be.mygod.reactmap.util.findErrorStream
@@ -160,7 +161,7 @@ class ReactMapFragment @JvmOverloads constructor(private val overrideUri: Uri? =
                             true
                         }
                         "http".equals(parsed.scheme, true) -> {
-                            Toast.makeText(view.context, "HTTP traffic disallowed", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(view.context, R.string.error_https_only, Toast.LENGTH_SHORT).show()
                             true
                         }
                         else -> false
@@ -193,7 +194,8 @@ class ReactMapFragment @JvmOverloads constructor(private val overrideUri: Uri? =
             }
             setDownloadListener { url, _, contentDisposition, mimetype, _ ->
                 if (!url.startsWith("data:", true)) {
-                    Toast.makeText(context, "Unsupported download: $url", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, context.getString(R.string.error_unsupported_download, url),
+                        Toast.LENGTH_LONG).show()
                     return@setDownloadListener
                 }
                 pendingJson = URLDecoder.decode(url.substringAfter(','), "utf-8")

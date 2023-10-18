@@ -41,7 +41,7 @@ object UpdateChecker {
     }
     private val semverParser = "^v?(\\d+)\\.(\\d+)\\.(\\d+)(?:-|$)".toPattern()
     private fun CharSequence.toSemVer() = semverParser.matcher(this).let { matcher ->
-        require(matcher.find()) { "Unrecognized version $this" }
+        require(matcher.find()) { app.getString(R.string.error_unrecognized_version, this) }
         SemVer(matcher.group(1)!!.toInt(), matcher.group(2)!!.toInt(), matcher.group(3)!!.toInt())
     }
     private val myVer = BuildConfig.VERSION_NAME.toSemVer()
@@ -113,9 +113,9 @@ object UpdateChecker {
         app.nm.notify(ID_AVAILABLE, Notification.Builder(app, CHANNEL_ID).apply {
             setCategory(Notification.CATEGORY_ALARM)
             setColor(app.getColor(R.color.main_blue))
-            setContentTitle("Update available: ${update.version}")
-            setContentText("You are out of date since " + DateUtils.getRelativeTimeSpanString(update.published,
-                System.currentTimeMillis(), 0))
+            setContentTitle(app.getString(R.string.notification_update_available_title, update.version))
+            setContentText(app.getString(R.string.notification_update_available_message,
+                DateUtils.getRelativeTimeSpanString(update.published, System.currentTimeMillis(), 0)))
             setGroup(CHANNEL_ID)
             setVisibility(Notification.VISIBILITY_PUBLIC)
             setSmallIcon(R.drawable.ic_action_update)

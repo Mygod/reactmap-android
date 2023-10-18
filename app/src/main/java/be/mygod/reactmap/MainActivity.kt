@@ -122,10 +122,12 @@ class MainActivity : FragmentActivity() {
         when (intent?.action) {
             ACTION_CONFIGURE -> startConfigure(false)
             ACTION_RESTART_GAME -> AlertDialog.Builder(this).apply {
-                setTitle("Pick game version to restart")
-                setMessage("This feature requires root")
-                setPositiveButton("Standard") { _, _ -> restartGame("com.nianticlabs.pokemongo") }
-                setNegativeButton("Samsung") { _, _ -> restartGame("com.nianticlabs.pokemongo.ares") }
+                setTitle(R.string.restart_game_dialog_title)
+                setMessage(R.string.restart_game_dialog_message)
+                setPositiveButton(R.string.restart_game_standard) { _, _ -> restartGame("com.nianticlabs.pokemongo") }
+                setNegativeButton(R.string.restart_game_samsung) { _, _ ->
+                    restartGame("com.nianticlabs.pokemongo.ares")
+                }
                 setNeutralButton(android.R.string.cancel, null)
             }.show()
             Intent.ACTION_VIEW -> {

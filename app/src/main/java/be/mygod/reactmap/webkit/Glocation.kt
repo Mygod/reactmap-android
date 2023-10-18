@@ -15,6 +15,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import be.mygod.reactmap.App.Companion.app
 import be.mygod.reactmap.R
+import be.mygod.reactmap.util.readableMessage
 import com.google.android.gms.location.LocationAvailability
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -43,7 +44,7 @@ class Glocation(private val web: WebView, private val fragment: Fragment) : Defa
 
         fun Exception?.toGeolocationPositionError() = """{
             code: ${if (this is SecurityException) PERMISSION_DENIED else POSITION_UNAVAILABLE},
-            message: ${this?.message?.let { "'$it'" }},
+            message: ${this?.readableMessage?.let { "'$it'" }},
         }"""
     }
 

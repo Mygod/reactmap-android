@@ -41,7 +41,7 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
             app.nm.notify(ID_STATUS, Notification.Builder(app, CHANNEL_ID_ERROR).apply {
                 setCategory(Notification.CATEGORY_ALARM)
                 setColor(app.getColor(R.color.main_orange))
-                setContentTitle("Failed to update location")
+                setContentTitle(app.getText(R.string.notification_webhook_failed_title))
                 setContentText(message)
                 setGroup(CHANNEL_ID)
                 setSmallIcon(R.drawable.ic_notification_sync_problem)
@@ -106,7 +106,7 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
                     val webhook = JSONObject(response).getJSONObject("data").getJSONObject("webhook")
                     if (webhook.opt("human") == null) {
                         withContext(Dispatchers.Main) { BackgroundLocationReceiver.stop() }
-                        notifyError("human not found")
+                        notifyError(app.getText(R.string.error_webhook_human_not_found))
                         throw CancellationException()
                     }
                     val o = webhook.getJSONObject("human")
@@ -122,7 +122,7 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
                 }
                 app.nm.notify(ID_STATUS, Notification.Builder(app, CHANNEL_ID_SUCCESS).apply {
                     setCategory(Notification.CATEGORY_STATUS)
-                    setContentTitle("Location updated")
+                    setContentTitle(app.getText(R.string.notification_webhook_updated_title))
                     setColor(app.getColor(R.color.main_blue))
                     setGroup(CHANNEL_ID)
                     setSmallIcon(R.drawable.ic_reactmap)
@@ -131,7 +131,8 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
                         Intent(app, MainActivity::class.java).setAction(MainActivity.ACTION_CONFIGURE),
                         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE))
                     setPublicVersion(build().clone())
-                    setContentText("$lat,$lon (stale ${formatTimeSpanFrom(time)}) > $human")
+                    setContentText(app.getString(R.string.notification_webhook_updated_message, lat, lon,
+                        formatTimeSpanFrom(time), human))
                 }.build())
                 Result.success()
             }
@@ -161,11 +162,11 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
 
     override suspend fun getForegroundInfo() = ForegroundInfo(2, Notification.Builder(app, CHANNEL_ID).apply {
         setCategory(Notification.CATEGORY_SERVICE)
-        setContentTitle("Updating location")
-        setContentText("${inputData.getDouble(KEY_LATITUDE, Double.NaN)}, " +
-                inputData.getDouble(KEY_LONGITUDE, Double.NaN) + " from " +
-                DateUtils.getRelativeTimeSpanString(inputData.getLong(KEY_TIME, 0),
-                    System.currentTimeMillis(), 0, DateUtils.FORMAT_ABBREV_RELATIVE))
+        setContentTitle(app.getText(R.string.notification_webhook_updating_title))
+        setContentText(app.getString(R.string.notification_webhook_updating_message,
+            inputData.getDouble(KEY_LATITUDE, Double.NaN), inputData.getDouble(KEY_LONGITUDE, Double.NaN),
+            DateUtils.getRelativeTimeSpanString(inputData.getLong(KEY_TIME, 0), System.currentTimeMillis(),
+                0, DateUtils.FORMAT_ABBREV_RELATIVE)))
         setColor(app.getColor(R.color.main_blue))
         setGroup(CHANNEL_ID)
         setVisibility(Notification.VISIBILITY_PUBLIC)

@@ -19,6 +19,7 @@ import androidx.work.OutOfQuotaPolicy
 import androidx.work.WorkRequest
 import androidx.work.workDataOf
 import be.mygod.reactmap.App.Companion.app
+import be.mygod.reactmap.R
 import be.mygod.reactmap.util.readableMessage
 import be.mygod.reactmap.util.toByteArray
 import be.mygod.reactmap.util.toParcelable
@@ -83,7 +84,7 @@ class BackgroundLocationReceiver : BroadcastReceiver() {
                 PackageManager.PERMISSION_GRANTED ||
                 app.checkSelfPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED) {
-                LocationSetter.notifyError("Background location permission missing")
+                LocationSetter.notifyError(app.getText(R.string.error_missing_bg_location_permission))
                 return
             }
             app.fusedLocation.requestLocationUpdates(LocationRequest.Builder(Priority.PRIORITY_PASSIVE,

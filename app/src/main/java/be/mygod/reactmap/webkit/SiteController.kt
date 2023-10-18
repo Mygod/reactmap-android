@@ -28,8 +28,8 @@ class SiteController(private val fragment: Fragment) : DefaultLifecycleObserver 
         app.nm.notify(NOTIFICATION_ID, Notification.Builder(context, CHANNEL_ID).apply {
             setWhen(0)
             setCategory(Notification.CATEGORY_SERVICE)
-            setContentTitle(title ?: "Loading…")
-            setContentText("Tap to configure")
+            setContentTitle(title ?: context.getText(R.string.title_loading))
+            setContentText(context.getText(R.string.notification_site_controller_message))
             setColor(context.getColor(R.color.main_blue))
             setGroup(CHANNEL_ID)
             setSmallIcon(R.drawable.ic_reactmap)
@@ -39,13 +39,13 @@ class SiteController(private val fragment: Fragment) : DefaultLifecycleObserver 
                 Intent(context, MainActivity::class.java).setAction(MainActivity.ACTION_CONFIGURE),
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE))
             addAction(Notification.Action.Builder(Icon.createWithResource(context, R.drawable.ic_notification_sync),
-                "Restart game", PendingIntent.getActivity(context, 1,
+                context.getString(R.string.notification_action_restart_game), PendingIntent.getActivity(context, 1,
                     Intent(context, MainActivity::class.java).setAction(MainActivity.ACTION_RESTART_GAME),
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)).build())
         }.build())
     }
 
-    var title: String? = null
+    var title: CharSequence? = null
         set(value) {
             field = value
             if (fragment.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {

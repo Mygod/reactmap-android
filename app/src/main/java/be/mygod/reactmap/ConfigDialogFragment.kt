@@ -42,7 +42,7 @@ class ConfigDialogFragment : AlertDialogFragment<ConfigDialogFragment.Arg, Empty
         if (!granted) missingLocationPermissions()
     }
     private fun missingLocationPermissions() {
-        Toast.makeText(requireContext(), "Missing location permission", Toast.LENGTH_LONG).show()
+        Toast.makeText(requireContext(), R.string.error_missing_location_permission, Toast.LENGTH_LONG).show()
         followerSwitch.isChecked = false
     }
 
@@ -55,7 +55,7 @@ class ConfigDialogFragment : AlertDialogFragment<ConfigDialogFragment.Arg, Empty
             setText(app.activeUrl)
         }
         followerSwitch = Switch(context).apply {
-            text = "Make alerts follow location in background\n(beware that you would be sharing your location with the map)"
+            text = context.getText(R.string.config_switch_webhook_follow_location)
             isChecked = BackgroundLocationReceiver.enabled && (context.checkSelfPermission(
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
                     context.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) ==
@@ -74,15 +74,15 @@ class ConfigDialogFragment : AlertDialogFragment<ConfigDialogFragment.Arg, Empty
             addView(followerSwitch, LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT))
         })
-        setTitle("ReactMap URL:")
-        if (arg.welcome) setMessage("You can return to this dialog later by clicking on the notification.")
+        setTitle(R.string.config_dialog_title)
+        if (arg.welcome) setMessage(R.string.config_welcome)
         setPositiveButton(android.R.string.ok, listener)
         setNegativeButton(android.R.string.cancel, null)
     }
 
     override val ret get() = try {
         val uri = urlEdit.text!!.toString().toUri().let {
-            require("https".equals(it.scheme, true)) { "Only HTTPS is allowed" }
+            require("https".equals(it.scheme, true)) { getText(R.string.error_https_only) }
             it.host!!
             it.toString()
         }

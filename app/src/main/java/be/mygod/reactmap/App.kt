@@ -77,28 +77,28 @@ class App : Application() {
         })
 
         nm.createNotificationChannels(mutableListOf(
-            NotificationChannel(SiteController.CHANNEL_ID, "Full screen site controls",
+            NotificationChannel(SiteController.CHANNEL_ID, getText(R.string.notification_channel_site_controller),
                 NotificationManager.IMPORTANCE_LOW).apply {
                 lockscreenVisibility = Notification.VISIBILITY_SECRET
                 setShowBadge(false)
             },
-            NotificationChannel(LocationSetter.CHANNEL_ID, "Background location updating",
+            NotificationChannel(LocationSetter.CHANNEL_ID, getText(R.string.notification_channel_webhook_updating),
                 NotificationManager.IMPORTANCE_LOW).apply {
                 lockscreenVisibility = Notification.VISIBILITY_PUBLIC
                 setShowBadge(false)
             },
-            NotificationChannel(LocationSetter.CHANNEL_ID_SUCCESS, "Background location updated",
-                NotificationManager.IMPORTANCE_MIN).apply {
+            NotificationChannel(LocationSetter.CHANNEL_ID_SUCCESS,
+                getText(R.string.notification_channel_webhook_updated), NotificationManager.IMPORTANCE_MIN).apply {
                 setShowBadge(false)
             },
-            NotificationChannel(LocationSetter.CHANNEL_ID_ERROR, "Background location update failed",
+            NotificationChannel(LocationSetter.CHANNEL_ID_ERROR, getText(R.string.notification_channel_webhook_failed),
                 NotificationManager.IMPORTANCE_HIGH).apply {
                 enableLights(true)
                 lightColor = getColor(R.color.main_orange)
             },
         ).apply {
             if (BuildConfig.GITHUB_RELEASES != null) add(NotificationChannel(UpdateChecker.CHANNEL_ID,
-                "Update available", NotificationManager.IMPORTANCE_HIGH).apply {
+                getText(R.string.notification_channel_update_available), NotificationManager.IMPORTANCE_HIGH).apply {
                 enableLights(true)
                 lightColor = getColor(R.color.main_blue)
                 lockscreenVisibility = Notification.VISIBILITY_PUBLIC
