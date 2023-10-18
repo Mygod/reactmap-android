@@ -16,7 +16,8 @@
     <string name="notification_webhook_updating_message">%1$f,%2$f od %3$s</string>
     <string name="config_dialog_title">Ustawienia aplikacji:</string>
     <string name="config_welcome">Możesz wrócić do tego menu klikając w powiadomienie.</string>
-    <string name="config_switch_webhook_follow_location">Aktualizacja lokalizacji w tle (location w powiadomieniach)</string>
+    <string name="config_switch_webhook_follow_location">Aktualizacja lokalizacji w tle\n(miej na uwadze,
+        że będziesz udostępniać mapie swoją lokalizację)</string>
     <string name="restart_game_dialog_title">Wybierz wersję gry do zrestartowania</string>
     <string name="restart_game_dialog_message">Wymagany root urządzenia</string>
     <string name="restart_game_standard">Standard</string>
