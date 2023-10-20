@@ -27,8 +27,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.withCreated
 import be.mygod.reactmap.App.Companion.app
 import be.mygod.reactmap.R
 import be.mygod.reactmap.follower.BackgroundLocationReceiver
@@ -272,21 +272,24 @@ class ReactMapFragment @JvmOverloads constructor(private val overrideUri: Uri? =
     }
 
     fun handleUri(uri: Uri?) = uri?.host?.let { host ->
-        viewLifecycleOwner.lifecycleScope.launch {
-            withCreated { }
-            Timber.d("Handling URI $uri")
-            if (host != hostname) {
-                hostname = host
-                return@launch web.loadUrl(uri.toString())
+        viewLifecycleOwnerLiveData.observe(this, object : Observer<LifecycleOwner> {
+            override fun onChanged(value: LifecycleOwner) {
+                viewLifecycleOwnerLiveData.removeObserver(this)
+                Timber.d("Handling URI $uri")
+                if (host != hostname) {
+                    hostname = host
+                    return web.loadUrl(uri.toString())
+                }
+                val path = uri.path
+                if (path.isNullOrEmpty() || path == "/") return
+                val match = flyToMatcher.matchEntire(path) ?: return web.loadUrl(uri.toString())
+                val script = StringBuilder(
+                    "window._hijackedMap.flyTo([${match.groupValues[1]}, ${match.groupValues[2]}]")
+                match.groups[3]?.let { script.append(", ${it.value}") }
+                script.append(')')
+                web.evaluateJavascript(script.toString(), null)
             }
-            val path = uri.path
-            if (path.isNullOrEmpty() || path == "/") return@launch
-            val match = flyToMatcher.matchEntire(path) ?: return@launch web.loadUrl(uri.toString())
-            val script = StringBuilder("window._hijackedMap.flyTo([${match.groupValues[1]}, ${match.groupValues[2]}]")
-            match.groups[3]?.let { script.append(", ${it.value}") }
-            script.append(')')
-            web.evaluateJavascript(script.toString(), null)
-        }
+        })
     }
     fun terminate() = web.destroy()
 }
