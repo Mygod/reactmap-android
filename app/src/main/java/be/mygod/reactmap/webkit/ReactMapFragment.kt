@@ -214,18 +214,18 @@ class ReactMapFragment @JvmOverloads constructor(private val overrideUri: Uri? =
             conn.requestMethod = request.method
             for ((key, value) in request.requestHeaders) conn.addRequestProperty(key, value)
         }
+        val charset = if (conn.contentEncoding == null) Charsets.UTF_8 else {
+            Charset.forName(conn.contentEncoding)
+        }
         WebResourceResponse(conn.contentType?.substringBefore(';'), conn.contentEncoding, conn.responseCode,
             conn.responseMessage.let { if (it.isNullOrBlank()) "N/A" else it },
             conn.headerFields.mapValues { (_, value) -> value.joinToString() },
             if (conn.responseCode in 200..299) try {
-                val charset = if (conn.contentEncoding == null) Charsets.UTF_8 else {
-                    Charset.forName(conn.contentEncoding)
-                }
                 transform(conn.inputStream.bufferedReader(charset)).byteInputStream(charset)
             } catch (e: IOException) {
                 Timber.d(e)
-                conn.inputStream
-            } else conn.findErrorStream)
+                conn.inputStream.bufferedReader(charset).readText().byteInputStream(charset)
+            } else conn.findErrorStream.bufferedReader(charset).readText().byteInputStream(charset))
     } catch (e: IOException) {
         Timber.d(e)
         null
