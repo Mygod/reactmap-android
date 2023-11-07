@@ -25,7 +25,7 @@ class DeviceStorageApp(context: Context) : Application(), Configuration.Provider
      */
     override fun isDeviceProtectedStorage() = false
 
-    override fun getWorkManagerConfiguration() = Configuration.Builder().apply {
+    override val workManagerConfiguration get() = Configuration.Builder().apply {
         setExecutor { GlobalScope.launch(Dispatchers.IO) { it.run() } }
         if (BuildConfig.DEBUG) setMinimumLoggingLevel(Log.VERBOSE)
     }.build()

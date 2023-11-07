@@ -22,9 +22,8 @@ import be.mygod.reactmap.util.DeviceStorageApp
 import be.mygod.reactmap.util.UpdateChecker
 import be.mygod.reactmap.webkit.SiteController
 import com.google.android.gms.location.LocationServices
+import com.google.firebase.FirebaseApp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.ktx.initialize
 import kotlinx.coroutines.DEBUG_PROPERTY_NAME
 import kotlinx.coroutines.DEBUG_PROPERTY_VALUE_ON
 import timber.log.Timber
@@ -53,7 +52,7 @@ class App : Application() {
         deviceStorage.moveSharedPreferencesFrom(this, PREF_NAME)
         // overhead of debug mode is minimal: https://github.com/Kotlin/kotlinx.coroutines/blob/f528898/docs/debugging.md#debug-mode
         System.setProperty(DEBUG_PROPERTY_NAME, DEBUG_PROPERTY_VALUE_ON)
-        Firebase.initialize(deviceStorage)
+        FirebaseApp.initializeApp(deviceStorage)
         FirebaseCrashlytics.getInstance().apply {
             setCustomKey("applicationId", BuildConfig.APPLICATION_ID)
             setCustomKey("build", Build.DISPLAY)

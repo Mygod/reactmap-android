@@ -38,6 +38,7 @@ android {
         }
         release {
             isMinifyEnabled = true
+            vcsInfo.include = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             if (!pluginManager.hasPlugin("com.google.gms.google-services")) {
                 the<CrashlyticsExtension>().mappingFileUploadEnabled = false
@@ -68,7 +69,7 @@ dependencies {
     implementation(libs.play.services.location)
     implementation(libs.lifecycle.common)
     implementation(libs.timber)
-    implementation(libs.work.ktx)
+    implementation(libs.work)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)

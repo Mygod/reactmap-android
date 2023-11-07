@@ -1,22 +1,22 @@
 [versions]
 activity = "1.8.0"
-agp = "8.3.0-alpha07"
+agp = "8.3.0-alpha12"
 androidx-test-ext-junit = "1.1.5"
-browser = "1.6.0"
+browser = "1.7.0-rc01"
 core = "1.12.0"
 crashlytics = "2.9.9"
-desugar = "2.0.3"
+desugar = "2.0.4"
 espresso-core = "3.5.1"
-firebase = "32.3.1"
-fragment = "1.6.1"
+firebase = "32.5.0"
+fragment = "1.6.2"
 hiddenapibypass = "4.3"
 junit = "4.13.2"
-kotlin = "1.9.10"
-lifecycle = "2.6.2"
+kotlin = "1.9.20"
+lifecycle = "2.7.0-beta01"
 google-services = "4.4.0"
 play-services-location = "21.0.1"
 timber = "5.0.1"
-work = "2.8.1"
+work = "2.9.0-rc01"
 gradle-versions = "0.49.0"
 
 [libraries]
@@ -35,7 +35,7 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 lifecycle-common = { group = "androidx.lifecycle", name = "lifecycle-common", version.ref = "lifecycle" }
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "play-services-location" }
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
-work-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "work" }
+work = { group = "androidx.work", name = "work-runtime", version.ref = "work" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
