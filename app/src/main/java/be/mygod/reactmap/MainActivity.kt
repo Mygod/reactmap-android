@@ -11,6 +11,7 @@ import android.system.Os
 import android.system.OsConstants
 import android.view.WindowManager
 import android.webkit.WebView
+import android.widget.Switch
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
@@ -124,9 +125,16 @@ class MainActivity : FragmentActivity() {
             ACTION_RESTART_GAME -> AlertDialog.Builder(this).apply {
                 setTitle(R.string.restart_game_dialog_title)
                 setMessage(R.string.restart_game_dialog_message)
-                setPositiveButton(R.string.restart_game_standard) { _, _ -> restartGame("com.nianticlabs.pokemongo") }
+                val switch = Switch(this@MainActivity).apply {
+                    setText(R.string.pip_phone_enter_split)
+                    isChecked = isInMultiWindowMode
+                }
+                setView(switch)
+                setPositiveButton(R.string.restart_game_standard) { _, _ ->
+                    restartGame("com.nianticlabs.pokemongo", switch.isChecked)
+                }
                 setNegativeButton(R.string.restart_game_samsung) { _, _ ->
-                    restartGame("com.nianticlabs.pokemongo.ares")
+                    restartGame("com.nianticlabs.pokemongo.ares", switch.isChecked)
                 }
                 setNeutralButton(android.R.string.cancel, null)
             }.show()
@@ -140,15 +148,14 @@ class MainActivity : FragmentActivity() {
         arg(ConfigDialogFragment.Arg(welcome))
         key()
     }.show(supportFragmentManager, null)
-    private fun restartGame(packageName: String) {
+    private fun restartGame(packageName: String, splitScreen: Boolean) {
         val intent = packageManager.getLaunchIntentForPackage(packageName) ?: return
-        val wasMultiWindow = isInMultiWindowMode
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val process = ProcessBuilder("su", "-c", "am force-stop $packageName").start()
                 val exit = process.waitFor()
                 if (exit != 0) Timber.w("su exited with $exit")
-                if (wasMultiWindow) {
+                if (splitScreen) {
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT)
                     delay(1000) // wait a second for animations
                 }

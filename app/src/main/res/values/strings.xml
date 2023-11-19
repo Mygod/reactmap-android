@@ -32,4 +32,6 @@
     <string name="error_unrecognized_version">Unrecognized version %1$s</string>
     <string name="error_unsupported_download">Unsupported download: %1$s</string>
     <string name="error_webhook_human_not_found">Human not found</string>
+
+    <string name="pip_phone_enter_split">Enter split screen</string>
 </resources>

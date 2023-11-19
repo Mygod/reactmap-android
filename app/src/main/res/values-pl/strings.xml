@@ -29,4 +29,6 @@
     <string name="error_unrecognized_version">Nierozpoznana wersja %1$s</string>
     <string name="error_unsupported_download">Nieobsługiwane pobranie: %1$s</string>
     <string name="error_webhook_human_not_found">Użytkownik nieznaleziony - brak dostępu do powiadomień</string>
+
+    <string name="pip_phone_enter_split">Włącz podzielony ekran</string>
 </resources>
