@@ -130,9 +130,9 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
                     setContentIntent(PendingIntent.getActivity(app, 2,
                         Intent(app, MainActivity::class.java).setAction(MainActivity.ACTION_CONFIGURE),
                         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE))
+                    setSubText(formatTimeSpanFrom(time))
                     setPublicVersion(build().clone())
-                    setContentText(app.getString(R.string.notification_webhook_updated_message, lat, lon,
-                        formatTimeSpanFrom(time), human))
+                    setContentText(app.getString(R.string.notification_webhook_updated_message, lat, lon, human))
                 }.build())
                 Result.success()
             }
