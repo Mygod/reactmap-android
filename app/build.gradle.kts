@@ -38,6 +38,7 @@ android {
         }
         release {
             isMinifyEnabled = true
+            isShrinkResources = true
             vcsInfo.include = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             if (!pluginManager.hasPlugin("com.google.gms.google-services")) {
