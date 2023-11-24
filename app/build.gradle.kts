@@ -30,6 +30,7 @@ android {
         buildConfigField("String", "GITHUB_RELEASES", if (extra.has("reactmap.githubReleases")) {
             extra["reactmap.githubReleases"] as String
         } else "null")
+        resourceConfigurations.addAll(arrayOf("en-rUS", "pl"))
     }
 
     buildTypes {
