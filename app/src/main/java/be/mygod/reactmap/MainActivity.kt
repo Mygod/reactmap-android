@@ -105,7 +105,7 @@ class MainActivity : FragmentActivity() {
             reactMapFragment(null)
         }
         supportFragmentManager.setFragmentResultListener("ReactMapFragment", this) { _, _ ->
-            reactMapFragment(null)
+            if (currentFragment?.isDestroyed != false) reactMapFragment(null)
         }
         lifecycleScope.launch { repeatOnLifecycle(Lifecycle.State.STARTED) { UpdateChecker.check() } }
     }
@@ -140,7 +140,9 @@ class MainActivity : FragmentActivity() {
             }.show()
             Intent.ACTION_VIEW -> {
                 val currentFragment = currentFragment
-                if (currentFragment == null) reactMapFragment(intent.data) else currentFragment.handleUri(intent.data)
+                if (currentFragment?.isDestroyed == false) {
+                    currentFragment.handleUri(intent.data)
+                } else reactMapFragment(intent.data)
             }
         }
     }

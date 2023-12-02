@@ -57,6 +57,7 @@ class ReactMapFragment @JvmOverloads constructor(private val overrideUri: Uri? =
         private val supportedHosts = setOf("discordapp.com", "discord.com", "telegram.org", "oauth.telegram.org")
     }
 
+    var isDestroyed = false
     private lateinit var web: WebView
     private lateinit var glocation: Glocation
     private lateinit var siteController: SiteController
@@ -181,6 +182,7 @@ class ReactMapFragment @JvmOverloads constructor(private val overrideUri: Uri? =
                     }
 
                 override fun onRenderProcessGone(view: WebView, detail: RenderProcessGoneDetail): Boolean {
+                    isDestroyed = true
                     if (detail.didCrash()) {
                         Timber.w(Exception("WebView crashed @ priority ${detail.rendererPriorityAtExit()}"))
                     } else if (isAdded) {
@@ -267,6 +269,7 @@ class ReactMapFragment @JvmOverloads constructor(private val overrideUri: Uri? =
     }
 
     override fun onDestroyView() {
+        isDestroyed = true
         super.onDestroyView()
         web.destroy()
     }
@@ -291,5 +294,8 @@ class ReactMapFragment @JvmOverloads constructor(private val overrideUri: Uri? =
             }
         })
     }
-    fun terminate() = web.destroy()
+    fun terminate() {
+        isDestroyed = true
+        web.destroy()
+    }
 }
