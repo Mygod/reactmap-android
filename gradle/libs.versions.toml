@@ -2,7 +2,7 @@
 activity = "1.8.1"
 agp = "8.3.0-alpha16"
 androidx-test-ext-junit = "1.1.5"
-browser = "1.7.0"
+browser = "1.8.0-beta01"
 core = "1.12.0"
 crashlytics = "2.9.9"
 desugar = "2.0.4"
@@ -16,7 +16,7 @@ lifecycle = "2.7.0-rc01"
 google-services = "4.4.0"
 play-services-location = "21.0.1"
 timber = "5.0.1"
-work = "2.9.0-rc01"
+work = "2.9.0"
 gradle-versions = "0.50.0"
 
 [libraries]
