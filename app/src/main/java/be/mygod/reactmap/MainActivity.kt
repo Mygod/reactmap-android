@@ -120,7 +120,9 @@ class MainActivity : FragmentActivity() {
     }
 
     private fun handleIntent(intent: Intent?) {
-        when (intent?.action) {
+        if (intent == null || intent.flags and Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY ==
+            Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) return
+        when (intent.action) {
             ACTION_CONFIGURE -> startConfigure(false)
             ACTION_RESTART_GAME -> AlertDialog.Builder(this).apply {
                 setTitle(R.string.restart_game_dialog_title)
