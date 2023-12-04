@@ -58,6 +58,7 @@ class ReactMapFragment @JvmOverloads constructor(private val overrideUri: Uri? =
     }
 
     var isDestroyed = false
+        private set
     private lateinit var web: WebView
     private lateinit var glocation: Glocation
     private lateinit var siteController: SiteController
@@ -229,6 +230,9 @@ class ReactMapFragment @JvmOverloads constructor(private val overrideUri: Uri? =
                 conn.inputStream.bufferedReader(charset).readText().byteInputStream(charset)
             } else conn.findErrorStream.bufferedReader(charset).readText().byteInputStream(charset))
     } catch (e: IOException) {
+        Timber.d(e)
+        null
+    } catch (e: IllegalArgumentException) {
         Timber.d(e)
         null
     }
