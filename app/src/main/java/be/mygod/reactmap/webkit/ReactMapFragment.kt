@@ -27,7 +27,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import be.mygod.reactmap.App.Companion.app
 import be.mygod.reactmap.R
@@ -48,7 +47,7 @@ import java.net.URLDecoder
 import java.nio.charset.Charset
 import java.util.Locale
 
-class ReactMapFragment @JvmOverloads constructor(private val overrideUri: Uri? = null) : Fragment() {
+class ReactMapFragment @JvmOverloads constructor(private var overrideUri: Uri? = null) : Fragment() {
     companion object {
         private val filenameExtractor = "filename=(\"([^\"]+)\"|[^;]+)".toRegex(RegexOption.IGNORE_CASE)
         private val vendorJsMatcher = "/vendor-[0-9a-f]{8}\\.js".toRegex()
@@ -57,8 +56,6 @@ class ReactMapFragment @JvmOverloads constructor(private val overrideUri: Uri? =
         private val supportedHosts = setOf("discordapp.com", "discord.com", "telegram.org", "oauth.telegram.org")
     }
 
-    var isDestroyed = false
-        private set
     private lateinit var web: WebView
     private lateinit var glocation: Glocation
     private lateinit var siteController: SiteController
@@ -83,7 +80,7 @@ class ReactMapFragment @JvmOverloads constructor(private val overrideUri: Uri? =
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         Timber.d("Creating ReactMapFragment")
         val activeUrl = overrideUri?.toString() ?: app.activeUrl
-        hostname = if (overrideUri == null) Uri.parse(activeUrl).host!! else overrideUri.host!!
+        hostname = (overrideUri ?: Uri.parse(activeUrl)).host!!
         val activity = requireActivity()
         web = WebView(activity).apply {
             settings.apply {
@@ -183,7 +180,6 @@ class ReactMapFragment @JvmOverloads constructor(private val overrideUri: Uri? =
                     }
 
                 override fun onRenderProcessGone(view: WebView, detail: RenderProcessGoneDetail): Boolean {
-                    isDestroyed = true
                     if (detail.didCrash()) {
                         Timber.w(Exception("WebView crashed @ priority ${detail.rendererPriorityAtExit()}"))
                     } else if (isAdded) {
@@ -273,33 +269,26 @@ class ReactMapFragment @JvmOverloads constructor(private val overrideUri: Uri? =
     }
 
     override fun onDestroyView() {
-        isDestroyed = true
         super.onDestroyView()
         web.destroy()
     }
 
     fun handleUri(uri: Uri?) = uri?.host?.let { host ->
-        viewLifecycleOwnerLiveData.observe(this, object : Observer<LifecycleOwner> {
-            override fun onChanged(value: LifecycleOwner) {
-                viewLifecycleOwnerLiveData.removeObserver(this)
-                Timber.d("Handling URI $uri")
-                if (host != hostname) {
-                    hostname = host
-                    return web.loadUrl(uri.toString())
-                }
-                val path = uri.path
-                if (path.isNullOrEmpty() || path == "/") return
-                val match = flyToMatcher.matchEntire(path) ?: return web.loadUrl(uri.toString())
-                val script = StringBuilder(
-                    "window._hijackedMap.flyTo([${match.groupValues[1]}, ${match.groupValues[2]}]")
-                match.groups[3]?.let { script.append(", ${it.value}") }
-                script.append(')')
-                web.evaluateJavascript(script.toString(), null)
+        Timber.d("Handling URI $uri")
+        if (view == null) overrideUri = uri else {
+            if (host != hostname) {
+                hostname = host
+                return web.loadUrl(uri.toString())
             }
-        })
+            val path = uri.path
+            if (path.isNullOrEmpty() || path == "/") return@let
+            val match = flyToMatcher.matchEntire(path) ?: return web.loadUrl(uri.toString())
+            val script = StringBuilder(
+                "window._hijackedMap.flyTo([${match.groupValues[1]}, ${match.groupValues[2]}]")
+            match.groups[3]?.let { script.append(", ${it.value}") }
+            script.append(')')
+            web.evaluateJavascript(script.toString(), null)
+        }
     }
-    fun terminate() {
-        isDestroyed = true
-        web.destroy()
-    }
+    fun terminate() = web.destroy()
 }
