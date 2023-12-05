@@ -1,6 +1,11 @@
 # ReactMap for Android
 
+[![CircleCI](https://circleci.com/gh/Mygod/reactmap-android.svg?style=shield)](https://circleci.com/gh/Mygod/reactmap-android)
 [![API](https://img.shields.io/badge/API-26%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=26)
+[![Releases](https://img.shields.io/github/downloads/Mygod/reactmap-android/total.svg)](https://github.com/Mygod/reactmap-android/releases)
+[![Language: Kotlin](https://img.shields.io/github/languages/top/Mygod/reactmap-android.svg)](https://github.com/Mygod/reactmap-android/search?l=kotlin)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/58a48b28278d46edad1b5c82bf648607)](https://app.codacy.com/gh/Mygod/reactmap-android/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+[![License](https://img.shields.io/github/license/Mygod/reactmap-android.svg)](LICENSE)
 
 Use ReactMap as an Android app with battery improvements, including:
 
