@@ -91,6 +91,7 @@ object UpdateChecker {
                     }))
                     putString(KEY_VERSION, update?.let {
                         putLong(KEY_PUBLISHED, update.published)
+                        putString(KEY_URL, update.url)
                         it.version
                     })
                     process(update)
