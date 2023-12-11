@@ -52,7 +52,8 @@ class ReactMapFragment @JvmOverloads constructor(private var overrideUri: Uri? =
         private val filenameExtractor = "filename=(\"([^\"]+)\"|[^;]+)".toRegex(RegexOption.IGNORE_CASE)
         private val vendorJsMatcher = "/vendor-[0-9a-f]{8}\\.js".toRegex()
         private val flyToMatcher = "/@/([0-9.-]+)/([0-9.-]+)(?:/([0-9.-]+))?/?".toRegex()
-        private val mapHijacker = ",this.callInitHooks\\(\\),this._zoomAnimated=".toRegex()
+        private val mapHijacker = "(?<=[\\n\\r\\s,])this(?=.callInitHooks\\(\\)[,;][\\n\\r\\s]*this._zoomAnimated\\s*=)"
+            .toRegex()
         private val supportedHosts = setOf("discordapp.com", "discord.com", "telegram.org", "oauth.telegram.org")
     }
 
@@ -265,7 +266,7 @@ class ReactMapFragment @JvmOverloads constructor(private var overrideUri: Uri? =
         response
     }
     private fun handleVendorJs(request: WebResourceRequest) = buildResponse(request) { reader ->
-        mapHijacker.replace(reader.readText(), ",(window._hijackedMap=this).callInitHooks(),this._zoomAnimated=")
+        mapHijacker.replace(reader.readText(), "(window._hijackedMap=this)")
     }
 
     override fun onDestroyView() {
