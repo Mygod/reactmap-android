@@ -125,7 +125,7 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
                     setContentTitle(app.getText(R.string.notification_webhook_updated_title))
                     setColor(app.getColor(R.color.main_blue))
                     setGroup(CHANNEL_ID)
-                    setSmallIcon(R.drawable.ic_reactmap)
+                    setSmallIcon(R.drawable.ic_device_share_location)
                     setShowWhen(true)
                     setContentIntent(PendingIntent.getActivity(app, 2,
                         Intent(app, MainActivity::class.java).setAction(MainActivity.ACTION_CONFIGURE),
