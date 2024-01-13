@@ -31,6 +31,7 @@ android {
             extra["reactmap.githubReleases"] as String
         } else "null")
         resourceConfigurations.addAll(arrayOf("en-rUS", "pl"))
+        ndk.abiFilters.addAll(listOf("armeabi-v7a", "arm64-v8a"))
     }
 
     buildTypes {
