@@ -65,7 +65,7 @@ dependencies {
     implementation(libs.browser)
     implementation(libs.core.ktx)
     implementation(libs.firebase.analytics)
-    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.crashlytics.ndk)   // without Play console we need to use ndk to see native crashes
     implementation(libs.fragment.ktx)
     implementation(libs.hiddenapibypass)
     implementation(libs.play.services.location)
