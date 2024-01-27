@@ -1,6 +1,5 @@
 package be.mygod.reactmap
 
-import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
@@ -11,10 +10,10 @@ import android.system.Os
 import android.system.OsConstants
 import android.view.WindowManager
 import android.webkit.WebView
-import android.widget.Switch
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.commit
@@ -28,6 +27,7 @@ import be.mygod.reactmap.util.UnblockCentral
 import be.mygod.reactmap.util.UpdateChecker
 import be.mygod.reactmap.util.readableMessage
 import be.mygod.reactmap.webkit.ReactMapFragment
+import com.google.android.material.materialswitch.MaterialSwitch
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -127,9 +127,14 @@ class MainActivity : FragmentActivity() {
             ACTION_RESTART_GAME -> AlertDialog.Builder(this).apply {
                 setTitle(R.string.restart_game_dialog_title)
                 setMessage(R.string.restart_game_dialog_message)
-                val switch = Switch(this@MainActivity).apply {
+                val switch = MaterialSwitch(this@MainActivity).apply {
                     setText(R.string.pip_phone_enter_split)
                     isChecked = isInMultiWindowMode
+                    val padding = context.obtainStyledAttributes(intArrayOf(
+                        com.google.android.material.R.attr.dialogPreferredPadding)).use {
+                        it.getDimensionPixelOffset(0, 0)
+                    }
+                    setPadding(padding, 0, padding, 0)
                 }
                 setView(switch)
                 setPositiveButton(R.string.restart_game_standard) { _, _ ->

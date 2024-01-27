@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="?dialogPreferredPadding"
+    android:paddingEnd="?dialogPreferredPadding">
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+            android:id="@android:id/edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:focusedByDefault="true"
+            android:inputType="textUri"
+            tools:text="https://www.reactmap.dev"/>
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.materialswitch.MaterialSwitch
+        android:id="@android:id/switch_widget"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/config_switch_webhook_follow_location"
+        android:layout_marginTop="16dp"/>
+</LinearLayout>
