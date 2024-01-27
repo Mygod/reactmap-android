@@ -268,7 +268,7 @@ class ReactMapFragment @JvmOverloads constructor(private var overrideUri: Uri? =
     private fun handleVendorJs(request: WebResourceRequest) = buildResponse(request) { reader ->
         val response = reader.readText()
         val matcher = mapHijacker.matcher(response)
-        if (matcher.find()) StringBuilder().also {
+        if (matcher.find()) StringBuffer().also {
             matcher.appendReplacement(it, "(console.log(this),window._hijackedMap=this)")
             matcher.appendTail(it)
         }.toString() else {
