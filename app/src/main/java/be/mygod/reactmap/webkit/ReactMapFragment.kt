@@ -3,6 +3,7 @@ package be.mygod.reactmap.webkit
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.JsonWriter
 import android.util.Log
@@ -268,10 +269,13 @@ class ReactMapFragment @JvmOverloads constructor(private var overrideUri: Uri? =
     private fun handleVendorJs(request: WebResourceRequest) = buildResponse(request) { reader ->
         val response = reader.readText()
         val matcher = mapHijacker.matcher(response)
-        if (matcher.find()) StringBuffer().also {
-            matcher.appendReplacement(it, "(console.log(this),window._hijackedMap=this)")
+        if (matcher.find()) (if (Build.VERSION.SDK_INT >= 34) StringBuilder().also {
+            matcher.appendReplacement(it, "(window._hijackedMap=this)")
             matcher.appendTail(it)
-        }.toString() else {
+        } else StringBuffer().also {
+            matcher.appendReplacement(it, "(window._hijackedMap=this)")
+            matcher.appendTail(it)
+        }).toString() else {
             Timber.w(Exception("vendor.js unmatched"))
             response
         }
