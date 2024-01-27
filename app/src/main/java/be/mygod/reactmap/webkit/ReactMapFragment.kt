@@ -187,7 +187,7 @@ class ReactMapFragment @JvmOverloads constructor(private var overrideUri: Uri? =
                 override fun onReceivedError(view: WebView?, request: WebResourceRequest, error: WebResourceError) {
                     if (!request.isForMainFrame) return
                     Snackbar.make(web, "${error.description} (${error.errorCode})", Snackbar.LENGTH_INDEFINITE).apply {
-                        setAction("Refresh") { web.reload() }
+                        setAction(R.string.web_refresh) { web.reload() }
                     }.show()
                 }
 

@@ -34,4 +34,5 @@
     <string name="error_webhook_human_not_found">Human not found</string>
 
     <string name="pip_phone_enter_split">Enter split screen</string>
+    <string name="web_refresh">Refresh</string>
 </resources>

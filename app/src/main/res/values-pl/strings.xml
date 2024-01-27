@@ -31,4 +31,5 @@
     <string name="error_webhook_human_not_found">Użytkownik nieznaleziony - brak dostępu do powiadomień</string>
 
     <string name="pip_phone_enter_split">Włącz podzielony ekran</string>
+    <string name="web_refresh">Odśwież</string>
 </resources>
