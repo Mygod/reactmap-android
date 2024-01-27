@@ -50,10 +50,10 @@ import java.util.Locale
 class ReactMapFragment @JvmOverloads constructor(private var overrideUri: Uri? = null) : Fragment() {
     companion object {
         private val filenameExtractor = "filename=(\"([^\"]+)\"|[^;]+)".toRegex(RegexOption.IGNORE_CASE)
-        private val vendorJsMatcher = "/vendor-[0-9a-f]{8}\\.js".toRegex()
+        private val vendorJsMatcher = "/vendor-[0-9a-z]{8}\\.js".toRegex(RegexOption.IGNORE_CASE)
         private val flyToMatcher = "/@/([0-9.-]+)/([0-9.-]+)(?:/([0-9.-]+))?/?".toRegex()
         private val mapHijacker = "(?<=[\\n\\r\\s,])this(?=.callInitHooks\\(\\)[,;][\\n\\r\\s]*this._zoomAnimated\\s*=)"
-            .toRegex()
+            .toPattern()
         private val supportedHosts = setOf("discordapp.com", "discord.com", "telegram.org", "oauth.telegram.org")
     }
 
@@ -266,7 +266,15 @@ class ReactMapFragment @JvmOverloads constructor(private var overrideUri: Uri? =
         response
     }
     private fun handleVendorJs(request: WebResourceRequest) = buildResponse(request) { reader ->
-        mapHijacker.replace(reader.readText(), "(window._hijackedMap=this)")
+        val response = reader.readText()
+        val matcher = mapHijacker.matcher(response)
+        if (matcher.find()) StringBuilder().also {
+            matcher.appendReplacement(it, "(console.log(this),window._hijackedMap=this)")
+            matcher.appendTail(it)
+        }.toString() else {
+            Timber.w(Exception("vendor.js unmatched"))
+            response
+        }
     }
 
     override fun onDestroyView() {
