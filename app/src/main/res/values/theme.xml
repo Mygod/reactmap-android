@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style
-        name="Theme.DeviceDefault.DayNight.NoActionBar"
-        parent="@android:style/Theme.DeviceDefault.Light.NoActionBar">
-        <item name="android:windowLightStatusBar">true</item>
-    </style>
-    <style name="Theme.ReactMap" parent="@style/Theme.DeviceDefault.DayNight.NoActionBar">
+    <style name="Theme.ReactMap" parent="@style/Theme.Material3.DynamicColors.DayNight">
         <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="s">@mipmap/splash</item>
         <item name="android:windowSplashscreenContent">@mipmap/splash</item>
     </style>

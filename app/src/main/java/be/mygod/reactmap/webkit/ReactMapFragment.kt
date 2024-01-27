@@ -14,6 +14,7 @@ import android.webkit.ConsoleMessage
 import android.webkit.RenderProcessGoneDetail
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
+import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
@@ -21,6 +22,7 @@ import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.core.view.WindowCompat
@@ -34,6 +36,7 @@ import be.mygod.reactmap.R
 import be.mygod.reactmap.follower.BackgroundLocationReceiver
 import be.mygod.reactmap.util.CreateDynamicDocument
 import be.mygod.reactmap.util.findErrorStream
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.coroutines.launch
 import org.json.JSONArray
@@ -181,6 +184,13 @@ class ReactMapFragment @JvmOverloads constructor(private var overrideUri: Uri? =
                         } else if (vendorJsMatcher.matchEntire(path) != null) handleVendorJs(request) else null
                     }
 
+                override fun onReceivedError(view: WebView?, request: WebResourceRequest, error: WebResourceError) {
+                    if (!request.isForMainFrame) return
+                    Snackbar.make(web, "${error.description} (${error.errorCode})", Snackbar.LENGTH_INDEFINITE).apply {
+                        setAction("Refresh") { web.reload() }
+                    }.show()
+                }
+
                 override fun onRenderProcessGone(view: WebView, detail: RenderProcessGoneDetail): Boolean {
                     if (detail.didCrash()) {
                         Timber.w(Exception("WebView crashed @ priority ${detail.rendererPriorityAtExit()}"))
@@ -206,7 +216,9 @@ class ReactMapFragment @JvmOverloads constructor(private var overrideUri: Uri? =
             }
             loadUrl(activeUrl)
         }
-        return web
+        return CoordinatorLayout(activity).apply {
+            addView(web, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        }
     }
 
     private fun buildResponse(request: WebResourceRequest, transform: (Reader) -> String) = try {
