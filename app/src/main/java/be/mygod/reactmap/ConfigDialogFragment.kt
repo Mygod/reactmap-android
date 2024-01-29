@@ -5,11 +5,10 @@ import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Parcelable
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import be.mygod.reactmap.App.Companion.app
@@ -18,7 +17,7 @@ import be.mygod.reactmap.util.AlertDialogFragment
 import be.mygod.reactmap.util.Empty
 import be.mygod.reactmap.util.readableMessage
 import be.mygod.reactmap.webkit.ReactMapHttpEngine
-import com.google.android.material.materialswitch.MaterialSwitch
+import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import kotlinx.parcelize.Parcelize
 
 class ConfigDialogFragment : AlertDialogFragment<ConfigDialogFragment.Arg, Empty>() {
@@ -30,8 +29,8 @@ class ConfigDialogFragment : AlertDialogFragment<ConfigDialogFragment.Arg, Empty
     data class Arg(val welcome: Boolean) : Parcelable
 
     private lateinit var historyUrl: Set<String?>
-    private lateinit var urlEdit: AutoCompleteTextView
-    private lateinit var followerSwitch: MaterialSwitch
+    private lateinit var urlEdit: MaterialAutoCompleteTextView
+    private lateinit var followerSwitch: SwitchCompat
 
     private val requestLocation = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
         if (it.any { (_, v) -> v }) {
@@ -59,7 +58,7 @@ class ConfigDialogFragment : AlertDialogFragment<ConfigDialogFragment.Arg, Empty
         historyUrl = app.pref.getStringSet(KEY_HISTORY_URL, null) ?: setOf("https://${BuildConfig.DEFAULT_DOMAIN}")
         val context = requireContext()
         urlEdit = findViewById(android.R.id.edit)!!
-        urlEdit.setAdapter(ArrayAdapter(context, android.R.layout.select_dialog_item, historyUrl.toTypedArray()))
+        urlEdit.setSimpleItems(historyUrl.toTypedArray())
         urlEdit.setText(app.activeUrl)
         followerSwitch = findViewById(android.R.id.switch_widget)!!
         followerSwitch.isChecked = BackgroundLocationReceiver.enabled && (context.checkSelfPermission(

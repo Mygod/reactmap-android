@@ -19,7 +19,6 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -61,7 +60,7 @@ class ReactMapFragment @JvmOverloads constructor(private var overrideUri: Uri? =
         private val supportedHosts = setOf("discordapp.com", "discord.com", "telegram.org", "oauth.telegram.org")
     }
 
-    private lateinit var web: WebView
+    lateinit var web: WebView
     private lateinit var glocation: Glocation
     private lateinit var siteController: SiteController
     private lateinit var hostname: String
@@ -165,7 +164,7 @@ class ReactMapFragment @JvmOverloads constructor(private var overrideUri: Uri? =
                             true
                         }
                         "http".equals(parsed.scheme, true) -> {
-                            Toast.makeText(view.context, R.string.error_https_only, Toast.LENGTH_SHORT).show()
+                            Snackbar.make(view, R.string.error_https_only, Snackbar.LENGTH_SHORT).show()
                             true
                         }
                         else -> false
@@ -205,8 +204,8 @@ class ReactMapFragment @JvmOverloads constructor(private var overrideUri: Uri? =
             }
             setDownloadListener { url, _, contentDisposition, mimetype, _ ->
                 if (!url.startsWith("data:", true)) {
-                    Toast.makeText(context, context.getString(R.string.error_unsupported_download, url),
-                        Toast.LENGTH_LONG).show()
+                    Snackbar.make(web, context.getString(R.string.error_unsupported_download, url),
+                        Snackbar.LENGTH_LONG).show()
                     return@setDownloadListener
                 }
                 pendingJson = URLDecoder.decode(url.substringAfter(','), "utf-8")

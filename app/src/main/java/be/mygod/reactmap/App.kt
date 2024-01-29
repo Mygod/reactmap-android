@@ -22,6 +22,7 @@ import be.mygod.reactmap.util.DeviceStorageApp
 import be.mygod.reactmap.util.UpdateChecker
 import be.mygod.reactmap.webkit.SiteController
 import com.google.android.gms.location.LocationServices
+import com.google.android.material.color.DynamicColors
 import com.google.firebase.FirebaseApp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import kotlinx.coroutines.DEBUG_PROPERTY_NAME
@@ -105,6 +106,7 @@ class App : Application() {
         })
         work = WorkManager.getInstance(deviceStorage)
         BackgroundLocationReceiver.setup()
+        DynamicColors.applyToActivitiesIfAvailable(this)
     }
 
     val customTabsIntent by lazy {
