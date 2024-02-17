@@ -21,7 +21,6 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.core.view.WindowCompat
@@ -215,9 +214,7 @@ class ReactMapFragment @JvmOverloads constructor(private var overrideUri: Uri? =
             }
             loadUrl(activeUrl)
         }
-        return CoordinatorLayout(activity).apply {
-            addView(web, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-        }
+        return web
     }
 
     private fun buildResponse(request: WebResourceRequest, transform: (Reader) -> String) = try {
