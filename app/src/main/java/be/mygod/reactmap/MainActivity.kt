@@ -58,7 +58,7 @@ class MainActivity : FragmentActivity() {
         if (BuildConfig.DEBUG) WebView.setWebContentsDebuggingEnabled(true)
         setContentView(R.layout.layout_main)
         handleIntent(intent)
-        if (currentFragment == null) reactMapFragment(null)
+        if (currentFragment == null) reactMapFragment()
         if (app.pref.getBoolean(KEY_WELCOME, true)) {
             startConfigure(true)
             app.pref.edit { putBoolean(KEY_WELCOME, false) }
@@ -103,10 +103,10 @@ class MainActivity : FragmentActivity() {
             } catch (e: IOException) {
                 Timber.d(e)
             }
-            reactMapFragment(null)
+            reactMapFragment()
         }
         supportFragmentManager.setFragmentResultListener("ReactMapFragment", this) { _, _ ->
-            reactMapFragment(null)
+            reactMapFragment()
         }
         lifecycleScope.launch { repeatOnLifecycle(Lifecycle.State.STARTED) { UpdateChecker.check() } }
     }
@@ -115,9 +115,10 @@ class MainActivity : FragmentActivity() {
         handleIntent(intent)
     }
 
-    private var currentFragment: ReactMapFragment? = null
-    private fun reactMapFragment(overrideUri: Uri?) = supportFragmentManager.commit {
-        replace(R.id.content, ReactMapFragment(overrideUri).also { currentFragment = it })
+    var currentFragment: ReactMapFragment? = null
+    var pendingOverrideUri: Uri? = null
+    private fun reactMapFragment() = supportFragmentManager.commit {
+        replace(R.id.content, ReactMapFragment().also { currentFragment = it })
     }
 
     private fun handleIntent(intent: Intent?) {
@@ -147,8 +148,8 @@ class MainActivity : FragmentActivity() {
                 setNeutralButton(android.R.string.cancel, null)
             }.show()
             Intent.ACTION_VIEW -> {
-                val currentFragment = currentFragment
-                if (currentFragment == null) reactMapFragment(intent.data) else currentFragment.handleUri(intent.data)
+                val child = currentFragment
+                if (child?.view == null) pendingOverrideUri = intent.data else child.handleUri(intent.data)
             }
         }
     }

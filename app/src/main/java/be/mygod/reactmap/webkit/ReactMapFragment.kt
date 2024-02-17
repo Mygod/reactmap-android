@@ -30,6 +30,7 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import be.mygod.reactmap.App.Companion.app
+import be.mygod.reactmap.MainActivity
 import be.mygod.reactmap.R
 import be.mygod.reactmap.follower.BackgroundLocationReceiver
 import be.mygod.reactmap.util.CreateDynamicDocument
@@ -49,7 +50,7 @@ import java.net.URLDecoder
 import java.nio.charset.Charset
 import java.util.Locale
 
-class ReactMapFragment @JvmOverloads constructor(private var overrideUri: Uri? = null) : Fragment() {
+class ReactMapFragment : Fragment() {
     companion object {
         private val filenameExtractor = "filename=(\"([^\"]+)\"|[^;]+)".toRegex(RegexOption.IGNORE_CASE)
         private val vendorJsMatcher = "/vendor-[0-9a-z]{8}\\.js".toRegex(RegexOption.IGNORE_CASE)
@@ -64,7 +65,8 @@ class ReactMapFragment @JvmOverloads constructor(private var overrideUri: Uri? =
     private lateinit var siteController: SiteController
     private lateinit var hostname: String
     private var loginText: String? = null
-    private val windowInsetsController by lazy { WindowCompat.getInsetsController(requireActivity().window, web) }
+    private val mainActivity by lazy { activity as MainActivity }
+    private val windowInsetsController by lazy { WindowCompat.getInsetsController(mainActivity.window, web) }
 
     private var pendingFileCallback: ValueCallback<Array<Uri>>? = null
     private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
@@ -82,10 +84,10 @@ class ReactMapFragment @JvmOverloads constructor(private var overrideUri: Uri? =
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         Timber.d("Creating ReactMapFragment")
-        val activeUrl = overrideUri?.toString() ?: app.activeUrl
-        hostname = (overrideUri ?: Uri.parse(activeUrl)).host!!
-        val activity = requireActivity()
-        web = WebView(activity).apply {
+        val activeUrl = mainActivity.pendingOverrideUri?.toString() ?: app.activeUrl
+        hostname = (mainActivity.pendingOverrideUri ?: Uri.parse(activeUrl)).host!!
+        mainActivity.pendingOverrideUri = null
+        web = WebView(mainActivity).apply {
             settings.apply {
                 domStorageEnabled = true
                 @SuppressLint("SetJavaScriptEnabled")
@@ -124,7 +126,7 @@ class ReactMapFragment @JvmOverloads constructor(private var overrideUri: Uri? =
                 override fun handleOnBackPressed() = web.goBack()
                 override fun onDestroy(owner: LifecycleOwner) = remove()
             }
-            activity.onBackPressedDispatcher.addCallback(onBackPressedCallback)
+            mainActivity.onBackPressedDispatcher.addCallback(onBackPressedCallback)
             lifecycle.addObserver(onBackPressedCallback)
             val muiMargin = ReactMapMuiMarginListener(this)
             webViewClient = object : WebViewClient() {
@@ -190,6 +192,7 @@ class ReactMapFragment @JvmOverloads constructor(private var overrideUri: Uri? =
                 }
 
                 override fun onRenderProcessGone(view: WebView, detail: RenderProcessGoneDetail): Boolean {
+                    mainActivity.currentFragment = null
                     if (detail.didCrash()) {
                         Timber.w(Exception("WebView crashed @ priority ${detail.rendererPriorityAtExit()}"))
                     } else if (isAdded) {
@@ -297,20 +300,19 @@ class ReactMapFragment @JvmOverloads constructor(private var overrideUri: Uri? =
 
     fun handleUri(uri: Uri?) = uri?.host?.let { host ->
         Timber.d("Handling URI $uri")
-        if (view == null) overrideUri = uri else {
-            if (host != hostname) {
-                hostname = host
-                return web.loadUrl(uri.toString())
-            }
-            val path = uri.path
-            if (path.isNullOrEmpty() || path == "/") return@let
-            val match = flyToMatcher.matchEntire(path) ?: return web.loadUrl(uri.toString())
-            val script = StringBuilder(
-                "window._hijackedMap.flyTo([${match.groupValues[1]}, ${match.groupValues[2]}]")
-            match.groups[3]?.let { script.append(", ${it.value}") }
-            script.append(')')
-            web.evaluateJavascript(script.toString(), null)
+        check(view != null)
+        if (host != hostname) {
+            hostname = host
+            return web.loadUrl(uri.toString())
         }
+        val path = uri.path
+        if (path.isNullOrEmpty() || path == "/") return@let
+        val match = flyToMatcher.matchEntire(path) ?: return web.loadUrl(uri.toString())
+        val script = StringBuilder(
+            "window._hijackedMap.flyTo([${match.groupValues[1]}, ${match.groupValues[2]}]")
+        match.groups[3]?.let { script.append(", ${it.value}") }
+        script.append(')')
+        web.evaluateJavascript(script.toString(), null)
     }
     fun terminate() = web.destroy()
 }
