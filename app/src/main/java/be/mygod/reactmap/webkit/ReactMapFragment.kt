@@ -59,7 +59,7 @@ class ReactMapFragment @JvmOverloads constructor(private var overrideUri: Uri? =
         private val supportedHosts = setOf("discordapp.com", "discord.com", "telegram.org", "oauth.telegram.org")
     }
 
-    lateinit var web: WebView
+    private lateinit var web: WebView
     private lateinit var glocation: Glocation
     private lateinit var siteController: SiteController
     private lateinit var hostname: String

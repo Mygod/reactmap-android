@@ -171,8 +171,7 @@ class MainActivity : FragmentActivity() {
             } catch (e: Exception) {
                 Timber.w(e)
                 withContext(Dispatchers.Main) {
-                    Snackbar.make(currentFragment?.web ?: findViewById(android.R.id.content), e.readableMessage,
-                        Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(findViewById(android.R.id.content), e.readableMessage, Snackbar.LENGTH_LONG).show()
                 }
             }
         }
