@@ -201,6 +201,7 @@ class ReactMapFragment @JvmOverloads constructor(private var overrideUri: Uri? =
                     return true
                 }
             }
+            setRendererPriorityPolicy(WebView.RENDERER_PRIORITY_IMPORTANT, true)
             setDownloadListener { url, _, contentDisposition, mimetype, _ ->
                 if (!url.startsWith("data:", true)) {
                     Snackbar.make(web, context.getString(R.string.error_unsupported_download, url),
