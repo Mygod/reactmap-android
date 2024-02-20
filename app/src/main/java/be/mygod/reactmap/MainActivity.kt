@@ -148,8 +148,8 @@ class MainActivity : FragmentActivity() {
                 setNeutralButton(android.R.string.cancel, null)
             }.show()
             Intent.ACTION_VIEW -> {
-                val child = currentFragment
-                if (child?.view == null) pendingOverrideUri = intent.data else child.handleUri(intent.data)
+                pendingOverrideUri = intent.data
+                currentFragment?.handleUri(intent.data)
             }
         }
     }

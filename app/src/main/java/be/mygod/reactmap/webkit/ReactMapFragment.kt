@@ -86,7 +86,6 @@ class ReactMapFragment : Fragment() {
         Timber.d("Creating ReactMapFragment")
         val activeUrl = mainActivity.pendingOverrideUri?.toString() ?: app.activeUrl
         hostname = (mainActivity.pendingOverrideUri ?: Uri.parse(activeUrl)).host!!
-        mainActivity.pendingOverrideUri = null
         web = WebView(mainActivity).apply {
             settings.apply {
                 domStorageEnabled = true
@@ -151,6 +150,7 @@ class ReactMapFragment : Fragment() {
                 }
 
                 override fun onPageFinished(view: WebView?, url: String) {
+                    mainActivity.pendingOverrideUri = null
                     if (url.toUri().host != hostname) return
                     muiMargin.apply()
                     BackgroundLocationReceiver.setup()  // redo setup in case cookie is updated
@@ -299,8 +299,8 @@ class ReactMapFragment : Fragment() {
     }
 
     fun handleUri(uri: Uri?) = uri?.host?.let { host ->
+        if (view == null) return@let
         Timber.d("Handling URI $uri")
-        check(view != null)
         if (host != hostname) {
             hostname = host
             return web.loadUrl(uri.toString())
