@@ -147,10 +147,7 @@ class MainActivity : FragmentActivity() {
                 }
                 setNeutralButton(android.R.string.cancel, null)
             }.show()
-            Intent.ACTION_VIEW -> {
-                pendingOverrideUri = intent.data
-                currentFragment?.handleUri(intent.data)
-            }
+            Intent.ACTION_VIEW -> if (currentFragment?.handleUri(intent.data) != true) pendingOverrideUri = intent.data
         }
     }
     private fun startConfigure(welcome: Boolean) = ConfigDialogFragment().apply {

@@ -299,20 +299,26 @@ class ReactMapFragment : Fragment() {
     }
 
     fun handleUri(uri: Uri?) = uri?.host?.let { host ->
-        if (view == null) return@let
+        if (view == null) return false
         Timber.d("Handling URI $uri")
         if (host != hostname) {
             hostname = host
-            return web.loadUrl(uri.toString())
+            web.loadUrl(uri.toString())
+            return true
         }
         val path = uri.path
-        if (path.isNullOrEmpty() || path == "/") return@let
-        val match = flyToMatcher.matchEntire(path) ?: return web.loadUrl(uri.toString())
+        if (path.isNullOrEmpty() || path == "/") return true
+        val match = flyToMatcher.matchEntire(path)
+        if (match == null) {
+            web.loadUrl(uri.toString())
+            return true
+        }
         val script = StringBuilder(
             "window._hijackedMap.flyTo([${match.groupValues[1]}, ${match.groupValues[2]}]")
         match.groups[3]?.let { script.append(", ${it.value}") }
         script.append(')')
         web.evaluateJavascript(script.toString(), null)
+        true
     }
     fun terminate() = web.destroy()
 }
