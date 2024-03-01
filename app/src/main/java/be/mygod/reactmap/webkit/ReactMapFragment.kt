@@ -304,14 +304,14 @@ class ReactMapFragment : Fragment() {
         if (host != hostname) {
             hostname = host
             web.loadUrl(uri.toString())
-            return true
+            return false
         }
         val path = uri.path
         if (path.isNullOrEmpty() || path == "/") return true
         val match = flyToMatcher.matchEntire(path)
         if (match == null) {
             web.loadUrl(uri.toString())
-            return true
+            return false
         }
         val script = StringBuilder(
             "window._hijackedMap.flyTo([${match.groupValues[1]}, ${match.groupValues[2]}]")
