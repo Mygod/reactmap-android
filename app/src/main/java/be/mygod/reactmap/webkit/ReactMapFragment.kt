@@ -314,11 +314,13 @@ class ReactMapFragment : Fragment() {
             return false
         }
         val script = StringBuilder(
-            "window._hijackedMap.flyTo([${match.groupValues[1]}, ${match.groupValues[2]}]")
+            "!!window._hijackedMap.flyTo([${match.groupValues[1]}, ${match.groupValues[2]}]")
         match.groups[3]?.let { script.append(", ${it.value}") }
         script.append(')')
-        web.evaluateJavascript(script.toString(), null)
-        true
+        web.evaluateJavascript(script.toString()) {
+            if (it == true.toString()) mainActivity.pendingOverrideUri = null else Timber.w(Exception(it))
+        }
+        false
     }
     fun terminate() = web.destroy()
 }
