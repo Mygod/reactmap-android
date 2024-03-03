@@ -318,7 +318,10 @@ class ReactMapFragment : Fragment() {
         match.groups[3]?.let { script.append(", ${it.value}") }
         script.append(')')
         web.evaluateJavascript(script.toString()) {
-            if (it == true.toString()) mainActivity.pendingOverrideUri = null else Timber.w(Exception(it))
+            if (it == true.toString()) mainActivity.pendingOverrideUri = null else {
+                Timber.w(Exception(it))
+                web.loadUrl(uri.toString())
+            }
         }
         false
     }

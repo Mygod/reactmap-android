@@ -58,7 +58,7 @@ class MainActivity : FragmentActivity() {
         if (BuildConfig.DEBUG) WebView.setWebContentsDebuggingEnabled(true)
         setContentView(R.layout.layout_main)
         handleIntent(intent)
-        if (currentFragment == null) reactMapFragment()
+        reactMapFragment()
         if (app.pref.getBoolean(KEY_WELCOME, true)) {
             startConfigure(true)
             app.pref.edit { putBoolean(KEY_WELCOME, false) }
