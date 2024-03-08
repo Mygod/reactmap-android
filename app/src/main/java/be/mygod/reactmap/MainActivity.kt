@@ -58,11 +58,13 @@ class MainActivity : FragmentActivity() {
         if (BuildConfig.DEBUG) WebView.setWebContentsDebuggingEnabled(true)
         setContentView(R.layout.layout_main)
         handleIntent(intent)
-        reactMapFragment()
-        if (app.pref.getBoolean(KEY_WELCOME, true)) {
-            startConfigure(true)
-            app.pref.edit { putBoolean(KEY_WELCOME, false) }
-        }
+        if (savedInstanceState == null) {
+            reactMapFragment()
+            if (app.pref.getBoolean(KEY_WELCOME, true)) {
+                startConfigure(true)
+                app.pref.edit { putBoolean(KEY_WELCOME, false) }
+            }
+        } else currentFragment = supportFragmentManager.findFragmentById(R.id.content) as ReactMapFragment?
         AlertDialogFragment.setResultListener<ConfigDialogFragment, Empty>(this) { which, _ ->
             if (which != DialogInterface.BUTTON_POSITIVE) return@setResultListener
             currentFragment?.terminate()

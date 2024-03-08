@@ -81,11 +81,10 @@ class ReactMapFragment : Fragment() {
         }
         pendingJson = null
     }
+    private var loaded = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         Timber.d("Creating ReactMapFragment")
-        val activeUrl = mainActivity.pendingOverrideUri?.toString() ?: app.activeUrl
-        hostname = (mainActivity.pendingOverrideUri ?: Uri.parse(activeUrl)).host!!
         web = WebView(mainActivity).apply {
             settings.apply {
                 domStorageEnabled = true
@@ -216,9 +215,17 @@ class ReactMapFragment : Fragment() {
                     groupValues[2].ifEmpty { groupValues[1] }
                 } ?: "settings.json"))
             }
-            loadUrl(activeUrl)
         }
         return web
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (loaded) return
+        loaded = true
+        val activeUrl = mainActivity.pendingOverrideUri?.toString() ?: app.activeUrl
+        hostname = (mainActivity.pendingOverrideUri ?: Uri.parse(activeUrl)).host!!
+        web.loadUrl(activeUrl)
     }
 
     private fun buildResponse(request: WebResourceRequest, transform: (Reader) -> String) = try {
@@ -299,7 +306,7 @@ class ReactMapFragment : Fragment() {
     }
 
     fun handleUri(uri: Uri?) = uri?.host?.let { host ->
-        if (view == null) return false
+        if (view == null || !loaded) return false
         Timber.d("Handling URI $uri")
         if (host != hostname) {
             hostname = host
