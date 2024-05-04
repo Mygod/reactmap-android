@@ -124,6 +124,7 @@ class MainActivity : FragmentActivity() {
     }
 
     private fun handleIntent(intent: Intent?) {
+        setIntent(null)
         if (intent == null || intent.flags and Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY ==
             Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) return
         when (intent.action) {
@@ -149,7 +150,10 @@ class MainActivity : FragmentActivity() {
                 }
                 setNeutralButton(android.R.string.cancel, null)
             }.show()
-            Intent.ACTION_VIEW -> if (currentFragment?.handleUri(intent.data) != true) pendingOverrideUri = intent.data
+            Intent.ACTION_VIEW -> {
+                Timber.d("Handling URI ${intent.data}")
+                if (currentFragment?.handleUri(intent.data) != true) pendingOverrideUri = intent.data
+            }
         }
     }
     private fun startConfigure(welcome: Boolean) = ConfigDialogFragment().apply {

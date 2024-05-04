@@ -304,7 +304,6 @@ class ReactMapFragment : Fragment() {
 
     fun handleUri(uri: Uri?) = uri?.host?.let { host ->
         if (view == null || !loaded) return false
-        Timber.d("Handling URI $uri")
         if (host != hostname) {
             hostname = host
             web.loadUrl(uri.toString())
