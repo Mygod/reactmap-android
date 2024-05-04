@@ -26,8 +26,6 @@ import androidx.core.os.bundleOf
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
-import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import be.mygod.reactmap.App.Companion.app
 import be.mygod.reactmap.MainActivity
@@ -121,16 +119,14 @@ class ReactMapFragment : Fragment() {
                     return true
                 }
             }
-            val onBackPressedCallback = object : OnBackPressedCallback(false), DefaultLifecycleObserver {
+            val onBackPressedCallback = object : OnBackPressedCallback(false) {
                 override fun handleOnBackPressed() = web.goBack()
-                override fun onDestroy(owner: LifecycleOwner) = remove()
             }
-            mainActivity.onBackPressedDispatcher.addCallback(onBackPressedCallback)
-            lifecycle.addObserver(onBackPressedCallback)
+            mainActivity.onBackPressedDispatcher.addCallback(viewLifecycleOwner, onBackPressedCallback)
             val muiMargin = ReactMapMuiMarginListener(this)
             webViewClient = object : WebViewClient() {
                 override fun doUpdateVisitedHistory(view: WebView?, url: String, isReload: Boolean) {
-                    onBackPressedCallback.isEnabled = web.canGoBack()
+                    onBackPressedCallback.isEnabled = web.canGoBack().also { Timber.d("canGoBack = $it") }
                     if (url.toUri().path?.trimEnd('/') == "/login") loginText?.let { login ->
                         val writer = StringWriter()
                         writer.write("document.location = document.evaluate('//a[text()=")
