@@ -126,7 +126,7 @@ class ReactMapFragment : Fragment() {
             val muiMargin = ReactMapMuiMarginListener(this)
             webViewClient = object : WebViewClient() {
                 override fun doUpdateVisitedHistory(view: WebView?, url: String, isReload: Boolean) {
-                    onBackPressedCallback.isEnabled = web.canGoBack().also { Timber.d("canGoBack = $it") }
+                    onBackPressedCallback.isEnabled = web.canGoBack()
                     if (url.toUri().path?.trimEnd('/') == "/login") loginText?.let { login ->
                         val writer = StringWriter()
                         writer.write("document.location = document.evaluate('//a[text()=")

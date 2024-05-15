@@ -57,8 +57,8 @@ class MainActivity : FragmentActivity() {
         enableEdgeToEdge()
         if (BuildConfig.DEBUG) WebView.setWebContentsDebuggingEnabled(true)
         setContentView(R.layout.layout_main)
-        handleIntent(intent)
         if (savedInstanceState == null) {
+            handleIntent(intent)
             reactMapFragment()
             if (app.pref.getBoolean(KEY_WELCOME, true)) {
                 startConfigure(true)
