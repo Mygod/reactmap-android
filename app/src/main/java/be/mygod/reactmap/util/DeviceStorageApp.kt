@@ -1,17 +1,15 @@
 package be.mygod.reactmap.util
 
+import android.annotation.SuppressLint
 import android.app.Application
+import android.content.ComponentCallbacks
 import android.content.Context
-import android.util.Log
-import androidx.work.Configuration
-import be.mygod.reactmap.BuildConfig
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import android.content.res.Configuration
 
-class DeviceStorageApp(context: Context) : Application(), Configuration.Provider {
+@SuppressLint("MissingSuperCall")
+class DeviceStorageApp(private val app: Application) : Application() {
     init {
-        attachBaseContext(context.createDeviceProtectedStorageContext())
+        attachBaseContext(app.createDeviceProtectedStorageContext())
     }
 
     /**
@@ -25,8 +23,20 @@ class DeviceStorageApp(context: Context) : Application(), Configuration.Provider
      */
     override fun isDeviceProtectedStorage() = false
 
-    override val workManagerConfiguration get() = Configuration.Builder().apply {
-        setExecutor { GlobalScope.launch(Dispatchers.IO) { it.run() } }
-        if (BuildConfig.DEBUG) setMinimumLoggingLevel(Log.VERBOSE)
-    }.build()
+    override fun onCreate() = app.onCreate()
+    override fun onTerminate() = app.onTerminate()
+    override fun onConfigurationChanged(newConfig: Configuration) = app.onConfigurationChanged(newConfig)
+    override fun onLowMemory() = app.onLowMemory()
+    override fun onTrimMemory(level: Int) = app.onTrimMemory(level)
+    override fun registerComponentCallbacks(callback: ComponentCallbacks?) = app.registerComponentCallbacks(callback)
+    override fun unregisterComponentCallbacks(callback: ComponentCallbacks?) =
+        app.unregisterComponentCallbacks(callback)
+    override fun registerActivityLifecycleCallbacks(callback: ActivityLifecycleCallbacks?) =
+        app.registerActivityLifecycleCallbacks(callback)
+    override fun unregisterActivityLifecycleCallbacks(callback: ActivityLifecycleCallbacks?) =
+        app.unregisterActivityLifecycleCallbacks(callback)
+    override fun registerOnProvideAssistDataListener(callback: OnProvideAssistDataListener?) =
+        app.registerOnProvideAssistDataListener(callback)
+    override fun unregisterOnProvideAssistDataListener(callback: OnProvideAssistDataListener?) =
+        app.unregisterOnProvideAssistDataListener(callback)
 }

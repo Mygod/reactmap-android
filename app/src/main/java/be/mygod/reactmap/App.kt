@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.getSystemService
+import androidx.work.Configuration
 import androidx.work.WorkManager
 import be.mygod.reactmap.follower.BackgroundLocationReceiver
 import be.mygod.reactmap.follower.LocationSetter
@@ -27,6 +28,9 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import kotlinx.coroutines.DEBUG_PROPERTY_NAME
 import kotlinx.coroutines.DEBUG_PROPERTY_VALUE_ON
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class App : Application() {
@@ -104,6 +108,10 @@ class App : Application() {
                 lockscreenVisibility = Notification.VISIBILITY_PUBLIC
             })
         })
+        WorkManager.initialize(deviceStorage, Configuration.Builder().apply {
+            setExecutor { GlobalScope.launch(Dispatchers.IO) { it.run() } }
+            if (BuildConfig.DEBUG) setMinimumLoggingLevel(Log.VERBOSE)
+        }.build())
         work = WorkManager.getInstance(deviceStorage)
         BackgroundLocationReceiver.setup()
         DynamicColors.applyToActivitiesIfAvailable(this)
