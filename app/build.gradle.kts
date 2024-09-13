@@ -31,7 +31,6 @@ android {
             extra["reactmap.githubReleases"] as String
         } else "null")
         resourceConfigurations.addAll(arrayOf("en-rUS", "pl"))
-        ndk.abiFilters.addAll(listOf("armeabi-v7a", "arm64-v8a"))
     }
 
     buildTypes {
@@ -66,7 +65,7 @@ dependencies {
     implementation(libs.browser)
     implementation(libs.core.ktx)
     implementation(libs.firebase.analytics)
-    implementation(libs.firebase.crashlytics.ndk)   // without Play console we need to use ndk to see native crashes
+    implementation(libs.firebase.crashlytics)
     implementation(libs.fragment.ktx)
     implementation(libs.hiddenapibypass)
     implementation(libs.material)
