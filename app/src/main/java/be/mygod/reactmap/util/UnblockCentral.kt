@@ -3,11 +3,12 @@ package be.mygod.reactmap.util
 import android.annotation.SuppressLint
 import android.os.Build
 import android.system.Os
+import android.webkit.WebResourceResponse
 import androidx.annotation.RequiresApi
 import org.lsposed.hiddenapibypass.HiddenApiBypass
 import java.io.FileDescriptor
 
-@SuppressLint("BlockedPrivateApi", "DiscouragedPrivateApi")
+@SuppressLint("BlockedPrivateApi", "DiscouragedPrivateApi", "SoonBlockedPrivateApi")
 object UnblockCentral {
     /**
      * Retrieve this property before doing dangerous shit.
@@ -35,4 +36,7 @@ object UnblockCentral {
         Os::class.java.getDeclaredMethod("setsockoptLinger", FileDescriptor::class.java, Int::class.java,
             Int::class.java, classStructLinger)
     }
+
+    val mStatusCode by lazy { init.let { WebResourceResponse::class.java.getDeclaredField("mStatusCode") } }
+    val mReasonPhrase by lazy { init.let { WebResourceResponse::class.java.getDeclaredField("mReasonPhrase") } }
 }
