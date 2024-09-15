@@ -32,7 +32,6 @@ import be.mygod.reactmap.MainActivity
 import be.mygod.reactmap.R
 import be.mygod.reactmap.follower.BackgroundLocationReceiver
 import be.mygod.reactmap.util.CreateDynamicDocument
-import be.mygod.reactmap.util.UnblockCentral
 import be.mygod.reactmap.util.findErrorStream
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -61,6 +60,11 @@ class ReactMapFragment : Fragment() {
         private val mapHijacker = "(?<=[\\n\\r\\s,])this(?=.callInitHooks\\(\\)[,;][\\n\\r\\s]*this._zoomAnimated\\s*=)"
             .toPattern()
         private val supportedHosts = setOf("discordapp.com", "discord.com", "telegram.org", "oauth.telegram.org")
+
+        private val newWebResourceResponse by lazy {
+            WebResourceResponse::class.java.getDeclaredConstructor(Boolean::class.java, String::class.java,
+                String::class.java, Int::class.java, String::class.java, Map::class.java, InputStream::class.java)
+        }
     }
 
     private lateinit var web: WebView
@@ -249,17 +253,9 @@ class ReactMapFragment : Fragment() {
         val charset = if (conn.contentEncoding == null) Charsets.UTF_8 else {
             Charset.forName(conn.contentEncoding)
         }
-        return WebResourceResponse(conn.contentType?.substringBefore(';'), conn.contentEncoding, data(charset)).apply {
-            responseHeaders = conn.headerFields.mapValues { (_, value) -> value.joinToString() }
-            try {
-                UnblockCentral.mStatusCode.set(this, conn.responseCode)
-                UnblockCentral.mReasonPhrase.set(this, conn.responseMessage)
-            } catch (e: ReflectiveOperationException) {
-                Timber.w(e)
-                setStatusCodeAndReasonPhrase(conn.responseCode,
-                    conn.responseMessage.let { if (it.isNullOrBlank()) "N/A" else it })
-            }
-        }
+        return newWebResourceResponse.newInstance(false, conn.contentType?.substringBefore(';'), conn.contentEncoding,
+            conn.responseCode, conn.responseMessage, conn.headerFields.mapValues { (_, value) -> value.joinToString() },
+            data(charset))
     }
     private fun buildResponse(request: WebResourceRequest, transform: (Reader) -> String) = try {
         val url = request.url.toString()
