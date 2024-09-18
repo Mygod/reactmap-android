@@ -60,6 +60,13 @@ class ReactMapFragment : Fragment() {
         private val mapHijacker = "(?<=[\\n\\r\\s,])this(?=.callInitHooks\\(\\)[,;][\\n\\r\\s]*this._zoomAnimated\\s*=)"
             .toPattern()
         private val supportedHosts = setOf("discordapp.com", "discord.com", "telegram.org", "oauth.telegram.org")
+        private val mediaExtensions = setOf(
+            "apng", "png", "avif", "gif", "jpg", "jpeg", "jfif", "pjpeg", "pjp", "png", "svg", "webp", "bmp", "ico", "cur",
+            "wav", "mp3", "mp4", "aac", "ogg", "flac",
+            "css", "js",
+            "ttf", "otf", "woff", "woff2",
+        )
+        private val mediaAcceptMatcher = "image/.*|text/css(?:[,;].*)?".toRegex(RegexOption.IGNORE_CASE)
 
         private val newWebResourceResponse by lazy {
             WebResourceResponse::class.java.getDeclaredConstructor(Boolean::class.java, String::class.java,
@@ -176,12 +183,6 @@ class ReactMapFragment : Fragment() {
                     }
                 }
 
-                private val mediaExtensions = setOf(
-                    "apng", "png", "avif", "gif", "jpg", "jpeg", "jfif", "pjpeg", "pjp", "png", "svg", "webp", "bmp", "ico", "cur",
-                    "wav", "mp3", "mp4", "aac", "ogg", "flac",
-                    "css", "js",
-                    "ttf", "otf", "woff", "woff2",
-                )
                 override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest): WebResourceResponse? {
                     val path = request.url.path ?: return null
                     if ("https".equals(request.url.scheme, true) && request.url.host == hostname) {
@@ -191,8 +192,10 @@ class ReactMapFragment : Fragment() {
                         }
                         if (vendorJsMatcher.matchEntire(path) != null) return handleVendorJs(request)
                     }
-                    if (ReactMapHttpEngine.isCronet && path.substringAfterLast('.')
-                        .lowercase(Locale.ENGLISH) in mediaExtensions) try {
+                    if (ReactMapHttpEngine.isCronet && (path.substringAfterLast('.')
+                        .lowercase(Locale.ENGLISH) in mediaExtensions || request.requestHeaders.any { (key, value) ->
+                            "Accept".equals(key, true) && mediaAcceptMatcher.matches(value)
+                        })) try {
                         val conn = ReactMapHttpEngine.engine.openConnection(URL(
                             request.url.toString())) as HttpURLConnection
                         setupConnection(request, conn)
