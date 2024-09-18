@@ -184,21 +184,22 @@ class ReactMapFragment : Fragment() {
                 )
                 override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest): WebResourceResponse? {
                     val path = request.url.path ?: return null
+                    if ("https".equals(request.url.scheme, true) && request.url.host == hostname) {
+                        if (path == "/api/settings") return handleSettings(request)
+                        if (path.startsWith("/locales/") && path.endsWith("/translation.json")) {
+                            return handleTranslation(request)
+                        }
+                        if (vendorJsMatcher.matchEntire(path) != null) return handleVendorJs(request)
+                    }
                     if (ReactMapHttpEngine.isCronet && path.substringAfterLast('.')
-                            .lowercase(Locale.ENGLISH) in mediaExtensions) return try {
-                        val conn = ReactMapHttpEngine.engine.openConnection(URL(request.url.toString())) as HttpURLConnection
+                        .lowercase(Locale.ENGLISH) in mediaExtensions) try {
+                        val conn = ReactMapHttpEngine.engine.openConnection(URL(
+                            request.url.toString())) as HttpURLConnection
                         setupConnection(request, conn)
-                        createResponse(conn) { conn.findErrorStream }
+                        return createResponse(conn) { conn.findErrorStream }
                     } catch (e: IOException) {
                         Timber.d(e)
-                        null
                     }
-                    if (!"https".equals(request.url.scheme, true) || request.url.host != hostname) return null
-                    if (path == "/api/settings") return handleSettings(request)
-                    if (path.startsWith("/locales/") && path.endsWith("/translation.json")) {
-                        return handleTranslation(request)
-                    }
-                    if (vendorJsMatcher.matchEntire(path) != null) return handleVendorJs(request)
                     return null
                 }
 
