@@ -23,13 +23,15 @@ import kotlin.coroutines.resumeWithException
 object ReactMapHttpEngine {
     private const val KEY_COOKIE = "cookie.graphql"
 
+    val isCronet get() = Build.VERSION.SDK_INT >= 34 || Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
+            SdkExtensions.getExtensionVersion(Build.VERSION_CODES.S) >= 7
     @get:RequiresExtension(Build.VERSION_CODES.S, 7)
-    private val engine by lazy @RequiresExtension(Build.VERSION_CODES.S, 7) {
+    val engine by lazy @RequiresExtension(Build.VERSION_CODES.S, 7) {
         val cache = File(app.deviceStorage.cacheDir, "httpEngine")
         HttpEngine.Builder(app.deviceStorage).apply {
             if (cache.mkdirs() || cache.isDirectory) {
                 setStoragePath(cache.absolutePath)
-                setEnableHttpCache(HttpEngine.Builder.HTTP_CACHE_DISK, 1024 * 1024)
+                setEnableHttpCache(HttpEngine.Builder.HTTP_CACHE_DISK, 256 * 1024 * 1024)
             }
             setConnectionMigrationOptions(ConnectionMigrationOptions.Builder().apply {
                 setDefaultNetworkMigration(ConnectionMigrationOptions.MIGRATION_OPTION_ENABLED)
@@ -43,8 +45,7 @@ object ReactMapHttpEngine {
         path("/graphql")
     }.build().toString()
 
-    private fun openConnection(url: String) = (if (Build.VERSION.SDK_INT >= 34 || Build.VERSION.SDK_INT >=
-        Build.VERSION_CODES.S && SdkExtensions.getExtensionVersion(Build.VERSION_CODES.S) >= 7) {
+    private fun openConnection(url: String) = (if (isCronet) {
         engine.openConnection(URL(url))
     } else URL(url).openConnection()) as HttpURLConnection
     suspend fun <T> connectCancellable(url: String, block: suspend (HttpURLConnection) -> T): T {

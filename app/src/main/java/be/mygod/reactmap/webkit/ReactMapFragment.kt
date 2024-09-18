@@ -42,8 +42,11 @@ import org.json.JSONObject
 import org.json.JSONTokener
 import timber.log.Timber
 import java.io.IOException
+import java.io.InputStream
 import java.io.Reader
 import java.io.StringWriter
+import java.net.HttpURLConnection
+import java.net.URL
 import java.net.URLDecoder
 import java.nio.charset.Charset
 import java.util.Locale
@@ -57,6 +60,18 @@ class ReactMapFragment : Fragment() {
         private val mapHijacker = "(?<=[\\n\\r\\s,])this(?=.callInitHooks\\(\\)[,;][\\n\\r\\s]*this._zoomAnimated\\s*=)"
             .toPattern()
         private val supportedHosts = setOf("discordapp.com", "discord.com", "telegram.org", "oauth.telegram.org")
+        private val mediaExtensions = setOf(
+            "apng", "png", "avif", "gif", "jpg", "jpeg", "jfif", "pjpeg", "pjp", "png", "svg", "webp", "bmp", "ico", "cur",
+            "wav", "mp3", "mp4", "aac", "ogg", "flac",
+            "css", "js",
+            "ttf", "otf", "woff", "woff2",
+        )
+        private val mediaAcceptMatcher = "image/.*|text/css(?:[,;].*)?".toRegex(RegexOption.IGNORE_CASE)
+
+        private val newWebResourceResponse by lazy {
+            WebResourceResponse::class.java.getDeclaredConstructor(Boolean::class.java, String::class.java,
+                String::class.java, Int::class.java, String::class.java, Map::class.java, InputStream::class.java)
+        }
     }
 
     private lateinit var web: WebView
@@ -168,17 +183,28 @@ class ReactMapFragment : Fragment() {
                     }
                 }
 
-                override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest) =
-                    if (!"https".equals(request.url.scheme, true) || request.url.host != hostname) null
-                    else when (val path = request.url.path) {
-                        // Since CookieManager.getCookie does not return session cookie on main requests,
-                        // we can only edit secondary files
-                        "/api/settings" -> handleSettings(request)
-                        null -> null
-                        else -> if (path.startsWith("/locales/") && path.endsWith("/translation.json")) {
-                            handleTranslation(request)
-                        } else if (vendorJsMatcher.matchEntire(path) != null) handleVendorJs(request) else null
+                override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest): WebResourceResponse? {
+                    val path = request.url.path ?: return null
+                    if ("https".equals(request.url.scheme, true) && request.url.host == hostname) {
+                        if (path == "/api/settings") return handleSettings(request)
+                        if (path.startsWith("/locales/") && path.endsWith("/translation.json")) {
+                            return handleTranslation(request)
+                        }
+                        if (vendorJsMatcher.matchEntire(path) != null) return handleVendorJs(request)
                     }
+                    if (ReactMapHttpEngine.isCronet && (path.substringAfterLast('.')
+                        .lowercase(Locale.ENGLISH) in mediaExtensions || request.requestHeaders.any { (key, value) ->
+                            "Accept".equals(key, true) && mediaAcceptMatcher.matches(value)
+                        })) try {
+                        val conn = ReactMapHttpEngine.engine.openConnection(URL(
+                            request.url.toString())) as HttpURLConnection
+                        setupConnection(request, conn)
+                        return createResponse(conn) { conn.findErrorStream }
+                    } catch (e: IOException) {
+                        Timber.d(e)
+                    }
+                    return null
+                }
 
                 override fun onReceivedError(view: WebView?, request: WebResourceRequest, error: WebResourceError) {
                     if (!request.isForMainFrame) return
@@ -225,24 +251,27 @@ class ReactMapFragment : Fragment() {
         web.loadUrl(activeUrl)
     }
 
-    private fun buildResponse(request: WebResourceRequest, transform: (Reader) -> String) = try {
-        val url = request.url.toString()
-        val conn = ReactMapHttpEngine.connectWithCookie(url) { conn ->
-            conn.requestMethod = request.method
-            for ((key, value) in request.requestHeaders) conn.addRequestProperty(key, value)
-        }
+    private fun setupConnection(request: WebResourceRequest, conn: HttpURLConnection) {
+        conn.requestMethod = request.method
+        for ((key, value) in request.requestHeaders) conn.addRequestProperty(key, value)
+    }
+    private fun createResponse(conn: HttpURLConnection, data: (Charset) -> InputStream): WebResourceResponse {
         val charset = if (conn.contentEncoding == null) Charsets.UTF_8 else {
             Charset.forName(conn.contentEncoding)
         }
-        WebResourceResponse(conn.contentType?.substringBefore(';'), conn.contentEncoding, conn.responseCode,
-            conn.responseMessage.let { if (it.isNullOrBlank()) "N/A" else it },
-            conn.headerFields.mapValues { (_, value) -> value.joinToString() },
-            if (conn.responseCode in 200..299) try {
-                transform(conn.inputStream.bufferedReader(charset)).byteInputStream(charset)
-            } catch (e: IOException) {
-                Timber.d(e)
-                conn.inputStream.bufferedReader(charset).readText().byteInputStream(charset)
-            } else conn.findErrorStream.bufferedReader(charset).readText().byteInputStream(charset))
+        return newWebResourceResponse.newInstance(false, conn.contentType?.substringBefore(';'), conn.contentEncoding,
+            conn.responseCode, conn.responseMessage, conn.headerFields.mapValues { (_, value) -> value.joinToString() },
+            data(charset))
+    }
+    private fun buildResponse(request: WebResourceRequest, transform: (Reader) -> String) = try {
+        val url = request.url.toString()
+        val conn = ReactMapHttpEngine.connectWithCookie(url) { conn -> setupConnection(request, conn) }
+        createResponse(conn) { charset -> if (conn.responseCode in 200..299) try {
+            transform(conn.inputStream.bufferedReader(charset)).byteInputStream(charset)
+        } catch (e: IOException) {
+            Timber.d(e)
+            conn.inputStream.bufferedReader(charset).readText().byteInputStream(charset)
+        } else conn.findErrorStream.bufferedReader(charset).readText().byteInputStream(charset) }
     } catch (e: IOException) {
         Timber.d(e)
         null
