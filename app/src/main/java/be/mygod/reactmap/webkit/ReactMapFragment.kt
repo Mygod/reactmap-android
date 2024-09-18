@@ -148,9 +148,7 @@ class ReactMapFragment : Fragment() {
                     }
                 }
 
-                private var isOffMain = false
                 override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
-                    isOffMain = Uri.parse(url).host != hostname
                     glocation.clear()
                     if (url.toUri().host == hostname) glocation.setupGeolocation()
                 }
@@ -178,9 +176,13 @@ class ReactMapFragment : Fragment() {
                     }
                 }
 
-                private val mediaExtensions = setOf("apng", "png", "avif", "gif", "jpg", "jpeg", "jfif", "pjpeg", "pjp", "png", "svg", "webp", "bmp", "ico", "cur", "wav")
+                private val mediaExtensions = setOf(
+                    "apng", "png", "avif", "gif", "jpg", "jpeg", "jfif", "pjpeg", "pjp", "png", "svg", "webp", "bmp", "ico", "cur",
+                    "wav", "mp3", "mp4", "aac", "ogg", "flac",
+                    "css", "js",
+                    "ttf", "otf", "woff", "woff2",
+                )
                 override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest): WebResourceResponse? {
-                    if (request.isForMainFrame || isOffMain) return null
                     val path = request.url.path ?: return null
                     if (ReactMapHttpEngine.isCronet && path.substringAfterLast('.')
                             .lowercase(Locale.ENGLISH) in mediaExtensions) return try {
