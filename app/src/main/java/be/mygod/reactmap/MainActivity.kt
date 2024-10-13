@@ -173,7 +173,7 @@ class MainActivity : FragmentActivity() {
                 }
                 startActivity(intent)
             } catch (e: Exception) {
-                Timber.w(e)
+                if (e is IOException) Timber.d(e) else Timber.w(e)
                 withContext(Dispatchers.Main) {
                     Snackbar.make(findViewById(android.R.id.content), e.readableMessage, Snackbar.LENGTH_LONG).show()
                 }
