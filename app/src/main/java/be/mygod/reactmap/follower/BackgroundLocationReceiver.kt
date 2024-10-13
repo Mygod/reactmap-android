@@ -90,7 +90,6 @@ class BackgroundLocationReceiver : BroadcastReceiver() {
             app.fusedLocation.requestLocationUpdates(LocationRequest.Builder(Priority.PRIORITY_PASSIVE,
                 5 * 60 * 1000).apply {
                 setMaxUpdateAgeMillis(0)
-                setMinUpdateDistanceMeters(MIN_UPDATE_THRESHOLD_METER)
                 setMinUpdateIntervalMillis(60 * 1000)
             }.build(), locationPendingIntent).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
