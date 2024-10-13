@@ -25,6 +25,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import timber.log.Timber
 import java.io.IOException
+import java.net.HttpURLConnection
 
 class LocationSetter(appContext: Context, workerParams: WorkerParameters) : CoroutineWorker(appContext, workerParams) {
     companion object {
@@ -78,9 +79,8 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
     override suspend fun doWork() = try {
         val lat = inputData.getDouble(KEY_LATITUDE, Double.NaN)
         val lon = inputData.getDouble(KEY_LONGITUDE, Double.NaN)
-        val time = inputData.getLong(KEY_TIME, 0)
         val apiUrl = inputData.getString(KEY_API_URL)!!
-        val conn = ReactMapHttpEngine.connectWithCookie(apiUrl) { conn ->
+        doWork(lat, lon, inputData.getLong(KEY_TIME, 0), apiUrl, ReactMapHttpEngine.connectWithCookie(apiUrl) { conn ->
             conn.doOutput = true
             conn.requestMethod = "POST"
             conn.addRequestProperty("Content-Type", "application/json")
@@ -98,13 +98,38 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
                             "human { current_profile_no name type } } }")
                 }.toString())
             }
-        }
-        when (val code = conn.responseCode) {
+        })
+    } catch (e: IOException) {
+        Timber.d(e)
+        Result.retry()
+    } catch (_: CancellationException) {
+        Result.failure()
+    } catch (e: Exception) {
+        Timber.w(e)
+        notifyError(e.readableMessage)
+        Result.failure()
+    }
+    private fun notifyErrors(response: String, json: JSONObject? = null) = notifyError(try {
+        val errors = (json ?: JSONObject(response)).getJSONArray("errors")
+        (0 until errors.length()).joinToString("\n") { errors.getJSONObject(it).getString("message") }
+    } catch (e: JSONException) {
+        response
+    })
+    private suspend fun doWork(lat: Double, lon: Double, time: Long, apiUrl: String, conn: HttpURLConnection): Result {
+        return when (val code = conn.responseCode) {
             200 -> {
                 val response = conn.inputStream.bufferedReader().readText()
                 val human = try {
-                    val webhook = JSONObject(response).getJSONObject("data").getJSONObject("webhook")
-                    if (webhook.opt("human") == null) {
+                    val obj = JSONObject(response)
+                    val webhook = obj.getJSONObject("data").optJSONObject("webhook")
+                    if (webhook == null) {
+                        notifyErrors(response, obj)
+                        if (obj.optJSONObject("extensions")?.optString("code") == "INTERNAL_SERVER_ERROR") {
+                            Timber.w(response)
+                        } else Timber.w(Exception(response))
+                        return Result.retry()
+                    }
+                    if (webhook["human"] == JSONObject.NULL) {
                         withContext(Dispatchers.Main) { BackgroundLocationReceiver.stop() }
                         notifyError(app.getText(R.string.error_webhook_human_not_found))
                         throw CancellationException()
@@ -138,8 +163,7 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
             }
             else -> {
                 val error = conn.findErrorStream.bufferedReader().readText()
-                val json = JSONObject(error).getJSONArray("errors")
-                notifyError((0 until json.length()).joinToString { json.getJSONObject(it).getString("message") })
+                notifyErrors(error)
                 if (code == 401 || code == 511) {
                     withContext(Dispatchers.Main) { BackgroundLocationReceiver.stop() }
                     Result.failure()
@@ -149,15 +173,6 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
                 }
             }
         }
-    } catch (e: IOException) {
-        Timber.d(e)
-        Result.retry()
-    } catch (_: CancellationException) {
-        Result.failure()
-    } catch (e: Exception) {
-        Timber.w(e)
-        notifyError(e.readableMessage)
-        Result.failure()
     }
 
     override suspend fun getForegroundInfo() = ForegroundInfo(2, Notification.Builder(app, CHANNEL_ID).apply {
