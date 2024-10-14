@@ -47,6 +47,18 @@
                 <data android:scheme="https" />
                 <data android:host="${defaultDomain}" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="maps.apple.com" />
+                <data android:path="/maps" />
+                <data android:queryPrefix="daddr=" />
+            </intent-filter>
         </activity>
         <receiver
             android:name=".follower.BackgroundLocationReceiver"

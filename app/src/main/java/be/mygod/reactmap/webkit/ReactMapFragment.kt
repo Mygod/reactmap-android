@@ -53,6 +53,9 @@ import java.util.Locale
 
 class ReactMapFragment : Fragment() {
     companion object {
+        private const val HOST_APPLE_MAPS = "maps.apple.com"
+        private const val DADDR_APPLE_MAPS = "daddr"
+
         private val filenameExtractor = "filename=(\"([^\"]+)\"|[^;]+)".toRegex(RegexOption.IGNORE_CASE)
         // https://github.com/rollup/rollup/blob/10bdaa325a94ca632ef052e929a3e256dc1c7ade/docs/configuration-options/index.md?plain=1#L876
         private val vendorJsMatcher = "/vendor-[0-9a-z_-]{8}\\.js".toRegex(RegexOption.IGNORE_CASE)
@@ -246,8 +249,20 @@ class ReactMapFragment : Fragment() {
         super.onResume()
         if (loaded) return
         loaded = true
-        val activeUrl = mainActivity.pendingOverrideUri?.toString() ?: app.activeUrl
-        hostname = (mainActivity.pendingOverrideUri ?: Uri.parse(activeUrl)).host!!
+        val overrideUrl = mainActivity.pendingOverrideUri
+        val activeUrl = (activeUrl@{
+            if (HOST_APPLE_MAPS.equals(overrideUrl?.host, true)) {
+                val daddr = overrideUrl?.getQueryParameter(DADDR_APPLE_MAPS)
+                if (!daddr.isNullOrBlank()) {
+                    hostname = Uri.parse(app.activeUrl).host!!
+                    return@activeUrl "https://$hostname/@/${daddr.replace(',', '/')}"
+                }
+            }
+            if (overrideUrl != null) {
+                hostname = overrideUrl.host!!
+                overrideUrl.toString()
+            } else app.activeUrl.also { hostname = Uri.parse(it).host!! }
+        })()
         web.loadUrl(activeUrl)
     }
 
@@ -331,9 +346,26 @@ class ReactMapFragment : Fragment() {
         web.destroy()
     }
 
+    private fun flyToUrl(destination: String, zoom: String? = null, urlOnFail: () -> String) {
+        val script = StringBuilder("!!window._hijackedMap.flyTo([$destination]")
+        zoom?.let { script.append(", $it") }
+        script.append(')')
+        web.evaluateJavascript(script.toString()) {
+            if (it == true.toString()) mainActivity.pendingOverrideUri = null else {
+                Timber.w(Exception(it))
+                web.loadUrl(urlOnFail())
+            }
+        }
+    }
     fun handleUri(uri: Uri?) = uri?.host?.let { host ->
         if (view == null || !loaded) return false
-        if (host != hostname) {
+        if (HOST_APPLE_MAPS.equals(host, true)) {
+            val daddr = uri.getQueryParameter(DADDR_APPLE_MAPS)
+            if (daddr.isNullOrBlank()) return true
+            flyToUrl(daddr) { "https://$hostname/@/${daddr.replace(',', '/')}" }
+            return false
+        }
+        if (!host.equals(hostname, true)) {
             hostname = host
             web.loadUrl(uri.toString())
             return false
@@ -345,16 +377,7 @@ class ReactMapFragment : Fragment() {
             web.loadUrl(uri.toString())
             return false
         }
-        val script = StringBuilder(
-            "!!window._hijackedMap.flyTo([${match.groupValues[1]}, ${match.groupValues[2]}]")
-        match.groups[3]?.let { script.append(", ${it.value}") }
-        script.append(')')
-        web.evaluateJavascript(script.toString()) {
-            if (it == true.toString()) mainActivity.pendingOverrideUri = null else {
-                Timber.w(Exception(it))
-                web.loadUrl(uri.toString())
-            }
-        }
+        flyToUrl("${match.groupValues[1]}, ${match.groupValues[2]}", match.groups[3]?.value) { uri.toString() }
         false
     }
     fun terminate() = web.destroy()
