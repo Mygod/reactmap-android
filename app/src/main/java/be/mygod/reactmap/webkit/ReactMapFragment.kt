@@ -50,6 +50,7 @@ import java.net.URL
 import java.net.URLDecoder
 import java.nio.charset.Charset
 import java.util.Locale
+import java.util.regex.Matcher
 
 class ReactMapFragment : Fragment() {
     companion object {
@@ -60,8 +61,38 @@ class ReactMapFragment : Fragment() {
         // https://github.com/rollup/rollup/blob/10bdaa325a94ca632ef052e929a3e256dc1c7ade/docs/configuration-options/index.md?plain=1#L876
         private val vendorJsMatcher = "/vendor-[0-9a-z_-]{8}\\.js".toRegex(RegexOption.IGNORE_CASE)
         private val flyToMatcher = "/@/([0-9.-]+)/([0-9.-]+)(?:/([0-9.-]+))?/?".toRegex()
-        private val mapHijacker = "(?<=[\\n\\r\\s,])this(?=.callInitHooks\\(\\)[,;][\\n\\r\\s]*this._zoomAnimated\\s*=)"
+
+        /**
+         * Raw regex: ([,}][\n\r\s]*)this(?=\.callInitHooks\(\)[,;][\n\r\s]*this\._zoomAnimated\s*=)
+         *           if (options.center && options.zoom !== void 0) {
+         *             this.setView(toLatLng(options.center), options.zoom, { reset: true });
+         *           }
+         *           this.callInitHooks();
+         *           this._zoomAnimated = TRANSITION && any3d && !mobileOpera && this.options.zoomAnimation;
+         * or match minimized fragment: ",this.callInitHooks(),this._zoomAnimated="
+         */
+        private val injectMapInitialize = "([,}][\\n\\r\\s]*)this(?=\\.callInitHooks\\(\\)[,;][\\n\\r\\s]*this\\._zoomAnimated\\s*=)"
             .toPattern()
+        /**
+         * Raw regex: ([;}][\n\r\s]*this\._stop\(\);)(?=[\n\r\s]*var )
+         *           if (options.animate === false || !any3d) {
+         *             return this.setView(targetCenter, targetZoom, options);
+         *           }
+         *           this._stop();
+         *           var from = this.project(this.getCenter()), to = this.project(targetCenter), size = this.getSize(), startZoom = this._zoom;
+         * or match minimized fragment: ";this._stop();var "
+         */
+        private val injectMapFlyTo = "([;}][\\n\\r\\s]*this\\._stop\\(\\);)(?=[\\n\\r\\s]*var )".toPattern()
+        /**
+         * Raw regex: ([,;][\n\r\s]*this\._map\.on\("locationfound",\s*this\._onLocationFound,\s*)(?=this\)[,;])
+         *             this._active = true;
+         *             this._map.on("locationfound", this._onLocationFound, this);
+         *             this._map.on("locationerror", this._onLocationError, this);
+         * or match minimized fragment: ",this._map.on("locationfound",this._onLocationFound,this),"
+         */
+        private val injectLocateControlActivate = "([,;][\\n\\r\\s]*this\\._map\\.on\\(\"locationfound\",\\s*this\\._onLocationFound,\\s*)(?=this\\)[,;])"
+            .toPattern()
+
         private val supportedHosts = setOf("discordapp.com", "discord.com", "telegram.org", "oauth.telegram.org")
         private val mediaExtensions = setOf(
             "apng", "png", "avif", "gif", "jpg", "jpeg", "jfif", "pjpeg", "pjp", "png", "svg", "webp", "bmp", "ico", "cur",
@@ -326,18 +357,35 @@ class ReactMapFragment : Fragment() {
         }
         response
     }
+    private inline fun buildString(matcher: Matcher, work: ((String) -> Unit) -> Unit) = (if (Build.VERSION.SDK_INT >=
+        34) StringBuilder().also { s ->
+            work { matcher.appendReplacement(s, it) }
+            matcher.appendTail(s)
+        } else StringBuffer().also { s ->
+            work { matcher.appendReplacement(s, it) }
+            matcher.appendTail(s)
+        }).toString()
     private fun handleVendorJs(request: WebResourceRequest) = buildResponse(request) { reader ->
         val response = reader.readText()
-        val matcher = mapHijacker.matcher(response)
-        if (matcher.find()) (if (Build.VERSION.SDK_INT >= 34) StringBuilder().also {
-            matcher.appendReplacement(it, "(window._hijackedMap=this)")
-            matcher.appendTail(it)
-        } else StringBuffer().also {
-            matcher.appendReplacement(it, "(window._hijackedMap=this)")
-            matcher.appendTail(it)
-        }).toString() else {
-            Timber.w(Exception("vendor.js unmatched"))
-            response
+        val matcher = injectMapInitialize.matcher(response)
+        if (!matcher.find()) {
+            Timber.w(Exception("injectMapInitialize unmatched"))
+            return@buildResponse response
+        }
+        buildString(matcher) { replace ->
+            replace("$1(window._hijackedMap=this)")
+            matcher.usePattern(injectMapFlyTo)
+            if (!matcher.find()) {
+                Timber.w(Exception("injectMapFlyTo unmatched"))
+                return@buildResponse response
+            }
+            replace("$1window._hijackedLocateControl&&(window._hijackedLocateControl._userPanned=!0);")
+            matcher.usePattern(injectLocateControlActivate)
+            if (!matcher.find()) {
+                Timber.w(Exception("injectLocateControlActivate unmatched"))
+                return@buildResponse response
+            }
+            replace("$1window._hijackedLocateControl=")
         }
     }
 
