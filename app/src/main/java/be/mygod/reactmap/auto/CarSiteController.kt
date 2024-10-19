@@ -19,8 +19,7 @@ class CarSiteController(private val fragment: Fragment) : DefaultLifecycleObserv
         fragment.lifecycle.addObserver(this)
     }
 
-    private fun postNotification() {
-        val context = fragment.requireContext()
+    private fun postNotification() = fragment.requireContext().let { context ->
         app.nm.notify(NOTIFICATION_ID, Notification.Builder(context, CHANNEL_ID).apply {
             setWhen(0)
             setCategory(Notification.CATEGORY_SERVICE)
