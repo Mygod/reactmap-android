@@ -14,6 +14,7 @@ import android.view.Gravity
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.annotation.Keep
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.commit
 import androidx.lifecycle.DefaultLifecycleObserver
@@ -28,7 +29,7 @@ import be.mygod.reactmap.util.format
 import com.google.android.apps.auto.sdk.CarActivity
 import kotlinx.coroutines.launch
 
-class MainCarActivity : CarActivity(), LifecycleOwner {
+class MainCarActivity @Keep constructor() : CarActivity(), LifecycleOwner {
     companion object {
         const val ACTION_CLOSE = "be.mygod.reactmap.auto.action.CLOSE"
     }

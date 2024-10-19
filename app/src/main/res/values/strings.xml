@@ -49,10 +49,10 @@
             Passengers may use the Map while the vehicle is moving, provided it does not distract the driver or
             interfere with the safe operation of the vehicle.</li>\n<li><b>Compliance with Laws:</b>
             You agree to adhere to all applicable traffic laws and regulations related to the use of electronic devices
-            and navigation aids while operating a vehicle.</li>\n<li><b>No Liability:</b> The developers and
-            distributors of the Map shall not be held liable for any direct or indirect damages arising from its
-            use.</li></ul>\nBy proceeding to use the Map, you confirm that you have read, understood, and agree to
-        abide by these terms and conditions.</string>
+            and navigation aids while operating a vehicle.</li>\n<li><b>No Liability:</b>
+            The developers and distributors of the Map shall not be held liable for any direct or indirect damages
+            arising from its use.</li></ul>\nBy proceeding to use the Map, you confirm that you have read, understood,
+        and agree to abide by these terms and conditions.</string>
     <string name="car_agreement_proceed">Proceed</string>
     <string name="car_toast_complicated_action">Please perform this action on your device instead</string>
     <string name="car_toast_unsupported_url">Attempting to open the target webpage on your device. This may require
