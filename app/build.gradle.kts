@@ -60,6 +60,7 @@ android {
 
 dependencies {
     coreLibraryDesugaring(libs.desugar)
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
     implementation(platform(libs.firebase.bom))
     implementation(libs.activity)
     implementation(libs.browser)
