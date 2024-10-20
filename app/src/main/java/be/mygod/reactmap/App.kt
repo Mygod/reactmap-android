@@ -17,6 +17,7 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.getSystemService
 import androidx.work.Configuration
 import androidx.work.WorkManager
+import be.mygod.reactmap.auto.CarSiteController
 import be.mygod.reactmap.follower.BackgroundLocationReceiver
 import be.mygod.reactmap.follower.LocationSetter
 import be.mygod.reactmap.util.DeviceStorageApp
@@ -83,6 +84,11 @@ class App : Application() {
         nm.createNotificationChannels(mutableListOf(
             NotificationChannel(SiteController.CHANNEL_ID, getText(R.string.notification_channel_site_controller),
                 NotificationManager.IMPORTANCE_LOW).apply {
+                lockscreenVisibility = Notification.VISIBILITY_SECRET
+                setShowBadge(false)
+            },
+            NotificationChannel(CarSiteController.CHANNEL_ID,
+                getText(R.string.notification_channel_car_site_controller), NotificationManager.IMPORTANCE_LOW).apply {
                 lockscreenVisibility = Notification.VISIBILITY_SECRET
                 setShowBadge(false)
             },

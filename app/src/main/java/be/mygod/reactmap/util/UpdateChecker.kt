@@ -123,7 +123,8 @@ object UpdateChecker {
             setShowWhen(true)
             setContentIntent(PendingIntent.getActivity(app, 3,
                 app.customTabsIntent.intent.setData(Uri.parse(update.url.substringBefore("/tag/"))),
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE))
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+                app.customTabsIntent.startAnimationBundle))
         }.build())
     }
 }

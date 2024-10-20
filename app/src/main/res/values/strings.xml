@@ -35,4 +35,28 @@
 
     <string name="pip_phone_enter_split">Enter split screen</string>
     <string name="web_refresh">Refresh</string>
+
+    <string name="car_agreement_template"><big><b>Terms of Use</b></big>\nBy using %s (“the Map”) on your vehicle, you
+        acknowledge and agree to the following terms:\n<ul><li><b>Development Purposes Only:</b>
+            You understand that the Map is provided for development and testing purposes only.
+            It may contain errors or inaccuracies and should not be relied upon for navigation or critical
+            decision-making.</li>\n<li><b>Assumption of Responsibility:</b>
+            You assume all responsibility and risk for any consequences resulting from your use of the Map.
+            This includes, but is not limited to, any accidents, injuries, or legal issues that may arise due to
+            distraction or misuse.</li>\n<li><b>Restricted Use While Driving:</b>
+            As a driver, you agree to use the Map only when the vehicle is stationary and if it is safe to do so.
+            Drivers must not use the Map while the vehicle is in motion.
+            Passengers may use the Map while the vehicle is moving, provided it does not distract the driver or
+            interfere with the safe operation of the vehicle.</li>\n<li><b>Compliance with Laws:</b>
+            You agree to adhere to all applicable traffic laws and regulations related to the use of electronic devices
+            and navigation aids while operating a vehicle.</li>\n<li><b>No Liability:</b>
+            The developers and distributors of the Map shall not be held liable for any direct or indirect damages
+            arising from its use.</li></ul>\nBy proceeding to use the Map, you confirm that you have read, understood,
+        and agree to abide by these terms and conditions.</string>
+    <string name="car_agreement_proceed">Proceed</string>
+    <string name="car_toast_complicated_action">Please perform this action on your device instead</string>
+    <string name="car_toast_unsupported_url">Attempting to open the target webpage on your device. This may require
+        opening the app or the permission to display over other apps</string>
+    <string name="notification_channel_car_site_controller">Android Auto map controls</string>
+    <string name="notification_car_site_controller_message">Tap to end session</string>
 </resources>

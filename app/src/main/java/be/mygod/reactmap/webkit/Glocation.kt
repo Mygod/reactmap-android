@@ -7,12 +7,11 @@ import android.location.Location
 import android.os.Looper
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresPermission
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import be.mygod.reactmap.App.Companion.app
 import be.mygod.reactmap.R
 import be.mygod.reactmap.util.readableMessage
@@ -21,9 +20,10 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.Priority
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class Glocation(private val web: WebView, private val fragment: Fragment) : DefaultLifecycleObserver {
+class Glocation(private val web: WebView, private val fragment: BaseReactMapFragment) : DefaultLifecycleObserver {
     companion object {
         const val PERMISSION_DENIED = 1
         const val POSITION_UNAVAILABLE = 2
@@ -85,18 +85,9 @@ class Glocation(private val web: WebView, private val fragment: Fragment) : Defa
 
     fun setupGeolocation() = web.evaluateJavascript(jsSetup, null)
 
-    private fun checkPermissions() = when (context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
-        PackageManager.PERMISSION_GRANTED -> true
-        else -> {
-            requestLocation.launch(arrayOf(
-                Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION))
-            null
-        }
-    }
-
-    private val requestLocation = fragment.registerForActivityResult(
-        ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-        val granted = permissions.any { (_, v) -> v }
+    private fun checkPermissions() = if (context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) ==
+        PackageManager.PERMISSION_GRANTED) true else fragment.requestLocationPermissions()
+    fun onPermissionResult(granted: Boolean) {
         if (pendingRequests.isNotEmpty()) {
             getCurrentPosition(granted, pendingRequests.joinToString())
             pendingRequests.clear()
@@ -112,7 +103,7 @@ class Glocation(private val web: WebView, private val fragment: Fragment) : Defa
         Timber.d("getCurrentPosition($i)")
         when (val granted = checkPermissions()) {
             null -> pendingRequests.add(i)
-            else -> getCurrentPosition(granted, i.toString())
+            else -> fragment.lifecycleScope.launch { getCurrentPosition(granted, i.toString()) }
         }
     }
 
@@ -134,7 +125,7 @@ class Glocation(private val web: WebView, private val fragment: Fragment) : Defa
         if (!activeListeners.add(i) || requestingLocationUpdates || pendingWatch) return
         when (val granted = checkPermissions()) {
             null -> pendingWatch = true
-            else -> watchPosition(granted)
+            else -> fragment.lifecycleScope.launch { watchPosition(granted) }
         }
     }
 
