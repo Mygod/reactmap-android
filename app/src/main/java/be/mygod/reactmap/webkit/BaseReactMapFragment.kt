@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.ConsoleMessage
 import android.webkit.DownloadListener
+import android.webkit.JsResult
 import android.webkit.RenderProcessGoneDetail
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
@@ -128,6 +129,7 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
     protected open fun findActiveUrl() = app.activeUrl.also { hostname = Uri.parse(it).host!! }
     protected open fun onConfigAvailable(config: JSONObject) { }
     protected open fun onUnsupportedUri(uri: Uri) = app.launchUrl(requireContext(), uri)
+    protected open fun onJsAlert(message: String?, result: JsResult) = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         Timber.d("Creating ReactMapFragment")
@@ -153,6 +155,8 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
                 }
 
                 override fun onReceivedTitle(view: WebView?, title: String?) = onReceiveTitle(title)
+                override fun onJsAlert(view: WebView?, url: String?, message: String?, result: JsResult) =
+                    onJsAlert(message, result)
 
                 override fun onShowFileChooser(webView: WebView, filePathCallback: ValueCallback<Array<Uri>>?,
                                                fileChooserParams: FileChooserParams) = true.also {

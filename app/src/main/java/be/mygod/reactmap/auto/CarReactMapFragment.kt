@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.webkit.JsResult
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
 import be.mygod.reactmap.App.Companion.app
@@ -62,5 +63,13 @@ class CarReactMapFragment : BaseReactMapFragment() {
             return Snackbar.make(web, s, Snackbar.LENGTH_SHORT).show()
         }
         Snackbar.make(web, R.string.car_toast_unsupported_url, Snackbar.LENGTH_SHORT).show()
+    }
+
+    override fun onJsAlert(message: String?, result: JsResult) = true.also {
+        Snackbar.make(web, message.toString(), Snackbar.LENGTH_INDEFINITE).apply {
+            addCallback(object : Snackbar.Callback() {
+                override fun onDismissed(transientBottomBar: Snackbar?, event: Int) = result.cancel()
+            })
+        }.show()
     }
 }

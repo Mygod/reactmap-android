@@ -11,6 +11,7 @@ import androidx.annotation.RequiresPermission
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import be.mygod.reactmap.App.Companion.app
 import be.mygod.reactmap.R
 import be.mygod.reactmap.util.readableMessage
@@ -19,6 +20,7 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.Priority
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class Glocation(private val web: WebView, private val fragment: BaseReactMapFragment) : DefaultLifecycleObserver {
@@ -101,7 +103,7 @@ class Glocation(private val web: WebView, private val fragment: BaseReactMapFrag
         Timber.d("getCurrentPosition($i)")
         when (val granted = checkPermissions()) {
             null -> pendingRequests.add(i)
-            else -> getCurrentPosition(granted, i.toString())
+            else -> fragment.lifecycleScope.launch { getCurrentPosition(granted, i.toString()) }
         }
     }
 
@@ -123,7 +125,7 @@ class Glocation(private val web: WebView, private val fragment: BaseReactMapFrag
         if (!activeListeners.add(i) || requestingLocationUpdates || pendingWatch) return
         when (val granted = checkPermissions()) {
             null -> pendingWatch = true
-            else -> watchPosition(granted)
+            else -> fragment.lifecycleScope.launch { watchPosition(granted) }
         }
     }
 
