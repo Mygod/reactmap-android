@@ -16,12 +16,16 @@ import timber.log.Timber
 
 class CarReactMapFragment : BaseReactMapFragment() {
     private val mainActivity by lazy { context as MainCarActivity }
+    private lateinit var carKeyboard: CarKeyboard
     private lateinit var siteController: CarSiteController
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        carKeyboard = CarKeyboard(web, this)
         siteController = CarSiteController(this)
     }
+
+    override fun onPageStarted() = carKeyboard.setup()
 
     override fun onShowFileChooser(filePathCallback: ValueCallback<Array<Uri>>?,
                                    fileChooserParams: WebChromeClient.FileChooserParams) {

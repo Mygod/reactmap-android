@@ -123,6 +123,7 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
     abstract fun requestLocationPermissions(): Boolean?
 
     protected open fun onHistoryUpdated() { }
+    protected open fun onPageStarted() { }
     protected open fun onPageFinished() { }
     protected open fun findActiveUrl() = app.activeUrl.also { hostname = Uri.parse(it).host!! }
     protected open fun onConfigAvailable(config: JSONObject) { }
@@ -178,6 +179,7 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
                 override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
                     glocation.clear()
                     if (url.toUri().host == hostname) glocation.setupGeolocation()
+                    onPageStarted()
                 }
 
                 override fun onPageFinished(view: WebView?, url: String) {
