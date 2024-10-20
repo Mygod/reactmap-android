@@ -1,8 +1,10 @@
 window._autoKeyboardCallback = {
+    _textTypes: new Set(['text', 'password', 'number', 'email', 'tel', 'url', 'search', 'date', 'datetime', 'datetime-local', 'time', 'month', 'week']),
     _setValue: Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set,
     _handler: function (e) {
         if (this._ignoreNextFocus && e instanceof FocusEvent) return delete this._ignoreNextFocus;
-        if (!this._currentInput && e.target instanceof HTMLInputElement &&
+        if (!this._currentInput && (e.target instanceof HTMLTextAreaElement || e.target instanceof HTMLInputElement &&
+                this._textTypes.has((e.target.getAttribute('type') || '').toLowerCase())) &&
             window._autoKeyboard.request(e.target.value, e.target.placeholder)) this._currentInput = e.target;
     },
     valueReady: function (value) {
