@@ -12,6 +12,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:textSize="24sp"
             android:padding="16dp"
             android:scrollbars="vertical"
             android:justificationMode="inter_word"
@@ -22,6 +23,9 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginBottom="16dp"
+            android:minWidth="64dp"
+            android:minHeight="64dp"
+            android:textSize="24sp"
             android:text="@string/car_agreement_proceed"
             tools:layout_gravity="right"/>
     </LinearLayout>
