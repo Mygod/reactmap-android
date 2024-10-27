@@ -59,7 +59,7 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
         private val vendorJsMatcher = "/vendor-[0-9a-z_-]{8}\\.js".toRegex(RegexOption.IGNORE_CASE)
 
         /**
-         * Raw regex: ([,}][\n\r\s]*)this(?=\.callInitHooks\(\)[,;][\n\r\s]*this\._zoomAnimated\s*=)
+         * Raw regex: ([,}]\s*)this(?=\.callInitHooks\(\)[,;]\s*this\._zoomAnimated\s*=)
          *           if (options.center && options.zoom !== void 0) {
          *             this.setView(toLatLng(options.center), options.zoom, { reset: true });
          *           }
@@ -67,10 +67,10 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
          *           this._zoomAnimated = TRANSITION && any3d && !mobileOpera && this.options.zoomAnimation;
          * or match minimized fragment: ",this.callInitHooks(),this._zoomAnimated="
          */
-        private val injectMapInitialize = "([,}][\\n\\r\\s]*)this(?=\\.callInitHooks\\(\\)[,;][\\n\\r\\s]*this\\._zoomAnimated\\s*=)"
+        private val injectMapInitialize = "([,}]\\s*)this(?=\\.callInitHooks\\(\\)[,;]\\s*this\\._zoomAnimated\\s*=)"
             .toPattern()
         /**
-         * Raw regex: ([;}][\n\r\s]*this\._stop\(\);)(?=[\n\r\s]*var )
+         * Raw regex: ([;}]\s*this\._stop\(\);)(?=\s*var )
          *           if (options.animate === false || !any3d) {
          *             return this.setView(targetCenter, targetZoom, options);
          *           }
@@ -78,15 +78,26 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
          *           var from = this.project(this.getCenter()), to = this.project(targetCenter), size = this.getSize(), startZoom = this._zoom;
          * or match minimized fragment: ";this._stop();var "
          */
-        private val injectMapFlyTo = "([;}][\\n\\r\\s]*this\\._stop\\(\\);)(?=[\\n\\r\\s]*var )".toPattern()
+        private val injectMapFlyTo = "([;}]\\s*this\\._stop\\(\\);)(?=\\s*var )".toPattern()
         /**
-         * Raw regex: ([,;][\n\r\s]*this\._map\.on\("locationfound",\s*this\._onLocationFound,\s*)(?=this\)[,;])
+         * Raw regex: (,\s*maxHeight:\s*null,\s*autoPan:\s*)(?:true|!0)(?=,\s*autoPanPaddingTopLeft:\s*null,)
+         *           minWidth: 50,
+         *           maxHeight: null,
+         *           autoPan: true,
+         *           autoPanPaddingTopLeft: null,
+         *           autoPanPaddingBottomRight: null,
+         * or match minimized fragment: ",maxHeight:null,autoPan:!0,autoPanPaddingTopLeft:null,"
+         */
+        private val injectPopupAutoPan = "(,\\s*maxHeight:\\s*null,\\s*autoPan:\\s*)(?:true|!0)(?=,\\s*autoPanPaddingTopLeft:\\s*null,)"
+            .toPattern()
+        /**
+         * Raw regex: ([,;]\s*this\._map\.on\("locationfound",\s*this\._onLocationFound,\s*)(?=this\)[,;])
          *             this._active = true;
          *             this._map.on("locationfound", this._onLocationFound, this);
          *             this._map.on("locationerror", this._onLocationError, this);
          * or match minimized fragment: ",this._map.on("locationfound",this._onLocationFound,this),"
          */
-        private val injectLocateControlActivate = "([,;][\\n\\r\\s]*this\\._map\\.on\\(\"locationfound\",\\s*this\\._onLocationFound,\\s*)(?=this\\)[,;])"
+        private val injectLocateControlActivate = "([,;]\\s*this\\._map\\.on\\(\"locationfound\",\\s*this\\._onLocationFound,\\s*)(?=this\\)[,;])"
             .toPattern()
 
         private val supportedHosts = setOf("discordapp.com", "discord.com", "telegram.org", "oauth.telegram.org")
@@ -338,6 +349,12 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
                 return@buildResponse response
             }
             replace("$1window._hijackedLocateControl&&(window._hijackedLocateControl._userPanned=!0);")
+            matcher.usePattern(injectPopupAutoPan)
+            if (!matcher.find()) {
+                Timber.w(Exception("injectPopupAutoPan unmatched"))
+                return@buildResponse response
+            }
+            replace("$1!1")
             matcher.usePattern(injectLocateControlActivate)
             if (!matcher.find()) {
                 Timber.w(Exception("injectLocateControlActivate unmatched"))
