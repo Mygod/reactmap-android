@@ -1,47 +1,25 @@
-[versions]
-activity = "1.9.3"
-agp = "8.7.1"
-androidx-test-ext-junit = "1.2.1"
-browser = "1.8.0"
-core = "1.13.1"
-crashlytics = "3.0.2"
-desugar = "2.1.2"
-espresso-core = "3.6.1"
-firebase = "33.5.1"
-fragment = "1.8.4"
-hiddenapibypass = "4.3"
-junit = "4.13.2"
-kotlin = "2.0.21"
-lifecycle = "2.8.6"
-google-services = "4.4.2"
-material = "1.12.0"
-play-services-location = "21.3.0"
-timber = "5.0.1"
-work = "2.9.1"
-gradle-versions = "0.51.0"
-
 [libraries]
-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
-androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
-browser = { group = "androidx.browser", name = "browser", version.ref = "browser" }
-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core" }
-desugar = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugar" }
-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
+activity = { group = "androidx.activity", name = "activity", version = "1.9.3" }
+androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version = "1.2.1" }
+browser = { group = "androidx.browser", name = "browser", version = "1.8.0" }
+core-ktx = { group = "androidx.core", name = "core-ktx", version = "1.15.0" }
+desugar = { group = "com.android.tools", name = "desugar_jdk_libs", version = "2.1.2" }
+espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version = "3.6.1" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
-firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase" }
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version = "33.5.1" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragment" }
-hiddenapibypass = { group = "org.lsposed.hiddenapibypass", name = "hiddenapibypass", version.ref = "hiddenapibypass" }
-junit = { group = "junit", name = "junit", version.ref = "junit" }
-lifecycle-common = { group = "androidx.lifecycle", name = "lifecycle-common", version.ref = "lifecycle" }
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "play-services-location" }
-timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
-work = { group = "androidx.work", name = "work-runtime", version.ref = "work" }
+fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version = "1.8.5" }
+hiddenapibypass = { group = "org.lsposed.hiddenapibypass", name = "hiddenapibypass", version = "4.3" }
+junit = { group = "junit", name = "junit", version = "4.13.2" }
+lifecycle-common = { group = "androidx.lifecycle", name = "lifecycle-common", version = "2.8.7" }
+material = { group = "com.google.android.material", name = "material", version = "1.12.0" }
+play-services-location = { group = "com.google.android.gms", name = "play-services-location", version = "21.3.0" }
+timber = { group = "com.jakewharton.timber", name = "timber", version = "5.0.1" }
+work = { group = "androidx.work", name = "work-runtime", version = "2.10.0" }
 
 [plugins]
-androidApplication = { id = "com.android.application", version.ref = "agp" }
-firebaseCrashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crashlytics" }
-googleServices = { id = "com.google.gms.google-services", version.ref = "google-services" }
-kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-gradleVersions = { id = "com.github.ben-manes.versions", version.ref = "gradle-versions" }
+androidApplication = { id = "com.android.application", version = "8.7.2" }
+firebaseCrashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.2" }
+googleServices = { id = "com.google.gms.google-services", version = "4.4.2" }
+kotlinAndroid = { id = "org.jetbrains.kotlin.android", version = "2.0.21" }
+gradleVersions = { id = "com.github.ben-manes.versions", version = "0.51.0" }
