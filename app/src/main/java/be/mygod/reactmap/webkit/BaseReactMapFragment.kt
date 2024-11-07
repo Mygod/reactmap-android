@@ -236,30 +236,7 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
                         }
                         if (vendorJsMatcher.matchEntire(path) != null) return handleVendorJs(request)
                         if (path == "/graphql" && request.method == "POST") {
-                            val body = request.requestHeaders.remove("_interceptedBody")
-                            if (body != null) return try {
-                                val url = request.url.toString()
-                                val conn = ReactMapHttpEngine.connectWithCookie(url) { conn ->
-                                    setupConnection(request, conn)
-                                    conn.setRequestProperty("Content-Encoding", "deflate")
-                                    conn.doOutput = true
-                                    val uncompressed = body.toByteArray()
-                                    val out = ExposingBufferByteArrayOutputStream()
-                                    DeflaterOutputStream(out, Deflater(Deflater.BEST_COMPRESSION)).use {
-                                        it.write(uncompressed)
-                                    }
-//                                    Timber.tag("CompressionStat").i("${out.length}/${uncompressed.size} ~ ${out.length.toDouble() / uncompressed.size}")
-                                    conn.setFixedLengthStreamingMode(out.length)
-                                    conn.outputStream.use { it.write(out.buffer, 0, out.length) }
-                                }
-                                createResponse(conn) { _ -> conn.findErrorStream }
-                            } catch (e: IOException) {
-                                Timber.d(e)
-                                null
-                            } catch (e: IllegalArgumentException) {
-                                Timber.d(e)
-                                null
-                            }
+                            request.requestHeaders.remove("_interceptedBody")?.let { return handleGraphql(request, it) }
                         }
                     }
                     if (ReactMapHttpEngine.isCronet && (path.substringAfterLast('.').lowercase(Locale.ENGLISH)
@@ -395,6 +372,29 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
             }
             replace("$1window._hijackedLocateControl=")
         }
+    }
+    private fun handleGraphql(request: WebResourceRequest, body: String) = try {
+        val url = request.url.toString()
+        val conn = ReactMapHttpEngine.connectWithCookie(url) { conn ->
+            setupConnection(request, conn)
+            conn.setRequestProperty("Content-Encoding", "deflate")
+            conn.doOutput = true
+            val uncompressed = body.toByteArray()
+            val out = ExposingBufferByteArrayOutputStream()
+            DeflaterOutputStream(out, Deflater(Deflater.BEST_COMPRESSION)).use {
+                it.write(uncompressed)
+            }
+            // Timber.tag("CompressionStat").i("${out.length}/${uncompressed.size} ~ ${out.length.toDouble() / uncompressed.size}")
+            conn.setFixedLengthStreamingMode(out.length)
+            conn.outputStream.use { it.write(out.buffer, 0, out.length) }
+        }
+        createResponse(conn) { _ -> conn.findErrorStream }
+    } catch (e: IOException) {
+        Timber.d(e)
+        null
+    } catch (e: IllegalArgumentException) {
+        Timber.d(e)
+        null
     }
 
     override fun onDestroyView() {
