@@ -40,6 +40,7 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import timber.log.Timber
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileDescriptor
 import java.io.IOException
@@ -52,6 +53,8 @@ import java.net.URL
 import java.nio.charset.Charset
 import java.util.Locale
 import java.util.regex.Matcher
+import java.util.zip.Deflater
+import java.util.zip.DeflaterOutputStream
 
 abstract class BaseReactMapFragment : Fragment(), DownloadListener {
     companion object {
@@ -228,6 +231,33 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
                             return handleTranslation(request)
                         }
                         if (vendorJsMatcher.matchEntire(path) != null) return handleVendorJs(request)
+                        if (path == "/graphql" && request.method == "POST") {
+                            val body = request.requestHeaders.remove("_interceptedBody")
+                            if (body != null) return try {
+                                val url = request.url.toString()
+                                val conn = ReactMapHttpEngine.connectWithCookie(url) { conn ->
+                                    setupConnection(request, conn)
+                                    conn.setRequestProperty("Content-Encoding", "deflate")
+                                    conn.doOutput = true
+                                    val uncompressed = body.toByteArray()
+                                    val out = ByteArrayOutputStream()
+                                    DeflaterOutputStream(out, Deflater(Deflater.BEST_COMPRESSION)).use {
+                                        it.write(uncompressed)
+                                    }
+                                    val outArray = out.toByteArray()
+//                                    Timber.tag("CompressionStat").i("${outArray.size}/${uncompressed.size} ~ ${outArray.size.toDouble() / uncompressed.size}")
+                                    conn.setFixedLengthStreamingMode(outArray.size)
+                                    conn.outputStream.use { it.write(outArray) }
+                                }
+                                createResponse(conn) { _ -> conn.findErrorStream }
+                            } catch (e: IOException) {
+                                Timber.d(e)
+                                null
+                            } catch (e: IllegalArgumentException) {
+                                Timber.d(e)
+                                null
+                            }
+                        }
                     }
                     if (ReactMapHttpEngine.isCronet && (path.substringAfterLast('.').lowercase(Locale.ENGLISH)
                                 in mediaExtensions || request.requestHeaders.any { (key, value) ->
