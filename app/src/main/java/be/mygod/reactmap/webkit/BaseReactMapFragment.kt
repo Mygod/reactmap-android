@@ -122,6 +122,10 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
         private val os by lazy { Class.forName("libcore.io.Libcore").getDeclaredField("os").get(null) }
         private val nullFd by lazy { Os.open("/dev/null", OsConstants.O_RDONLY, 0) }
     }
+    private class ExposingBufferByteArrayOutputStream : ByteArrayOutputStream() {
+        val buffer get() = buf
+        val length get() = count
+    }
 
     protected lateinit var web: WebView
     protected lateinit var glocation: Glocation
@@ -240,14 +244,13 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
                                     conn.setRequestProperty("Content-Encoding", "deflate")
                                     conn.doOutput = true
                                     val uncompressed = body.toByteArray()
-                                    val out = ByteArrayOutputStream()
+                                    val out = ExposingBufferByteArrayOutputStream()
                                     DeflaterOutputStream(out, Deflater(Deflater.BEST_COMPRESSION)).use {
                                         it.write(uncompressed)
                                     }
-                                    val outArray = out.toByteArray()
-//                                    Timber.tag("CompressionStat").i("${outArray.size}/${uncompressed.size} ~ ${outArray.size.toDouble() / uncompressed.size}")
-                                    conn.setFixedLengthStreamingMode(outArray.size)
-                                    conn.outputStream.use { it.write(outArray) }
+//                                    Timber.tag("CompressionStat").i("${out.length}/${uncompressed.size} ~ ${out.length.toDouble() / uncompressed.size}")
+                                    conn.setFixedLengthStreamingMode(out.length)
+                                    conn.outputStream.use { it.write(out.buffer, 0, out.length) }
                                 }
                                 createResponse(conn) { _ -> conn.findErrorStream }
                             } catch (e: IOException) {
