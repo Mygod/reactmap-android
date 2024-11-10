@@ -308,9 +308,6 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
     } catch (e: IOException) {
         Timber.d(e)
         null
-    } catch (e: IllegalArgumentException) {
-        Timber.d(e)
-        null
     }
     private fun handleSettings(request: WebResourceRequest) = buildResponse(request) { reader ->
         val response = reader.readText()
@@ -390,9 +387,6 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
         }
         createResponse(conn) { _ -> conn.findErrorStream }
     } catch (e: IOException) {
-        Timber.d(e)
-        null
-    } catch (e: IllegalArgumentException) {
         Timber.d(e)
         null
     }
