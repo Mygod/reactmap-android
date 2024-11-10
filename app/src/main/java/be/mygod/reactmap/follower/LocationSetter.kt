@@ -81,23 +81,20 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
         val lon = inputData.getDouble(KEY_LONGITUDE, Double.NaN)
         val apiUrl = inputData.getString(KEY_API_URL)!!
         doWork(lat, lon, inputData.getLong(KEY_TIME, 0), apiUrl, ReactMapHttpEngine.connectWithCookie(apiUrl) { conn ->
-            conn.doOutput = true
             conn.requestMethod = "POST"
             conn.addRequestProperty("Content-Type", "application/json")
-            conn.outputStream.bufferedWriter().use {
-                it.write(JSONObject().apply {
-                    put("operationName", "Webhook")
-                    put("variables", JSONObject().apply {
-                        put("category", "setLocation")
-                        put("data", JSONArray(arrayOf(lat, lon)))
-                        put("status", "POST")
-                    })
-                    // epic graphql query yay >:(
-                    put("query", "mutation Webhook(\$data: JSON, \$category: String!, \$status: String!) {" +
-                            "webhook(data: \$data, category: \$category, status: \$status) {" +
-                            "human { current_profile_no name type } } }")
-                }.toString())
-            }
+            ReactMapHttpEngine.writeCompressed(conn, JSONObject().apply {
+                put("operationName", "Webhook")
+                put("variables", JSONObject().apply {
+                    put("category", "setLocation")
+                    put("data", JSONArray(arrayOf(lat, lon)))
+                    put("status", "POST")
+                })
+                // epic graphql query yay >:(
+                put("query", "mutation Webhook(\$data: JSON, \$category: String!, \$status: String!) {" +
+                        "webhook(data: \$data, category: \$category, status: \$status) {" +
+                        "human { current_profile_no name type } } }")
+            }.toString())
         })
     } catch (e: IOException) {
         Timber.d(e)

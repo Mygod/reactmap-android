@@ -14,9 +14,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
+import java.util.zip.Deflater
+import java.util.zip.DeflaterOutputStream
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
@@ -83,5 +86,22 @@ object ReactMapHttpEngine {
         val cookie = CookieManager.getInstance()
         app.pref.edit { putString(KEY_COOKIE, cookie.getCookie(apiUrl)) }
         cookie.flush()
+    }
+
+    private class ExposingBufferByteArrayOutputStream : ByteArrayOutputStream() {
+        val buffer get() = buf
+        val length get() = count
+    }
+    fun writeCompressed(conn: HttpURLConnection, body: String) {
+        conn.setRequestProperty("Content-Encoding", "deflate")
+        conn.doOutput = true
+        val uncompressed = body.toByteArray()
+        val out = ExposingBufferByteArrayOutputStream()
+        DeflaterOutputStream(out, Deflater(Deflater.BEST_COMPRESSION)).use {
+            it.write(uncompressed)
+        }
+        // Timber.tag("CompressionStat").i("${out.length}/${uncompressed.size} ~ ${out.length.toDouble() / uncompressed.size}")
+        conn.setFixedLengthStreamingMode(out.length)
+        conn.outputStream.use { it.write(out.buffer, 0, out.length) }
     }
 }
