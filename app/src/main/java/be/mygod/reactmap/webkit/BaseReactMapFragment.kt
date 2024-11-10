@@ -193,7 +193,9 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
 
                 override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
                     glocation.clear()
-                    if (url.toUri().host == hostname) glocation.setupGeolocation()
+                    val uri = url.toUri()
+                    if ("http".equals(uri.scheme, true)) web.loadUrl(uri.buildUpon().scheme("https").build().toString())
+                    if (uri.host == hostname) glocation.setupGeolocation()
                     onPageStarted()
                 }
 
