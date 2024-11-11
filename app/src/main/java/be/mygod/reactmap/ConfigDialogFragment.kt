@@ -75,7 +75,7 @@ class ConfigDialogFragment : AlertDialogFragment<ConfigDialogFragment.Arg, Empty
 
     override val ret get() = try {
         val uri = urlEdit.text!!.toString().toUri().let {
-            require("https".equals(it.scheme, true)) { getText(R.string.error_https_only) }
+            require(BuildConfig.DEBUG || "https".equals(it.scheme, true)) { getText(R.string.error_https_only) }
             it.host!!
             it.toString()
         }

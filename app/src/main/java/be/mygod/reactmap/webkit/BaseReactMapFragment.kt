@@ -30,6 +30,7 @@ import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import be.mygod.reactmap.App.Companion.app
+import be.mygod.reactmap.BuildConfig
 import be.mygod.reactmap.R
 import be.mygod.reactmap.follower.BackgroundLocationReceiver
 import be.mygod.reactmap.util.UnblockCentral
@@ -194,7 +195,9 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
                 override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
                     glocation.clear()
                     val uri = url.toUri()
-                    if ("http".equals(uri.scheme, true)) web.loadUrl(uri.buildUpon().scheme("https").build().toString())
+                    if (!BuildConfig.DEBUG && "http".equals(uri.scheme, true)) {
+                        web.loadUrl(uri.buildUpon().scheme("https").build().toString())
+                    }
                     if (uri.host == hostname) glocation.setupGeolocation()
                     onPageStarted()
                 }
@@ -216,7 +219,7 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
                         }
                         "http".equals(parsed.scheme, true) -> {
                             Snackbar.make(view, R.string.error_https_only, Snackbar.LENGTH_SHORT).show()
-                            true
+                            !BuildConfig.DEBUG
                         }
                         else -> false
                     }
@@ -224,7 +227,7 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
 
                 override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest): WebResourceResponse? {
                     val path = request.url.path ?: return null
-                    if ("https".equals(request.url.scheme, true) && request.url.host == hostname) {
+                    if (request.url.host == hostname) {
                         if (path == "/api/settings") return handleSettings(request)
                         if (path.startsWith("/locales/") && path.endsWith("/translation.json")) {
                             return handleTranslation(request)
