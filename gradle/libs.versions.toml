@@ -3,7 +3,7 @@ activity = { group = "androidx.activity", name = "activity", version = "1.9.3" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version = "1.2.1" }
 browser = { group = "androidx.browser", name = "browser", version = "1.8.0" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version = "1.15.0" }
-desugar = { group = "com.android.tools", name = "desugar_jdk_libs", version = "2.1.2" }
+desugar = { group = "com.android.tools", name = "desugar_jdk_libs", version = "2.1.3" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version = "3.6.1" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version = "33.5.1" }
