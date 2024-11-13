@@ -106,12 +106,22 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
         notifyError(e.readableMessage)
         Result.failure()
     }
-    private fun notifyErrors(response: String, json: JSONObject? = null) = notifyError(try {
-        val errors = (json ?: JSONObject(response)).getJSONArray("errors")
-        (0 until errors.length()).joinToString("\n") { errors.getJSONObject(it).getString("message") }
-    } catch (e: JSONException) {
-        response
-    })
+    private fun notifyErrors(response: String, json: JSONObject? = null): Boolean {
+        var shouldWarn = true
+        notifyError(try {
+            val errors = (json ?: JSONObject(response)).getJSONArray("errors")
+            (0 until errors.length()).joinToString("\n") {
+                val error = errors.getJSONObject(it)
+                if (error.optJSONObject("extensions")?.optString("code") == "INTERNAL_SERVER_ERROR") {
+                    shouldWarn = false
+                }
+                error.getString("message")
+            }
+        } catch (e: JSONException) {
+            response
+        })
+        return shouldWarn
+    }
     private suspend fun doWork(lat: Double, lon: Double, time: Long, apiUrl: String, conn: HttpURLConnection): Result {
         return when (val code = conn.responseCode) {
             200 -> {
@@ -120,10 +130,7 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
                     val obj = JSONObject(response)
                     val webhook = obj.getJSONObject("data").optJSONObject("webhook")
                     if (webhook == null) {
-                        notifyErrors(response, obj)
-                        if (obj.optJSONObject("extensions")?.optString("code") == "INTERNAL_SERVER_ERROR") {
-                            Timber.w(response)
-                        } else Timber.w(Exception(response))
+                        if (notifyErrors(response, obj)) Timber.w(response) else Timber.w(Exception(response))
                         return Result.retry()
                     }
                     if (webhook["human"] == JSONObject.NULL) {
