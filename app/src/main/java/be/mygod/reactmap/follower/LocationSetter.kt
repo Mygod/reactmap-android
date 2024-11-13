@@ -172,7 +172,9 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
                     withContext(Dispatchers.Main) { BackgroundLocationReceiver.stop() }
                     Result.failure()
                 } else {
-                    Timber.w(Exception(error + code))
+                    if (code == 502 || code == 522 || code == 523) {
+                        Timber.d(Exception(error + code))
+                    } else Timber.w(Exception(error + code))
                     Result.retry()
                 }
             }
