@@ -56,6 +56,17 @@ android {
     kotlinOptions.jvmTarget = javaVersion.toString()
     packaging.resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"
     lint.informational.add("MissingTranslation")
+
+    sourceSets.getByName("main") {
+        java.srcDirs("../brotli/java")
+        java.excludes.add("**/brotli/**/*Test.java")
+    }
+    externalNativeBuild {
+        cmake {
+            path = file("src/main/cpp/CMakeLists.txt")
+            version = "3.22.1"
+        }
+    }
 }
 
 dependencies {
@@ -66,7 +77,7 @@ dependencies {
     implementation(libs.browser)
     implementation(libs.core.ktx)
     implementation(libs.firebase.analytics)
-    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.crashlytics.ndk)
     implementation(libs.fragment.ktx)
     implementation(libs.hiddenapibypass)
     implementation(libs.material)
