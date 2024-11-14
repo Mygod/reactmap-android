@@ -74,17 +74,18 @@ class ConfigDialogFragment : AlertDialogFragment<ConfigDialogFragment.Arg, Empty
     }
 
     override val ret get() = try {
-        val uri = urlEdit.text!!.toString().toUri().let {
-            require(BuildConfig.DEBUG || "https".equals(it.scheme, true)) { getText(R.string.error_https_only) }
-            it.host!!
-            it.toString()
-        }
+        val uri = urlEdit.text!!.toString().toUri()
+        require(BuildConfig.DEBUG || "https".equals(uri.scheme, true)) { getText(R.string.error_https_only) }
+        uri.host!!
+        val uriString = uri.toString()
         val oldApiUrl = ReactMapHttpEngine.apiUrl
+        val changing = oldApiUrl != ReactMapHttpEngine.apiUrl(uri)
         app.pref.edit {
-            putString(App.KEY_ACTIVE_URL, uri)
-            putStringSet(KEY_HISTORY_URL, historyUrl + uri)
+            putString(App.KEY_ACTIVE_URL, uriString)
+            putStringSet(KEY_HISTORY_URL, historyUrl + uriString)
+            if (changing) remove(ReactMapHttpEngine.KEY_BROTLI)
         }
-        if (oldApiUrl != ReactMapHttpEngine.apiUrl) BackgroundLocationReceiver.onApiChanged()
+        if (changing) BackgroundLocationReceiver.onApiChanged()
         Empty()
     } catch (e: Exception) {
         Toast.makeText(requireContext(), e.readableMessage, Toast.LENGTH_LONG).show()

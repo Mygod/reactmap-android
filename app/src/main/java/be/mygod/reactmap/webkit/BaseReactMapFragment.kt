@@ -29,6 +29,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import be.mygod.reactmap.App.Companion.app
 import be.mygod.reactmap.BuildConfig
 import be.mygod.reactmap.R
@@ -37,6 +38,7 @@ import be.mygod.reactmap.util.UnblockCentral
 import be.mygod.reactmap.util.findErrorStream
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
+import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -123,6 +125,7 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
 
     protected lateinit var web: WebView
     protected lateinit var glocation: Glocation
+    private lateinit var postInterceptor: PostInterceptor
     protected lateinit var hostname: String
 
     private var loginText: String? = null
@@ -152,6 +155,7 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
                 javaScriptEnabled = true
             }
             glocation = Glocation(this, this@BaseReactMapFragment)
+            postInterceptor = PostInterceptor(this)
             webChromeClient = object : WebChromeClient() {
                 @Suppress("KotlinConstantConditions")
                 override fun onConsoleMessage(consoleMessage: ConsoleMessage) = consoleMessage.run {
@@ -194,11 +198,15 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
 
                 override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
                     glocation.clear()
+                    postInterceptor.clear()
                     val uri = url.toUri()
                     if (!BuildConfig.DEBUG && "http".equals(uri.scheme, true)) {
                         web.loadUrl(uri.buildUpon().scheme("https").build().toString())
                     }
-                    if (uri.host == hostname) glocation.setupGeolocation()
+                    if (uri.host == hostname) {
+                        glocation.setupGeolocation()
+                        postInterceptor.setup()
+                    }
                     onPageStarted()
                 }
 
@@ -233,9 +241,7 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
                             return handleTranslation(request)
                         }
                         if (vendorJsMatcher.matchEntire(path) != null) return handleVendorJs(request)
-                        if (path == "/graphql" && request.method == "POST") {
-                            request.requestHeaders.remove("_interceptedBody")?.let { return handleGraphql(request, it) }
-                        }
+                        postInterceptor.extractBody(request)?.let { return handleGraphql(request, it) }
                     }
                     if (ReactMapHttpEngine.isCronet && (path.substringAfterLast('.').lowercase(Locale.ENGLISH)
                                 in mediaExtensions || request.requestHeaders.any { (key, value) ->
@@ -374,7 +380,12 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
             setupConnection(request, conn)
             ReactMapHttpEngine.writeCompressed(conn, body)
         }
-        createResponse(conn) { _ -> conn.findErrorStream }
+        if (conn.responseCode == 302) {
+            ReactMapHttpEngine.detectBrotliError(conn)?.let {
+                lifecycleScope.launch { Snackbar.make(web, it, Snackbar.LENGTH_LONG).show() }
+            }
+            null
+        } else createResponse(conn) { _ -> conn.findErrorStream }
     } catch (e: IOException) {
         Timber.d(e)
         null

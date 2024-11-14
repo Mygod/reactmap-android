@@ -53,7 +53,7 @@ class Glocation(private val web: WebView, private val fragment: BaseReactMapFrag
         fragment.lifecycle.addObserver(this)
         it.context
     }
-    private val jsSetup = fragment.resources.openRawResource(R.raw.setup).bufferedReader().readText()
+    private val jsSetup = fragment.resources.openRawResource(R.raw.setup_glocation).bufferedReader().readText()
     private val pendingRequests = mutableSetOf<Long>()
     private var pendingWatch = false
     private val activeListeners = mutableSetOf<Long>()

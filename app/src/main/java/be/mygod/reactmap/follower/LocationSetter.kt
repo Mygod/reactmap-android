@@ -165,6 +165,10 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
                 }.build())
                 Result.success()
             }
+            302 -> {
+                ReactMapHttpEngine.detectBrotliError(conn)?.let { notifyError(it) }
+                Result.retry()
+            }
             else -> {
                 val error = conn.findErrorStream.bufferedReader().readText()
                 notifyErrors(error)
