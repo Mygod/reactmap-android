@@ -27,12 +27,4 @@ object UnblockCentral {
                 Int::class.java)
         }
     }
-    private val classStructLinger by lazy { init.let { Class.forName("android.system.StructLinger") } }
-    val lingerReset by lazy {
-        classStructLinger.getDeclaredConstructor(Int::class.java, Int::class.java).newInstance(1, 0)
-    }
-    val setsockoptLinger by lazy {
-        Os::class.java.getDeclaredMethod("setsockoptLinger", FileDescriptor::class.java, Int::class.java,
-            Int::class.java, classStructLinger)
-    }
 }

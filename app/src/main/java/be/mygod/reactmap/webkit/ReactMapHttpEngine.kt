@@ -1,5 +1,6 @@
 package be.mygod.reactmap.webkit
 
+import android.annotation.SuppressLint
 import android.net.Uri
 import android.net.http.ConnectionMigrationOptions
 import android.net.http.HttpEngine
@@ -33,10 +34,11 @@ object ReactMapHttpEngine {
 
     val isCronet get() = Build.VERSION.SDK_INT >= 34 || Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
             SdkExtensions.getExtensionVersion(Build.VERSION_CODES.S) >= 7
+    private var engineInternal: HttpEngine? = null
     @get:RequiresExtension(Build.VERSION_CODES.S, 7)
-    val engine by lazy @RequiresExtension(Build.VERSION_CODES.S, 7) {
-        val cache = File(app.deviceStorage.cacheDir, "httpEngine")
-        HttpEngine.Builder(app.deviceStorage).apply {
+    val engine get() = synchronized(ReactMapHttpEngine) {
+        engineInternal ?: HttpEngine.Builder(app.deviceStorage).apply {
+            val cache = File(app.deviceStorage.cacheDir, "httpEngine")
             if (cache.mkdirs() || cache.isDirectory) {
                 setStoragePath(cache.absolutePath)
                 setEnableHttpCache(HttpEngine.Builder.HTTP_CACHE_DISK, 512 * 1024 * 1024)
@@ -46,7 +48,21 @@ object ReactMapHttpEngine {
                 setPathDegradationMigration(ConnectionMigrationOptions.MIGRATION_OPTION_ENABLED)
             }.build())
             setEnableBrotli(true)
-        }.build()
+        }.build().also {
+            engineInternal = it
+            Timber.d("HttpEngine ${HttpEngine.getVersionString()} initialized")
+        }
+    }
+    @SuppressLint("NewApi")
+    fun reset() = synchronized(ReactMapHttpEngine) {
+        engineInternal?.apply {
+            try {
+                shutdown()
+            } catch (e: IllegalStateException) {
+                Timber.d(e)
+            }
+            engineInternal = null
+        }
     }
 
     fun apiUrl(base: Uri) = base.buildUpon().apply {

@@ -398,6 +398,7 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
 
     fun terminate() {
         web.destroy()
+        ReactMapHttpEngine.reset()
         try {
             for (file in File("/proc/self/fd").listFiles() ?: emptyArray()) try {
                 val fdInt = file.name.toInt()
@@ -408,10 +409,9 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
                     if (e.errno == OsConstants.EBADF || e.errno == OsConstants.ENOTSOCK) continue else throw e
                 }
                 if (endpoint !is InetSocketAddress) continue
-                val isTcp = when (val type = UnblockCentral.getsockoptInt(null, fd, OsConstants.SOL_SOCKET,
-                    OsConstants.SO_TYPE)) {
-                    OsConstants.SOCK_STREAM -> true
-                    OsConstants.SOCK_DGRAM -> false
+                when (val type = UnblockCentral.getsockoptInt(null, fd, OsConstants.SOL_SOCKET, OsConstants.SO_TYPE)) {
+                    OsConstants.SOCK_STREAM -> { }
+                    OsConstants.SOCK_DGRAM -> continue
                     else -> {
                         Timber.w(Exception("Unknown $type to $endpoint"))
                         continue
@@ -423,12 +423,8 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
                     Timber.w(e)
                     0
                 } else 0
-                Timber.d("Resetting $fdInt owned by $ownerTag if is 0 -> $endpoint $isTcp")
-                if (ownerTag != 0L) continue
-                if (isTcp) {
-                    UnblockCentral.setsockoptLinger(null, fd, OsConstants.SOL_SOCKET,
-                        OsConstants.SO_LINGER, UnblockCentral.lingerReset)
-                } else Os.dup2(nullFd, fdInt)
+                Timber.d("Resetting $fdInt owned by $ownerTag if is 0 -> $endpoint")
+                if (ownerTag == 0L) Os.dup2(nullFd, fdInt)
             } catch (e: Exception) {
                 Timber.w(e)
             }
