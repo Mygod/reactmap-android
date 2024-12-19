@@ -117,7 +117,7 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
                 }
                 error.getString("message")
             }
-        } catch (e: JSONException) {
+        } catch (_: JSONException) {
             response
         })
         return shouldWarn
@@ -130,7 +130,7 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
                     val obj = JSONObject(response)
                     val webhook = obj.getJSONObject("data").optJSONObject("webhook")
                     if (webhook == null) {
-                        if (notifyErrors(response, obj)) Timber.w(response) else Timber.w(Exception(response))
+                        if (notifyErrors(response, obj)) Timber.w(Exception(response)) else Timber.w(response)
                         return Result.retry()
                     }
                     if (webhook["human"] == JSONObject.NULL) {
@@ -177,8 +177,8 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
                     Result.failure()
                 } else {
                     if (code == 502 || code == 522 || code == 523) {
-                        Timber.d(Exception(error + code))
-                    } else Timber.w(Exception(error + code))
+                        Timber.d(Exception("$code $error"))
+                    } else Timber.w(Exception("$code $error"))
                     Result.retry()
                 }
             }
