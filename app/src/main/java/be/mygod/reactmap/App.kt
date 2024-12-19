@@ -11,6 +11,7 @@ import android.os.Build
 import android.os.UserManager
 import android.os.ext.SdkExtensions
 import android.util.Log
+import android.webkit.WebView
 import android.widget.Toast
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
@@ -62,6 +63,10 @@ class App : Application() {
         FirebaseCrashlytics.getInstance().apply {
             setCustomKey("applicationId", BuildConfig.APPLICATION_ID)
             setCustomKey("build", Build.DISPLAY)
+            WebView.getCurrentWebViewPackage()?.let {
+                setCustomKey("webview", it.packageName)
+                setCustomKey("webviewVersion", it.versionName.toString())
+            }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) setCustomKey("extension_s",
                 SdkExtensions.getExtensionVersion(Build.VERSION_CODES.S))
         }
