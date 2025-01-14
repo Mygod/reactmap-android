@@ -41,7 +41,7 @@ object ReactMapHttpEngine {
             val cache = File(app.deviceStorage.cacheDir, "httpEngine")
             if (cache.mkdirs() || cache.isDirectory) {
                 setStoragePath(cache.absolutePath)
-                setEnableHttpCache(HttpEngine.Builder.HTTP_CACHE_DISK, 512 * 1024 * 1024)
+                setEnableHttpCache(HttpEngine.Builder.HTTP_CACHE_DISK, 1024 * 1024 * 1024)
             }
             setConnectionMigrationOptions(ConnectionMigrationOptions.Builder().apply {
                 setDefaultNetworkMigration(ConnectionMigrationOptions.MIGRATION_OPTION_ENABLED)
