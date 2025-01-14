@@ -38,6 +38,10 @@ class SiteController(private val fragment: Fragment) : DefaultLifecycleObserver 
             setContentIntent(PendingIntent.getActivity(context, 0,
                 Intent(context, MainActivity::class.java).setAction(MainActivity.ACTION_CONFIGURE),
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE))
+            addAction(Notification.Action.Builder(Icon.createWithResource(context, R.drawable.ic_image_wb_sunny),
+                "AccuWeather", PendingIntent.getActivity(context, 1,
+                    Intent(context, MainActivity::class.java).setAction(MainActivity.ACTION_ACCUWEATHER),
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)).build())
             addAction(Notification.Action.Builder(Icon.createWithResource(context, R.drawable.ic_notification_sync),
                 context.getString(R.string.notification_action_restart_game), PendingIntent.getActivity(context, 1,
                     Intent(context, MainActivity::class.java).setAction(MainActivity.ACTION_RESTART_GAME),

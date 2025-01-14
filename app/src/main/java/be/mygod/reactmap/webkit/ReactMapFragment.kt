@@ -15,11 +15,15 @@ import be.mygod.reactmap.App.Companion.app
 import be.mygod.reactmap.MainActivity
 import be.mygod.reactmap.R
 import be.mygod.reactmap.util.CreateDynamicDocument
+import be.mygod.reactmap.util.readableMessage
 import com.google.android.material.snackbar.Snackbar
+import com.google.common.geometry.S2CellId
+import com.google.common.geometry.S2LatLng
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import org.json.JSONTokener
 import timber.log.Timber
+import java.io.IOException
 import java.net.URLDecoder
 
 class ReactMapFragment : BaseReactMapFragment() {
@@ -162,5 +166,22 @@ class ReactMapFragment : BaseReactMapFragment() {
         }
         flyToUrl("${match.groupValues[1]}, ${match.groupValues[2]}", match.groups[3]?.value) { uri.toString() }
         false
+    }
+
+    fun accuWeather() = web.evaluateJavascript("window._hijackedMap.getCenter()") { evalResult ->
+        val center = JSONObject(evalResult)
+        val cell = S2CellId.fromLatLng(S2LatLng.fromDegrees(center.getDouble("lat"), center.getDouble("lng")))
+            .parent(10).toLatLng()
+        lifecycleScope.launch {
+            try {
+                AccuWeatherDialogFragment.newInstance(cell).show(parentFragmentManager, null)
+            } catch (e: IOException) {
+                Timber.d(e)
+                Snackbar.make(web, e.readableMessage, Snackbar.LENGTH_LONG).show()
+            } catch (e: Exception) {
+                Timber.w(e)
+                Snackbar.make(web, e.readableMessage, Snackbar.LENGTH_LONG).show()
+            }
+        }
     }
 }

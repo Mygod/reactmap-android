@@ -8,6 +8,7 @@ import android.text.Spanned
 import androidx.core.os.ParcelCompat
 import java.lang.reflect.InvocationTargetException
 import java.net.HttpURLConnection
+import java.net.URLConnection
 import java.util.Locale
 
 tailrec fun Throwable.getRootCause(): Throwable {
@@ -82,3 +83,5 @@ fun CharSequence.format(locale: Locale, vararg args: Any) = SpannableStringBuild
         i += cookedArg.length
     }
 }
+
+val URLConnection.headerLocation get() = getHeaderField("Location")

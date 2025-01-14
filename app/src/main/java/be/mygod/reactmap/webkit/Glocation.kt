@@ -164,10 +164,8 @@ class Glocation(private val web: WebView, private val fragment: BaseReactMapFrag
         }.build(), callback, Looper.getMainLooper()).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 Timber.d("Start watching location")
-            } else web.evaluateJavascript(
-                "navigator.geolocation._watchPositionError([${activeListeners.joinToString()}]," +
-                        " ${task.exception.toGeolocationPositionError()})", null
-            )
+            } else web.evaluateJavascript("navigator.geolocation._watchPositionError([" +
+                    "${activeListeners.joinToString()}], ${task.exception.toGeolocationPositionError()})", null)
         }
     }
     private fun removeLocationUpdates() = app.fusedLocation.removeLocationUpdates(callback).addOnCompleteListener {

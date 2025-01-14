@@ -11,6 +11,7 @@ import androidx.annotation.RequiresExtension
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import be.mygod.reactmap.App.Companion.app
+import be.mygod.reactmap.util.headerLocation
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -136,7 +137,7 @@ object ReactMapHttpEngine {
     }
 
     fun detectBrotliError(conn: HttpURLConnection): String? {
-        val path = conn.getHeaderField("Location")
+        val path = conn.headerLocation
         if (path.startsWith("/error/")) return Uri.decode(path.substring(7)).also {
             if (conn.url.host == app.activeUrl.toUri().host && it == "unsupported content encoding \"br\"") app.pref.edit { putBoolean(KEY_BROTLI, false) }
         }

@@ -82,6 +82,7 @@ dependencies {
     implementation(libs.hiddenapibypass)
     implementation(libs.material)
     implementation(libs.play.services.location)
+    implementation(libs.s2.geometry)
     implementation(libs.lifecycle.common)
     implementation(libs.timber)
     implementation(libs.work)

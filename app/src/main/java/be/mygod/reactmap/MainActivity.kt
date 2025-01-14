@@ -34,6 +34,7 @@ class MainActivity : FragmentActivity() {
     companion object {
         const val ACTION_CONFIGURE = "be.mygod.reactmap.action.CONFIGURE"
         const val ACTION_RESTART_GAME = "be.mygod.reactmap.action.RESTART_GAME"
+        const val ACTION_ACCUWEATHER = "be.mygod.reactmap.action.ACCUWEATHER"
         private const val KEY_WELCOME = "welcome"
     }
 
@@ -78,6 +79,7 @@ class MainActivity : FragmentActivity() {
             Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) return
         when (intent.action) {
             ACTION_CONFIGURE -> startConfigure(false)
+            ACTION_ACCUWEATHER -> currentFragment?.accuWeather()
             ACTION_RESTART_GAME -> AlertDialog.Builder(this).apply {
                 setTitle(R.string.restart_game_dialog_title)
                 setMessage(R.string.restart_game_dialog_message)
