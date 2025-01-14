@@ -3,6 +3,7 @@ package be.mygod.reactmap.webkit
 import android.content.DialogInterface
 import android.icu.text.DateFormat
 import android.icu.text.SimpleDateFormat
+import android.icu.util.Calendar
 import android.os.Bundle
 import android.os.Parcelable
 import android.text.Spannable
@@ -27,6 +28,7 @@ import timber.log.Timber
 import java.io.IOException
 import java.net.URLConnection
 import java.text.ParseException
+import java.text.ParsePosition
 import java.util.Date
 import java.util.Locale
 import java.util.regex.Pattern
@@ -80,10 +82,11 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
     }
 
     private lateinit var hourFormat: DateFormat
+    private val calendar = Calendar.getInstance()
     override fun onCreateDialog(savedInstanceState: Bundle?) = super.onCreateDialog(savedInstanceState).apply {
         create()
         hourFormat = DateFormat.getInstanceForSkeleton(
-            if (android.text.format.DateFormat.is24HourFormat(requireContext())) "dH" else "dha",
+            if (android.text.format.DateFormat.is24HourFormat(requireContext())) "dEEEEH" else "dEEEEha",
             resources.configuration.locales[0])
         fetchData(R.id.day1, param = "?day=1")
         fetchData(R.id.day2, param = "?day=2")
@@ -93,10 +96,11 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
 
     private fun AlertDialog.fetchData(id: Int, type: String = "hourly", param: String = "") = lifecycleScope.launch {
         val format = if (param.isEmpty()) {
-            DateFormat.getInstanceForSkeleton("Md", resources.configuration.locales[0])
+            DateFormat.getInstanceForSkeleton("MMMMdEEEE", resources.configuration.locales[0])
         } else hourFormat
         val out = try {
-            ReactMapHttpEngine.connectCancellable("https://www.accuweather.com/en/${arg.locationDescription}/$type-weather-forecast/${arg.locationKey}$param") { conn ->
+            ReactMapHttpEngine.connectCancellable(
+                "https://www.accuweather.com/en/${arg.locationDescription}/$type-weather-forecast/${arg.locationKey}$param") { conn ->
                 conn.setUserAgent()
                 if (conn.responseCode != 200) return@connectCancellable "${conn.responseCode}: ${conn.findErrorStream.bufferedReader().readText()}"
                 val response = conn.inputStream.bufferedReader().readText()
@@ -109,7 +113,7 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
                     val icon = when (matcher.group(2)!!.toInt()) {
                         1, 2, 30 -> R.drawable.ic_image_wb_sunny
                         33, 34 -> R.drawable.ic_image_bedtime
-                        12, 15, 18, 26, 29 -> R.drawable.ic_rainy
+                        12, 15, 18, 26, 29 -> R.drawable.ic_places_beach_access
                         3, 4, 14, 17, 21 -> R.drawable.ic_partly_cloudy_day
                         35, 36, 39, 41 -> R.drawable.ic_partly_cloudy_night
                         5, 6, 7, 8, 13, 16, 20, 23, 37, 38, 40, 42 -> R.drawable.ic_file_cloud
@@ -121,11 +125,11 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
                     val i = result.length
                     if (icon == 0) result.append("(${matcher.group(2)})) ") else {
                         result.append("  ")
-                        result.setSpan(ImageSpan(requireContext(), icon), i, i + 1,
-                            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        result.setSpan(ImageSpan(requireContext(), icon), i, i + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     }
                     result.append(if (param.isEmpty()) try {
-                        format.format(dayFormat.parse(matcher.group(1)))
+                        dayFormat.parse(matcher.group(1), calendar, ParsePosition(0))
+                        format.format(calendar.time)
                     } catch (e: ParseException) {
                         Timber.w(Exception(matcher.group(1)).initCause(e))
                         matcher.group(1)
