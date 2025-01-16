@@ -91,16 +91,16 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
         fetchData(R.id.day1, param = "?day=1")
         fetchData(R.id.day2, param = "?day=2")
         fetchData(R.id.day3, param = "?day=3")
-        fetchData(R.id.daily, "daily")
+        fetchData(R.id.daily, "dai")
     }
 
-    private fun AlertDialog.fetchData(id: Int, type: String = "hourly", param: String = "") = lifecycleScope.launch {
+    private fun AlertDialog.fetchData(id: Int, type: String = "hour", param: String = "") = lifecycleScope.launch {
         val format = if (param.isEmpty()) {
             DateFormat.getInstanceForSkeleton("MMMMdEEEE", resources.configuration.locales[0])
         } else hourFormat
         val out = try {
             ReactMapHttpEngine.connectCancellable(
-                "https://www.accuweather.com/en/${arg.locationDescription}/$type-weather-forecast/${arg.locationKey}$param") { conn ->
+                "https://www.accuweather.com/en/${arg.locationDescription}/${type}ly-weather-forecast/${arg.locationKey}$param") { conn ->
                 conn.setUserAgent()
                 if (conn.responseCode != 200) return@connectCancellable "${conn.responseCode}: ${conn.findErrorStream.bufferedReader().readText()}"
                 val response = conn.inputStream.bufferedReader().readText()
