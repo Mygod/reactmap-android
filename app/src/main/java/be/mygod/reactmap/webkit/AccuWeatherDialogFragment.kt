@@ -36,13 +36,13 @@ import java.util.regex.Pattern
 class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.Arg, Empty>() {
     companion object {
         private val weatherForecastMatcher = "^/en/([^/]*/[^/]*/[^/]*)/weather-forecast/(.*)\$".toRegex()
-        // raw: <div id="(\d+)" data-qa="\1" class="accordion-item hour".*?data-src="/images/weathericons/(\d+).svg"
+        // raw: <div id="(\d+)" data-qa="\1" class="accordion-item hour".*?data-src="/images/weathericons/(\d+).svg".*?<div class="phrase">([^<]*)</div>.*?(\d+) km/h.*?(\d+) km/h
         private val hourlyMatcher =
-            "<div id=\"(\\d+)\" data-qa=\"\\1\" class=\"accordion-item hour\".*?data-src=\"/images/weathericons/(\\d+).svg\""
+            "<div id=\"(\\d+)\" data-qa=\"\\1\" class=\"accordion-item hour\".*?data-src=\"/images/weathericons/(\\d+).svg\".*?<div class=\"phrase\">([^<]*)</div>.*?(\\d+) km/h.*?(\\d+) km/h"
                 .toPattern(Pattern.DOTALL)
-        // raw: <span class="module-header sub date">([^<]*)</span>.*?data-src="/images/weathericons/(\d+).svg"
+        // raw: <span class="module-header sub date">([^<]*)</span>.*?data-src="/images/weathericons/(\d+).svg".*?<div class="phrase">([^<]*)</div>.*?(\d+) km/h(?:[^b]*?(\d+) km/h)?
         private val dailyMatcher =
-            "<span class=\"module-header sub date\">([^<]*)</span>.*?data-src=\"/images/weathericons/(\\d+).svg\""
+            "<span class=\"module-header sub date\">([^<]*)</span>.*?data-src=\"/images/weathericons/(\\d+).svg\".*?<div class=\"phrase\">([^<]*)</div>.*?(\\d+) km/h(?:[^b]*?(\\d+) km/h)?"
                 .toPattern(Pattern.DOTALL)
         private val dayFormat = SimpleDateFormat("M/d", Locale.US)
 
@@ -88,9 +88,9 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
         hourFormat = DateFormat.getInstanceForSkeleton(
             if (android.text.format.DateFormat.is24HourFormat(requireContext())) "dEEEEH" else "dEEEEha",
             resources.configuration.locales[0])
-        fetchData(R.id.day1, param = "?day=1")
-        fetchData(R.id.day2, param = "?day=2")
-        fetchData(R.id.day3, param = "?day=3")
+        fetchData(R.id.day1, param = "&day=1")
+        fetchData(R.id.day2, param = "&day=2")
+        fetchData(R.id.day3, param = "&day=3")
         fetchData(R.id.daily, "dai")
     }
 
@@ -100,7 +100,7 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
         } else hourFormat
         val out = try {
             ReactMapHttpEngine.connectCancellable(
-                "https://www.accuweather.com/en/${arg.locationDescription}/${type}ly-weather-forecast/${arg.locationKey}$param") { conn ->
+                "https://www.accuweather.com/en/${arg.locationDescription}/${type}ly-weather-forecast/${arg.locationKey}?unit=c$param") { conn ->
                 conn.setUserAgent()
                 if (conn.responseCode != 200) return@connectCancellable "${conn.responseCode}: ${conn.findErrorStream.bufferedReader().readText()}"
                 val response = conn.inputStream.bufferedReader().readText()
@@ -109,23 +109,30 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
                 val result = SpannableStringBuilder()
                 do {
                     if (result.isNotEmpty()) result.appendLine()
-                    // https://github.com/KartulUdus/PoracleJS/blob/5552deaeedb395e35268172e7a789f249b9ee415/src/controllers/weather.js#L68-L74
-                    val icon = when (matcher.group(2)!!.toInt()) {
-                        1, 2, 30 -> R.drawable.ic_image_wb_sunny
-                        33, 34 -> R.drawable.ic_image_bedtime
-                        12, 15, 18, 26, 29 -> R.drawable.ic_places_beach_access
-                        3, 4, 14, 17, 21 -> R.drawable.ic_partly_cloudy_day
-                        35, 36, 39, 41 -> R.drawable.ic_partly_cloudy_night
-                        5, 6, 7, 8, 13, 16, 20, 23, 37, 38, 40, 42 -> R.drawable.ic_file_cloud
-                        32 -> R.drawable.ic_family_link
-                        19, 22, 24, 25, 31, 43, 44 -> R.drawable.ic_places_ac_unit
-                        11 -> R.drawable.ic_mist
-                        else -> 0
+                    // https://github.com/5310/discord-bot-castform/issues/2#issuecomment-1687783087
+                    // https://docs.google.com/spreadsheets/d/1v51qbI1egh6eBTk-NTaRy3Qlx2Y2v9kDYqmvHlmntJE/edit
+                    val (icon, windyOverride) = when (matcher.group(2)!!.toInt()) {
+                        1, 2 -> R.drawable.ic_image_wb_sunny to true
+                        3, 4 -> R.drawable.ic_partly_cloudy_day to true
+                        5, 6, 7, 8, 37, 38 -> R.drawable.ic_file_cloud to true
+                        11 -> R.drawable.ic_mist to false
+                        12, 15, 18, 26, 29 -> R.drawable.ic_places_beach_access to false
+                        13, 16, 20, 23, 40, 42 -> R.drawable.ic_file_cloud to false
+                        14, 17, 21 -> R.drawable.ic_partly_cloudy_day to false
+                        19, 22, 24, 25, 43, 44 -> R.drawable.ic_places_ac_unit to false
+                        32 -> R.drawable.ic_family_link to false
+                        33, 34 -> R.drawable.ic_image_bedtime to true
+                        35, 36 -> R.drawable.ic_partly_cloudy_night to true
+                        39, 41 -> R.drawable.ic_partly_cloudy_night to false
+                        else -> 0 to false
                     }
                     val i = result.length
-                    if (icon == 0) result.append("(${matcher.group(2)})) ") else {
+                    if (icon != 0) {
                         result.append("  ")
-                        result.setSpan(ImageSpan(requireContext(), icon), i, i + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        result.setSpan(ImageSpan(requireContext(), if (windyOverride &&
+                            (matcher.group(4)!!.toInt() > 20 || matcher.group(5)?.run { toInt() > 30 } == true)) {
+                            R.drawable.ic_family_link
+                        } else icon), i, i + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     }
                     result.append(if (param.isEmpty()) try {
                         dayFormat.parse(matcher.group(1), calendar, ParsePosition(0))
@@ -134,6 +141,9 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
                         Timber.w(Exception(matcher.group(1)).initCause(e))
                         matcher.group(1)
                     } else format.format(Date(matcher.group(1)!!.toLong() * 1000)))
+                    result.append("\n${matcher.group(3)}, ${matcher.group(4)}")
+                    matcher.group(5)?.let { result.append("-$it") }
+                    result.append(" km/h")
                 } while (matcher.find())
                 result
             }
