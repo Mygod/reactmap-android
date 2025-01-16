@@ -389,6 +389,9 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
     } catch (e: IOException) {
         Timber.d(e)
         null
+    } catch (e: Exception) {
+        Timber.w(e)
+        null
     }
 
     override fun onDestroyView() {
