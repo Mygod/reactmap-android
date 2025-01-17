@@ -73,30 +73,30 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
         setTitle("${arg.locationDescription} (${arg.locationKey})")
     }
 
-    private lateinit var hourFormat: DateFormat
-    private val calendar = Calendar.getInstance()
     override fun onCreateDialog(savedInstanceState: Bundle?) = super.onCreateDialog(savedInstanceState).apply {
         create()
-        hourFormat = DateFormat.getInstanceForSkeleton(
+        val hourFormat = DateFormat.getInstanceForSkeleton(
             if (android.text.format.DateFormat.is24HourFormat(requireContext())) "dEEEEH" else "dEEEEha",
             resources.configuration.locales[0])
-        fetchData(R.id.day1, param = "&day=1")
-        fetchData(R.id.day2, param = "&day=2")
-        fetchData(R.id.day3, param = "&day=3")
-        fetchData(R.id.daily, "dai")
+        fetchData(R.id.day1, hourFormat)
+        fetchData(R.id.day2, hourFormat, "&day=2")
+        fetchData(R.id.day3, hourFormat, "&day=3")
+        fetchData(R.id.daily, DateFormat.getInstanceForSkeleton("MMMMdEEEE", resources.configuration.locales[0]),
+            daily = true)
     }
 
-    private fun AlertDialog.fetchData(id: Int, type: String = "hour", param: String = "") = lifecycleScope.launch {
-        val format = if (param.isEmpty()) {
-            DateFormat.getInstanceForSkeleton("MMMMdEEEE", resources.configuration.locales[0])
-        } else hourFormat
+    private val calendar = Calendar.getInstance()
+    private fun AlertDialog.fetchData(id: Int, format: DateFormat, param: String = "",
+                                      daily: Boolean = false) = lifecycleScope.launch {
         val out = try {
             ReactMapHttpEngine.connectCancellable(
-                "https://www.accuweather.com/en/${arg.locationDescription}/${type}ly-weather-forecast/${arg.locationKey}?unit=c$param") { conn ->
+                "https://www.accuweather.com/en/${arg.locationDescription}/${if (daily) {
+                    "dai"
+                } else "hour"}ly-weather-forecast/${arg.locationKey}?unit=c$param") { conn ->
                 conn.setUserAgent()
                 if (conn.responseCode != 200) return@connectCancellable "${conn.responseCode}: ${conn.findErrorStream.bufferedReader().readText()}"
                 val response = conn.inputStream.bufferedReader().readText()
-                val matcher = (if (param.isEmpty()) dailyMatcher else hourlyMatcher).matcher(response)
+                val matcher = (if (daily) dailyMatcher else hourlyMatcher).matcher(response)
                 if (!matcher.find()) return@connectCancellable response
                 val result = SpannableStringBuilder()
                 do {
@@ -126,7 +126,7 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
                             R.drawable.ic_family_link
                         } else icon), i, i + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     }
-                    result.append("${if (param.isEmpty()) try {
+                    result.append("${if (daily) try {
                         dayFormat.parse(matcher.group(1), calendar, ParsePosition(0))
                         format.format(calendar.time)
                     } catch (e: ParseException) {
