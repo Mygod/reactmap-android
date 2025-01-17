@@ -35,7 +35,7 @@ import java.util.regex.Pattern
 
 class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.Arg, Empty>() {
     companion object {
-        private val weatherForecastMatcher = "^/en/([^/]*/[^/]*/[^/]*)/weather-forecast/(.*)\$".toRegex()
+        private val weatherForecastMatcher = "^/en/([^/]*/[^/]*/[^/]*)/weather-forecast/([^?]*)".toRegex()
         // raw: <div id="(\d+)" data-qa="\1" class="accordion-item hour".*?data-src="/images/weathericons/(\d+).svg".*?<div class="phrase">([^<]*)</div>.*?(\d+) km/h.*?(\d+) km/h
         private val hourlyMatcher =
             "<div id=\"(\\d+)\" data-qa=\"\\1\" class=\"accordion-item hour\".*?data-src=\"/images/weathericons/(\\d+).svg\".*?<div class=\"phrase\">([^<]*)</div>.*?(\\d+) km/h.*?(\\d+) km/h"
@@ -48,24 +48,16 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
 
         private fun URLConnection.setUserAgent() = setRequestProperty("User-Agent", "Mozilla/5.0 (Linux; Android 10)")
         suspend fun newInstance(cell: S2LatLng): AccuWeatherDialogFragment {
-            val searchResponse = ReactMapHttpEngine.connectCancellable(
-                "https://www.accuweather.com/en/search-locations?query=${cell.latDegrees()},${cell.lngDegrees()}") { conn ->
+            val keyResponse = ReactMapHttpEngine.connectCancellable(
+                "https://www.accuweather.com/web-api/three-day-redirect?lat=${cell.latDegrees()}&lon=${cell.lngDegrees()}") { conn ->
                 conn.setUserAgent()
                 conn.instanceFollowRedirects = false
                 if (conn.responseCode != 302) throw Exception(
                     "${conn.responseCode}: ${conn.findErrorStream.bufferedReader().readText()}")
                 conn.headerLocation
             }
-            val keyResponse = ReactMapHttpEngine.connectCancellable(
-                "https://www.accuweather.com$searchResponse") { conn ->
-                conn.setUserAgent()
-                conn.instanceFollowRedirects = false
-                if (conn.responseCode != 302) throw Exception("$searchResponse returns ${conn.responseCode}: " +
-                        conn.findErrorStream.bufferedReader().readText())
-                conn.headerLocation
-            }
-            val match = weatherForecastMatcher.matchEntire(keyResponse)
-            if (match == null) throw Exception("Unknown redirect target $searchResponse - $keyResponse")
+            val match = weatherForecastMatcher.find(keyResponse)
+            if (match == null) throw Exception("Unknown redirect target $keyResponse")
             return AccuWeatherDialogFragment().apply {
                 arg(Arg(match.groupValues[1], match.groupValues[2]))
                 key()
@@ -134,14 +126,15 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
                             R.drawable.ic_family_link
                         } else icon), i, i + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     }
-                    result.append(if (param.isEmpty()) try {
+                    result.append("${if (param.isEmpty()) try {
                         dayFormat.parse(matcher.group(1), calendar, ParsePosition(0))
                         format.format(calendar.time)
                     } catch (e: ParseException) {
                         Timber.w(Exception(matcher.group(1)).initCause(e))
                         matcher.group(1)
-                    } else format.format(Date(matcher.group(1)!!.toLong() * 1000)))
-                    result.append("\n${matcher.group(3)}, ${matcher.group(4)}")
+                    } else {
+                        format.format(Date(matcher.group(1)!!.toLong() * 1000))
+                    }}\n${matcher.group(3)}, ${matcher.group(4)}")
                     matcher.group(5)?.let { result.append("-$it") }
                     result.append(" km/h")
                 } while (matcher.find())
