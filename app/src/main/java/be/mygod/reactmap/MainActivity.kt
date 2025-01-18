@@ -5,6 +5,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.os.Process
+import android.os.UserHandle
 import android.view.WindowManager
 import android.webkit.WebView
 import androidx.activity.enableEdgeToEdge
@@ -139,7 +141,8 @@ class MainActivity : FragmentActivity(), Shizuku.OnRequestPermissionResultListen
         val intent = packageManager.getLaunchIntentForPackage(packageName) ?: return
         lifecycleScope.launch(Dispatchers.IO) {
             try {
-                forceStopPackage(UnblockCentral.shizukuActivity, packageName, 0)
+                forceStopPackage(UnblockCentral.shizukuActivity, packageName,
+                    UserHandle.getUserHandleForUid(Process.myUid()).hashCode())
                 if (splitScreen) {
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT)
                     delay(1000) // wait a second for animations
