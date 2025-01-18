@@ -134,7 +134,7 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
                         matcher.group(1)
                     } else {
                         format.format(Date(matcher.group(1)!!.toLong() * 1000))
-                    }}\n${matcher.group(3)}, ${matcher.group(4)}")
+                    }}\n${matcher.group(3)}. ${matcher.group(4)}")
                     matcher.group(5)?.let { result.append("-$it") }
                     result.append(" km/h")
                 } while (matcher.find())
