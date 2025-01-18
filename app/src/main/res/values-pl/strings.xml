@@ -19,7 +19,7 @@
     <string name="config_switch_webhook_follow_location">Aktualizacja lokalizacji w tle\n(miej na uwadze,
         że będziesz udostępniać mapie swoją lokalizację)</string>
     <string name="restart_game_dialog_title">Wybierz wersję gry do zrestartowania</string>
-    <string name="restart_game_dialog_message">Wymagany root urządzenia</string>
+    <string name="restart_game_dialog_message">Wymagany Shizuku/Sui urządzenia</string>
     <string name="restart_game_standard">Standard</string>
     <string name="restart_game_samsung">Samsung</string>
     <string name="title_loading">Ładowanie…</string>

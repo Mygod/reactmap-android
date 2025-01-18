@@ -21,7 +21,7 @@
     <string name="config_switch_webhook_follow_location">Make alerts follow location in background\n(beware that you
         would be sharing your location with the map)</string>
     <string name="restart_game_dialog_title">Pick game version to restart</string>
-    <string name="restart_game_dialog_message">This feature requires root</string>
+    <string name="restart_game_dialog_message">This feature requires Shizuku/Sui</string>
     <string name="restart_game_standard">Standard</string>
     <string name="restart_game_samsung">Samsung</string>
 

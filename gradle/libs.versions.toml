@@ -1,12 +1,15 @@
+[versions]
+shizuku = "13.1.5"
+
 [libraries]
-activity = { group = "androidx.activity", name = "activity", version = "1.9.3" }
+activity = "androidx.activity:activity:1.10.0"
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version = "1.2.1" }
 browser = { group = "androidx.browser", name = "browser", version = "1.8.0" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version = "1.15.0" }
 desugar = { group = "com.android.tools", name = "desugar_jdk_libs", version = "2.1.4" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version = "3.6.1" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
-firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version = "33.7.0" }
+firebase-bom = "com.google.firebase:firebase-bom:33.8.0"
 firebase-crashlytics-ndk = { group = "com.google.firebase", name = "firebase-crashlytics-ndk" }
 fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version = "1.8.5" }
 hiddenapibypass = { group = "org.lsposed.hiddenapibypass", name = "hiddenapibypass", version = "4.3" }
@@ -15,6 +18,8 @@ lifecycle-common = { group = "androidx.lifecycle", name = "lifecycle-common", ve
 material = { group = "com.google.android.material", name = "material", version = "1.12.0" }
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version = "21.3.0" }
 s2-geometry = "com.google.geometry:s2-geometry:2.0.0"
+shizuku-api = { group = "dev.rikka.shizuku", name = "api", version.ref = "shizuku" }
+shizuku-provider = { group = "dev.rikka.shizuku", name = "provider", version.ref = "shizuku" }
 timber = { group = "com.jakewharton.timber", name = "timber", version = "5.0.1" }
 work = { group = "androidx.work", name = "work-runtime", version = "2.10.0" }
 

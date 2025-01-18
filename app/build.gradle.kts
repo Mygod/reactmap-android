@@ -83,6 +83,8 @@ dependencies {
     implementation(libs.material)
     implementation(libs.play.services.location)
     implementation(libs.s2.geometry)
+    implementation(libs.shizuku.api)
+    implementation(libs.shizuku.provider)
     implementation(libs.lifecycle.common)
     implementation(libs.timber)
     implementation(libs.work)

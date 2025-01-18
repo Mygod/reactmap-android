@@ -1,10 +1,14 @@
 package be.mygod.reactmap.util
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Build
+import android.os.IBinder
 import android.system.Os
 import androidx.annotation.RequiresApi
 import org.lsposed.hiddenapibypass.HiddenApiBypass
+import rikka.shizuku.ShizukuBinderWrapper
+import rikka.shizuku.SystemServiceHelper
 import java.io.FileDescriptor
 
 @SuppressLint("BlockedPrivateApi", "DiscouragedPrivateApi")
@@ -25,6 +29,13 @@ object UnblockCentral {
         init.let {
             Os::class.java.getDeclaredMethod("getsockoptInt", FileDescriptor::class.java, Int::class.java,
                 Int::class.java)
+        }
+    }
+
+    val shizukuActivity by lazy {
+        init.let {
+            Class.forName("android.app.IActivityManager\$Stub").getDeclaredMethod("asInterface", IBinder::class.java)(
+                null, ShizukuBinderWrapper(SystemServiceHelper.getSystemService(Context.ACTIVITY_SERVICE)))
         }
     }
 }
