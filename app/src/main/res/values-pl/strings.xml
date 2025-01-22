@@ -4,11 +4,8 @@
     <string name="notification_channel_webhook_failed">Niepowodzenie aktualizacji lokalizacji w tle</string>
     <string name="notification_channel_webhook_updated">Aktualizacja lokalizacji w tle</string>
     <string name="notification_channel_webhook_updating">Trwa aktualizacja lokalizacji w tle</string>
-    <string name="notification_channel_update_available">Dostępna aktualizacja</string>
     <string name="notification_site_controller_message">Kliknij, aby skonfigurować</string>
     <string name="notification_action_restart_game">Zrestartuj grę</string>
-    <string name="notification_update_available_title">Dostępna aktualizacja: %1$s</string>
-    <string name="notification_update_available_message">Nie masz aktualnej wersji od %1$s</string>
     <string name="notification_webhook_failed_title">Niepowodzenie aktualizacji lokalizacji</string>
     <string name="notification_webhook_updated_title">Lokalizacja zaktualizowana</string>
     <string name="notification_webhook_updated_message"><![CDATA[%1$f,%2$f > %3$s]]></string>

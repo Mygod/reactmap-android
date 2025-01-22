@@ -21,13 +21,9 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import be.mygod.reactmap.R
-import be.mygod.reactmap.util.UpdateChecker
 import be.mygod.reactmap.util.format
 import com.google.android.apps.auto.sdk.CarActivity
-import kotlinx.coroutines.launch
 
 class MainCarActivity @Keep constructor() : CarActivity(), LifecycleOwner {
     companion object {
@@ -77,7 +73,6 @@ class MainCarActivity @Keep constructor() : CarActivity(), LifecycleOwner {
                 override fun onDestroy(owner: LifecycleOwner) = unregisterReceiver(it)
             })
         }
-        lifecycleScope.launch { repeatOnLifecycle(Lifecycle.State.STARTED) { UpdateChecker.check() } }
     }
 
     fun killMap() {

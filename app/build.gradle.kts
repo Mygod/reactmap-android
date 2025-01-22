@@ -27,9 +27,6 @@ android {
             manifestPlaceholders["defaultDomain"] = defaultDomain
             buildConfigField("String", "DEFAULT_DOMAIN", "\"$defaultDomain\"")
         }
-        buildConfigField("String", "GITHUB_RELEASES", if (extra.has("reactmap.githubReleases")) {
-            extra["reactmap.githubReleases"] as String
-        } else "null")
         androidResources.localeFilters += listOf("en-rUS", "pl")
     }
 

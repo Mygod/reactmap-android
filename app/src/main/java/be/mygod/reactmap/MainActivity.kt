@@ -15,15 +15,12 @@ import androidx.core.content.res.use
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.commit
 import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import be.mygod.reactmap.App.Companion.app
 import be.mygod.reactmap.util.AlertDialogFragment
 import be.mygod.reactmap.util.Empty
 import be.mygod.reactmap.util.UnblockCentral
-import be.mygod.reactmap.util.UpdateChecker
 import be.mygod.reactmap.util.readableMessage
 import be.mygod.reactmap.webkit.ReactMapFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -71,7 +68,6 @@ class MainActivity : FragmentActivity(), Shizuku.OnRequestPermissionResultListen
         supportFragmentManager.setFragmentResultListener("ReactMapFragment", this) { _, _ ->
             reactMapFragment()
         }
-        lifecycleScope.launch { repeatOnLifecycle(Lifecycle.State.STARTED) { UpdateChecker.check() } }
         Shizuku.addRequestPermissionResultListener(this)
         lifecycle.addObserver(object : DefaultLifecycleObserver {
             override fun onDestroy(owner: LifecycleOwner) {

@@ -5,11 +5,8 @@
     <string name="notification_channel_webhook_failed">Background location update failed</string>
     <string name="notification_channel_webhook_updated">Background location updated</string>
     <string name="notification_channel_webhook_updating">Background location updating</string>
-    <string name="notification_channel_update_available">Update available</string>
     <string name="notification_site_controller_message">Tap to configure</string>
     <string name="notification_action_restart_game">Restart game</string>
-    <string name="notification_update_available_title">Update available: %1$s</string>
-    <string name="notification_update_available_message">You are out of date since %1$s</string>
     <string name="notification_webhook_failed_title">Failed to update location</string>
     <string name="notification_webhook_updated_title">Location updated</string>
     <string name="notification_webhook_updated_message"><![CDATA[%1$f,%2$f > %3$s]]></string>

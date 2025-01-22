@@ -22,7 +22,6 @@ import be.mygod.reactmap.auto.CarSiteController
 import be.mygod.reactmap.follower.BackgroundLocationReceiver
 import be.mygod.reactmap.follower.LocationSetter
 import be.mygod.reactmap.util.DeviceStorageApp
-import be.mygod.reactmap.util.UpdateChecker
 import be.mygod.reactmap.webkit.SiteController
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.color.DynamicColors
@@ -111,14 +110,8 @@ class App : Application() {
                 enableLights(true)
                 lightColor = getColor(R.color.main_orange)
             },
-        ).apply {
-            if (BuildConfig.GITHUB_RELEASES != null) add(NotificationChannel(UpdateChecker.CHANNEL_ID,
-                getText(R.string.notification_channel_update_available), NotificationManager.IMPORTANCE_HIGH).apply {
-                enableLights(true)
-                lightColor = getColor(R.color.main_blue)
-                lockscreenVisibility = Notification.VISIBILITY_PUBLIC
-            })
-        })
+        ))
+        nm.deleteNotificationChannel("updateAvailable")
         WorkManager.initialize(deviceStorage, Configuration.Builder().apply {
             setExecutor { GlobalScope.launch(Dispatchers.IO) { it.run() } }
             if (BuildConfig.DEBUG) setMinimumLoggingLevel(Log.VERBOSE)
