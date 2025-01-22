@@ -7,6 +7,8 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/58a48b28278d46edad1b5c82bf648607)](https://app.codacy.com/gh/Mygod/reactmap-android/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 [![License](https://img.shields.io/github/license/Mygod/reactmap-android.svg)](LICENSE)
 
+[![Get it on Obtainium](https://github.com/ImranR98/Obtainium/blob/main/assets/graphics/badge_obtainium.png)](https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/Mygod/reactmap-android)
+
 Use ReactMap as an Android app with battery improvements, including:
 
 * Use Google location services to follow location.
