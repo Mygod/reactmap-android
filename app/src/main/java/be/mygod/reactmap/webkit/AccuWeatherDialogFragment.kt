@@ -4,6 +4,7 @@ import android.content.DialogInterface
 import android.icu.text.DateFormat
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
+import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import android.text.Spannable
@@ -70,7 +71,7 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
 
     override fun AlertDialog.Builder.prepare(listener: DialogInterface.OnClickListener) {
         setView(R.layout.dialog_accuweather)
-        setTitle("${arg.locationDescription} (${arg.locationKey})")
+        setTitle("${Uri.decode(arg.locationDescription)} (${arg.locationKey})")
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?) = super.onCreateDialog(savedInstanceState).apply {
