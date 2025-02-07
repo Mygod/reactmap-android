@@ -72,10 +72,3 @@ See `gradle.properties` for a complete list of supported properties.
 An alternative to using `-P` switches is to adding your properties to the `gradle.properties` file in the root directory.
 
 Success! Find your apk in `app/build/outputs/apk/release`.
-
-### Support in-app GitHub update checking
-
-In-app update checking is supported if you use your custom GitHub repository to distribute built apks.
-To do this, it is required to use a release name of format `[v]X.Y.Z` with an arbitrary optional suffix followed by `-`.
-The app version name should follow the same format (usually without `v` prefix), and the `X,Y,Z` in the version name will be compared to determine the latest update.
-You may configure this by using properties `reactmap.versionCode,reactmap.versionName,reactmap.githubReleases` (see `gradle.properties` for details).
