@@ -1,14 +1,17 @@
 package be.mygod.reactmap.webkit
 
 import android.Manifest
-import android.content.Intent
+import android.content.pm.verify.domain.DomainVerificationManager
+import android.content.pm.verify.domain.DomainVerificationUserState
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient.FileChooserParams
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.getSystemService
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.lifecycleScope
@@ -34,6 +37,8 @@ class ReactMapFragment : BaseReactMapFragment() {
 
         private val filenameExtractor = "filename=(\"([^\"]+)\"|[^;]+)".toRegex(RegexOption.IGNORE_CASE)
         private val flyToMatcher = "/@/([0-9.-]+)/([0-9.-]+)(?:/([0-9.-]+))?/?".toRegex()
+
+        private val dvm by lazy { app.getSystemService<DomainVerificationManager>()!! }
     }
 
     private lateinit var siteController: SiteController
@@ -128,15 +133,13 @@ class ReactMapFragment : BaseReactMapFragment() {
         }
     }
 
-    override fun onAuthUri(url: Uri) = app.packageManager.queryIntentActivities(Intent(Intent.ACTION_VIEW,
-        Uri.Builder().apply {
-            scheme("https")
-            authority(hostname)
-            path("/auth/discord/callback")
-        }.build()).apply {
-            addCategory(Intent.CATEGORY_BROWSABLE)
-        }, 0).any { it.activityInfo.packageName == app.packageName }.also {
-        if (it) app.launchUrl(requireContext(), url)
+    override fun onAuthUri(url: Uri) = Build.VERSION.SDK_INT >= 31 && when (dvm.getDomainVerificationUserState(
+        app.packageName)?.hostToStateMap[hostname]) {
+        DomainVerificationUserState.DOMAIN_STATE_SELECTED, DomainVerificationUserState.DOMAIN_STATE_VERIFIED -> {
+            app.launchUrl(requireContext(), url)
+            true
+        }
+        else -> false
     }
 
     override fun onRenderProcessGone() {

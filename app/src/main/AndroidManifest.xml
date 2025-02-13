@@ -13,10 +13,6 @@
     <queries>
         <package android:name="com.nianticlabs.pokemongo" />
         <package android:name="com.nianticlabs.pokemongo.ares" />
-        <intent>
-            <action android:name="android.intent.action.VIEW" />
-            <category android:name="android.intent.category.BROWSABLE" />
-        </intent>
     </queries>
 
     <application
