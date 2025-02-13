@@ -9,10 +9,10 @@ core-ktx = { group = "androidx.core", name = "core-ktx", version = "1.15.0" }
 desugar = { group = "com.android.tools", name = "desugar_jdk_libs", version = "2.1.4" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version = "3.6.1" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
-firebase-bom = "com.google.firebase:firebase-bom:33.8.0"
+firebase-bom = "com.google.firebase:firebase-bom:33.9.0"
 firebase-crashlytics-ndk = { group = "com.google.firebase", name = "firebase-crashlytics-ndk" }
-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version = "1.8.5" }
-hiddenapibypass = "org.lsposed.hiddenapibypass:hiddenapibypass:5.0"
+fragment-ktx = "androidx.fragment:fragment-ktx:1.8.6"
+hiddenapibypass = "org.lsposed.hiddenapibypass:hiddenapibypass:6.1"
 junit = { group = "junit", name = "junit", version = "4.13.2" }
 lifecycle-common = { group = "androidx.lifecycle", name = "lifecycle-common", version = "2.8.7" }
 material = { group = "com.google.android.material", name = "material", version = "1.12.0" }
@@ -25,7 +25,7 @@ work = { group = "androidx.work", name = "work-runtime", version = "2.10.0" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version = "8.8.0" }
-firebaseCrashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.2" }
+firebaseCrashlytics = "com.google.firebase.crashlytics:3.0.3"
 googleServices = { id = "com.google.gms.google-services", version = "4.4.2" }
-kotlinAndroid = { id = "org.jetbrains.kotlin.android", version = "2.1.0" }
-gradleVersions = { id = "com.github.ben-manes.versions", version = "0.51.0" }
+kotlinAndroid = "org.jetbrains.kotlin.android:2.1.10"
+gradleVersions = "com.github.ben-manes.versions:0.52.0"
