@@ -7,6 +7,5 @@ window.fetch = function (input, init = {}) {
 };
 window._addEventListener = window.addEventListener;
 window.addEventListener = function (type, listener, options) {
-    if (type === 'online' || type === 'offline') return;
-    return window._addEventListener(type, listener, options);
+    if (type !== 'online' && type !== 'offline') return window._addEventListener(type, listener, options);
 };
