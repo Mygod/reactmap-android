@@ -1,6 +1,7 @@
 package be.mygod.reactmap.webkit
 
 import android.Manifest
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -125,6 +126,17 @@ class ReactMapFragment : BaseReactMapFragment() {
                         .firstOrNull { obj -> obj.getString("name") == name }?.optString("style") != "dark"
             }
         }
+    }
+
+    override fun onAuthUri(url: Uri) = app.packageManager.queryIntentActivities(Intent(Intent.ACTION_VIEW,
+        Uri.Builder().apply {
+            scheme("https")
+            authority(hostname)
+            path("/auth/discord/callback")
+        }.build()).apply {
+            addCategory(Intent.CATEGORY_BROWSABLE)
+        }, 0).any { it.activityInfo.packageName == app.packageName }.also {
+        if (it) app.launchUrl(requireContext(), url)
     }
 
     override fun onRenderProcessGone() {

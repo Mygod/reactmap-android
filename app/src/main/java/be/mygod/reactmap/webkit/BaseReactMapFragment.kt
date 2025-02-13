@@ -144,6 +144,7 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
     protected open fun findActiveUrl() = app.activeUrl.also { hostname = Uri.parse(it).host!! }
     protected open fun onConfigAvailable(config: JSONObject) { }
     protected open fun onUnsupportedUri(uri: Uri) = app.launchUrl(requireContext(), uri)
+    protected open fun onAuthUri(url: Uri) = false
     protected open fun onJsAlert(message: String?, result: JsResult) = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -220,16 +221,18 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
 
                 override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
                     val parsed = request.url
+                    if ("http".equals(parsed.scheme, true)) {
+                        Snackbar.make(view, R.string.error_https_only, Snackbar.LENGTH_SHORT).show()
+                        return !BuildConfig.DEBUG
+                    }
+                    val host = parsed.host?.lowercase(Locale.ENGLISH)
                     return when {
-                        parsed.host?.lowercase(Locale.ENGLISH).let { it != hostname && it !in supportedHosts } -> {
+                        hostname.equals(host, true) -> false
+                        host in supportedHosts -> onAuthUri(parsed)
+                        else -> {
                             onUnsupportedUri(parsed)
                             true
                         }
-                        "http".equals(parsed.scheme, true) -> {
-                            Snackbar.make(view, R.string.error_https_only, Snackbar.LENGTH_SHORT).show()
-                            !BuildConfig.DEBUG
-                        }
-                        else -> false
                     }
                 }
 
