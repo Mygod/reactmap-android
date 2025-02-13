@@ -1,6 +1,7 @@
 package be.mygod.reactmap.webkit
 
 import android.Manifest
+import android.content.pm.PackageManager
 import android.content.pm.verify.domain.DomainVerificationManager
 import android.content.pm.verify.domain.DomainVerificationUserState
 import android.net.Uri
@@ -38,6 +39,10 @@ class ReactMapFragment : BaseReactMapFragment() {
         private val filenameExtractor = "filename=(\"([^\"]+)\"|[^;]+)".toRegex(RegexOption.IGNORE_CASE)
         private val flyToMatcher = "/@/([0-9.-]+)/([0-9.-]+)(?:/([0-9.-]+))?/?".toRegex()
 
+        private val getIntentVerificationStatusAsUser by lazy {
+            PackageManager::class.java.getDeclaredMethod("getIntentVerificationStatusAsUser",
+                String::class.java, Int::class.java)
+        }
         private val dvm by lazy { app.getSystemService<DomainVerificationManager>()!! }
     }
 
@@ -133,13 +138,14 @@ class ReactMapFragment : BaseReactMapFragment() {
         }
     }
 
-    override fun onAuthUri(url: Uri) = Build.VERSION.SDK_INT >= 31 && when (dvm.getDomainVerificationUserState(
-        app.packageName)?.hostToStateMap[hostname]) {
-        DomainVerificationUserState.DOMAIN_STATE_SELECTED, DomainVerificationUserState.DOMAIN_STATE_VERIFIED -> {
-            app.launchUrl(requireContext(), url)
-            true
-        }
+    override fun onAuthUri(url: Uri) = (if (Build.VERSION.SDK_INT < 31) {
+        // INTENT_FILTER_DOMAIN_VERIFICATION_STATUS_ALWAYS
+        getIntentVerificationStatusAsUser(app.packageManager, app.packageName, app.userId) == 2
+    } else when (dvm.getDomainVerificationUserState(app.packageName)?.hostToStateMap[hostname]) {
+        DomainVerificationUserState.DOMAIN_STATE_SELECTED, DomainVerificationUserState.DOMAIN_STATE_VERIFIED -> true
         else -> false
+    }).also {
+        if (it) app.launchUrl(requireContext(), url)
     }
 
     override fun onRenderProcessGone() {

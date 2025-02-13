@@ -8,6 +8,8 @@ import android.app.NotificationManager
 import android.content.Context
 import android.net.Uri
 import android.os.Build
+import android.os.Process
+import android.os.UserHandle
 import android.os.UserManager
 import android.os.ext.SdkExtensions
 import android.util.Log
@@ -48,6 +50,7 @@ class App : Application() {
     val fusedLocation by lazy { LocationServices.getFusedLocationProviderClient(deviceStorage) }
     val nm by lazy { getSystemService<NotificationManager>()!! }
     val userManager by lazy { getSystemService<UserManager>()!! }
+    val userId by lazy { UserHandle.getUserHandleForUid(Process.myUid()).hashCode() }
 
     val activeUrl get() = pref.getString(KEY_ACTIVE_URL, null) ?: "https://${BuildConfig.DEFAULT_DOMAIN}"
 
