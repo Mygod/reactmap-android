@@ -32,8 +32,6 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import kotlinx.coroutines.DEBUG_PROPERTY_NAME
 import kotlinx.coroutines.DEBUG_PROPERTY_VALUE_ON
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class App : Application() {
@@ -116,7 +114,7 @@ class App : Application() {
         ))
         nm.deleteNotificationChannel("updateAvailable")
         WorkManager.initialize(deviceStorage, Configuration.Builder().apply {
-            setExecutor { GlobalScope.launch(Dispatchers.IO) { it.run() } }
+            setWorkerCoroutineContext(Dispatchers.IO)
             if (BuildConfig.DEBUG) setMinimumLoggingLevel(Log.VERBOSE)
         }.build())
         work = WorkManager.getInstance(deviceStorage)
