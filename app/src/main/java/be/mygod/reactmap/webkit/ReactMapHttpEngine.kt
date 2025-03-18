@@ -12,11 +12,11 @@ import androidx.core.content.edit
 import androidx.core.net.toUri
 import be.mygod.reactmap.App.Companion.app
 import be.mygod.reactmap.util.headerLocation
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.job
+import kotlinx.coroutines.withContext
 import org.brotli.wrapper.enc.BrotliOutputStream
 import org.brotli.wrapper.enc.Encoder
 import timber.log.Timber
@@ -26,8 +26,6 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.util.zip.Deflater
 import java.util.zip.DeflaterOutputStream
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 
 object ReactMapHttpEngine {
     private const val KEY_COOKIE = "cookie.graphql"
@@ -76,18 +74,12 @@ object ReactMapHttpEngine {
     } else URL(url).openConnection()) as HttpURLConnection
     suspend fun <T> connectCancellable(url: String, block: suspend (HttpURLConnection) -> T): T {
         val conn = openConnection(url)
-        return suspendCancellableCoroutine { cont ->
-            val job = GlobalScope.launch(Dispatchers.IO) {
-                try {
-                    cont.resume(block(conn))
-                } catch (e: Throwable) {
-                    cont.resumeWithException(e)
-                } finally {
-                    conn.disconnect()
-                }
-            }
-            cont.invokeOnCancellation {
-                job.cancel(it as? CancellationException)
+        return coroutineScope {
+            @OptIn(InternalCoroutinesApi::class)    // https://github.com/Kotlin/kotlinx.coroutines/issues/4117
+            coroutineContext.job.invokeOnCompletion(true) { conn.disconnect() }
+            try {
+                withContext(Dispatchers.IO) { block(conn) }
+            } finally {
                 conn.disconnect()
             }
         }
