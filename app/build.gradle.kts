@@ -11,12 +11,12 @@ plugins {
 
 android {
     namespace = "be.mygod.reactmap"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = extra["reactmap.packageName"] as String?
         minSdk = 26
-        targetSdk = 35
+        targetSdk = 36
         versionCode = (extra["reactmap.versionCode"] as String?)?.toInt()
         versionName = extra["reactmap.versionName"] as String?
 
