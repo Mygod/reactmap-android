@@ -15,9 +15,11 @@ class ReactMapMuiMarginListener(private val web: WebView) : OnApplyWindowInsetsL
     private var bottomInset = 0
 
     override fun onApplyWindowInsets(v: View, insets: WindowInsetsCompat) = insets.apply {
-        val tappable = insets.getInsets(WindowInsetsCompat.Type.tappableElement())
-        topInset = tappable.top
-        bottomInset = tappable.bottom
+        // https://medium.com/androiddevelopers/make-webviews-edge-to-edge-a6ef319adfac#339d
+        val safeDrawing = insets.getInsets(WindowInsetsCompat.Type.systemBars() or
+                WindowInsetsCompat.Type.displayCutout() or WindowInsetsCompat.Type.ime())
+        topInset = safeDrawing.top
+        bottomInset = safeDrawing.bottom
         apply()
     }
 
