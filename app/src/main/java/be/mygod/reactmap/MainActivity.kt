@@ -91,9 +91,14 @@ class MainActivity : FragmentActivity(), Shizuku.OnRequestPermissionResultListen
         when (intent.action) {
             ACTION_CONFIGURE -> startConfigure(false)
             ACTION_ACCUWEATHER -> currentFragment?.accuWeather()
-            ACTION_RESTART_GAME -> if (Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED) {
-                startRestart()
-            } else Shizuku.requestPermission(0)
+            ACTION_RESTART_GAME -> try {
+                if (Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED) {
+                    startRestart()
+                } else Shizuku.requestPermission(0)
+            } catch (_: IllegalStateException) {
+                Snackbar.make(findViewById(R.id.content), R.string.restart_game_dialog_message,
+                    Snackbar.LENGTH_LONG).show()
+            }
             Intent.ACTION_VIEW -> {
                 Timber.d("Handling URI ${intent.data}")
                 if (currentFragment?.handleUri(intent.data) != true) pendingOverrideUri = intent.data
