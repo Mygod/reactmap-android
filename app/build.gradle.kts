@@ -78,6 +78,7 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.activity)
     implementation(libs.browser)
+    implementation(libs.core.i18n)
     implementation(libs.core.ktx)
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.crashlytics.ndk)

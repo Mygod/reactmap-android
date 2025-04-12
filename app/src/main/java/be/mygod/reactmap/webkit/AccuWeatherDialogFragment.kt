@@ -1,7 +1,6 @@
 package be.mygod.reactmap.webkit
 
 import android.content.DialogInterface
-import android.icu.text.DateFormat
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import android.net.Uri
@@ -13,6 +12,8 @@ import android.text.style.ImageSpan
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.i18n.DateTimeFormatter
+import androidx.core.i18n.DateTimeFormatterSkeletonOptions
 import androidx.core.view.get
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
@@ -30,7 +31,6 @@ import java.io.IOException
 import java.net.URLConnection
 import java.text.ParseException
 import java.text.ParsePosition
-import java.util.Date
 import java.util.Locale
 import java.util.regex.Pattern
 
@@ -76,18 +76,24 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
 
     override fun onCreateDialog(savedInstanceState: Bundle?) = super.onCreateDialog(savedInstanceState).apply {
         create()
-        val hourFormat = DateFormat.getInstanceForSkeleton(
-            if (android.text.format.DateFormat.is24HourFormat(requireContext())) "dEEEEH" else "dEEEEha",
-            resources.configuration.locales[0])
+        val hourFormat = DateTimeFormatter(requireContext(), DateTimeFormatterSkeletonOptions.Builder(
+            day = DateTimeFormatterSkeletonOptions.Day.NUMERIC,
+            weekDay = DateTimeFormatterSkeletonOptions.WeekDay.WIDE,
+            period = DateTimeFormatterSkeletonOptions.Period.WIDE,
+            hour = DateTimeFormatterSkeletonOptions.Hour.NUMERIC,
+        ).build(), resources.configuration.locales[0])
         fetchData(R.id.day1, hourFormat)
         fetchData(R.id.day2, hourFormat, "&day=2")
         fetchData(R.id.day3, hourFormat, "&day=3")
-        fetchData(R.id.daily, DateFormat.getInstanceForSkeleton("MMMMdEEEE", resources.configuration.locales[0]),
-            daily = true)
+        fetchData(R.id.daily, DateTimeFormatter(requireContext(), DateTimeFormatterSkeletonOptions.Builder(
+            month = DateTimeFormatterSkeletonOptions.Month.WIDE,
+            day = DateTimeFormatterSkeletonOptions.Day.NUMERIC,
+            weekDay = DateTimeFormatterSkeletonOptions.WeekDay.WIDE,
+        ).build(), resources.configuration.locales[0]), daily = true)
     }
 
     private val calendar = Calendar.getInstance()
-    private fun AlertDialog.fetchData(id: Int, format: DateFormat, param: String = "",
+    private fun AlertDialog.fetchData(id: Int, format: DateTimeFormatter, param: String = "",
                                       daily: Boolean = false) = lifecycleScope.launch {
         val out = try {
             ReactMapHttpEngine.connectCancellable(
@@ -134,7 +140,7 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
                         Timber.w(Exception(matcher.group(1)).initCause(e))
                         matcher.group(1)
                     } else {
-                        format.format(Date(matcher.group(1)!!.toLong() * 1000))
+                        format.format(matcher.group(1)!!.toLong() * 1000)
                     }}\n${matcher.group(3)}. ${matcher.group(4)}")
                     matcher.group(5)?.let { result.append("-$it") }
                     result.append(" km/h")
