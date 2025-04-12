@@ -35,7 +35,7 @@ import java.net.URLDecoder
 class ReactMapFragment : BaseReactMapFragment() {
     companion object {
         private const val HOST_APPLE_MAPS = "maps.apple.com"
-        private const val DADDR_APPLE_MAPS = "daddr"
+        private val Uri.appleMapCoordinate get() = getQueryParameter("daddr") ?: getQueryParameter("coordinate")
 
         private val filenameExtractor = "filename=(\"([^\"]+)\"|[^;]+)".toRegex(RegexOption.IGNORE_CASE)
         private val flyToMatcher = "/@/([0-9.-]+)/([0-9.-]+)(?:/([0-9.-]+))?/?".toRegex()
@@ -115,16 +115,16 @@ class ReactMapFragment : BaseReactMapFragment() {
     override fun findActiveUrl(): String {
         val overrideUrl = mainActivity.pendingOverrideUri
         if (HOST_APPLE_MAPS.equals(overrideUrl?.host, true)) {
-            val daddr = overrideUrl?.getQueryParameter(DADDR_APPLE_MAPS)
+            val daddr = overrideUrl?.appleMapCoordinate
             if (!daddr.isNullOrBlank()) {
-                hostname = Uri.parse(app.activeUrl).host!!
+                hostname = app.activeUrl.toUri().host!!
                 return "https://$hostname/@/${daddr.replace(',', '/')}"
             }
         }
         return if (overrideUrl != null) {
             hostname = overrideUrl.host!!
             overrideUrl.toString()
-        } else app.activeUrl.also { hostname = Uri.parse(it).host!! }
+        } else app.activeUrl.also { hostname = it.toUri().host!! }
     }
 
     override fun onConfigAvailable(config: JSONObject) {
@@ -169,7 +169,7 @@ class ReactMapFragment : BaseReactMapFragment() {
     fun handleUri(uri: Uri?) = uri?.host?.let { host ->
         if (view == null || !loaded) return false
         if (HOST_APPLE_MAPS.equals(host, true)) {
-            val daddr = uri.getQueryParameter(DADDR_APPLE_MAPS)
+            val daddr = uri.appleMapCoordinate
             if (daddr.isNullOrBlank()) return true
             flyToUrl(daddr) { "https://$hostname/@/${daddr.replace(',', '/')}" }
             return false

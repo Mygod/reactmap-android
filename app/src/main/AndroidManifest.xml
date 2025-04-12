@@ -60,6 +60,18 @@
                 <data android:path="/maps" />
                 <data android:queryPrefix="daddr=" />
             </intent-filter>
+            <intent-filter android:autoVerify="false">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="maps.apple.com" />
+                <data android:path="/place" />
+                <data android:queryPrefix="coordinate=" />
+            </intent-filter>
         </activity>
         <service
             android:name=".auto.MainService"
