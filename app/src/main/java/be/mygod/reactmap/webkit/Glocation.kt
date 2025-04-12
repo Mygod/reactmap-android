@@ -27,7 +27,7 @@ class Glocation(private val web: WebView, private val fragment: BaseReactMapFrag
     companion object {
         const val PERMISSION_DENIED = 1
         const val POSITION_UNAVAILABLE = 2
-        const val TIMEOUT = 3
+//        const val TIMEOUT = 3
 
         fun Location.toGeolocationPosition() = """{
             coords: {

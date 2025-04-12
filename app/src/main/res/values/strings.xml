@@ -26,7 +26,6 @@
     <string name="error_https_only">Only HTTPS is allowed</string>
     <string name="error_missing_bg_location_permission">Missing background location permission</string>
     <string name="error_missing_location_permission">Missing location permission</string>
-    <string name="error_unrecognized_version">Unrecognized version %1$s</string>
     <string name="error_unsupported_download">Unsupported download: %1$s</string>
     <string name="error_webhook_human_not_found">Human not found</string>
 

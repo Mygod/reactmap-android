@@ -20,22 +20,18 @@ object UnblockCentral {
 
     @get:RequiresApi(29)
     val fdsanGetOwnerTag by lazy {
-        init.let {
-            Class.forName("libcore.io.Os").getDeclaredMethod("android_fdsan_get_owner_tag", FileDescriptor::class.java)
-        }
+        init
+        Class.forName("libcore.io.Os").getDeclaredMethod("android_fdsan_get_owner_tag", FileDescriptor::class.java)
     }
 
     val getsockoptInt by lazy {
-        init.let {
-            Os::class.java.getDeclaredMethod("getsockoptInt", FileDescriptor::class.java, Int::class.java,
-                Int::class.java)
-        }
+        init
+        Os::class.java.getDeclaredMethod("getsockoptInt", FileDescriptor::class.java, Int::class.java, Int::class.java)
     }
 
     val shizukuActivity by lazy {
-        init.let {
-            Class.forName("android.app.IActivityManager\$Stub").getDeclaredMethod("asInterface", IBinder::class.java)(
-                null, ShizukuBinderWrapper(SystemServiceHelper.getSystemService(Context.ACTIVITY_SERVICE)))
-        }
+        init
+        Class.forName("android.app.IActivityManager\$Stub").getDeclaredMethod("asInterface", IBinder::class.java)(null,
+            ShizukuBinderWrapper(SystemServiceHelper.getSystemService(Context.ACTIVITY_SERVICE)))
     }
 }

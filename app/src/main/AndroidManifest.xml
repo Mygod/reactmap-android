@@ -58,7 +58,7 @@
                 <data android:scheme="https" />
                 <data android:host="maps.apple.com" />
                 <data android:path="/maps" />
-                <data android:queryPrefix="daddr=" />
+                <data android:queryPrefix="daddr=" tools:targetApi="35" />
             </intent-filter>
             <intent-filter android:autoVerify="false">
                 <action android:name="android.intent.action.VIEW" />
@@ -70,7 +70,7 @@
                 <data android:scheme="https" />
                 <data android:host="maps.apple.com" />
                 <data android:path="/place" />
-                <data android:queryPrefix="coordinate=" />
+                <data android:queryPrefix="coordinate=" tools:targetApi="35" />
             </intent-filter>
         </activity>
         <service

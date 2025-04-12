@@ -142,7 +142,7 @@ class MainActivity : FragmentActivity(), Shizuku.OnRequestPermissionResultListen
             try {
                 forceStopPackage(UnblockCentral.shizukuActivity, packageName, app.userId)
                 if (splitScreen) {
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT
                     delay(1000) // wait a second for animations
                 }
                 startActivity(intent)

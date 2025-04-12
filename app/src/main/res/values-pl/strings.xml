@@ -23,7 +23,6 @@
     <string name="error_https_only">Tylko protokół HTTPS jest dozwolony</string>
     <string name="error_missing_bg_location_permission">Brak uprawnień do lokalizacji w tle</string>
     <string name="error_missing_location_permission">Brak uprawnień do lokalizacji</string>
-    <string name="error_unrecognized_version">Nierozpoznana wersja %1$s</string>
     <string name="error_unsupported_download">Nieobsługiwane pobranie: %1$s</string>
     <string name="error_webhook_human_not_found">Użytkownik nieznaleziony - brak dostępu do powiadomień</string>
 
