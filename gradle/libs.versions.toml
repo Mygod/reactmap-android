@@ -4,12 +4,12 @@ shizuku = "13.1.5"
 [libraries]
 activity = "androidx.activity:activity:1.10.1"
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version = "1.2.1" }
-browser = "androidx.browser:browser:1.9.0-alpha01"
-core-ktx = { group = "androidx.core", name = "core-ktx", version = "1.15.0" }
+browser = "androidx.browser:browser:1.8.0"
+core-ktx = "androidx.core:core-ktx:1.16.0"
 desugar = "com.android.tools:desugar_jdk_libs:2.1.5"
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version = "3.6.1" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
-firebase-bom = "com.google.firebase:firebase-bom:33.10.0"
+firebase-bom = "com.google.firebase:firebase-bom:33.12.0"
 firebase-crashlytics-ndk = { group = "com.google.firebase", name = "firebase-crashlytics-ndk" }
 fragment-ktx = "androidx.fragment:fragment-ktx:1.8.6"
 hiddenapibypass = "org.lsposed.hiddenapibypass:hiddenapibypass:6.1"
@@ -24,8 +24,8 @@ timber = { group = "com.jakewharton.timber", name = "timber", version = "5.0.1" 
 work = { group = "androidx.work", name = "work-runtime", version = "2.10.0" }
 
 [plugins]
-androidApplication = { id = "com.android.application", version = "8.9.0" }
+androidApplication = "com.android.application:8.9.1"
 firebaseCrashlytics = "com.google.firebase.crashlytics:3.0.3"
 googleServices = { id = "com.google.gms.google-services", version = "4.4.2" }
-kotlinAndroid = "org.jetbrains.kotlin.android:2.1.10"
+kotlinAndroid = "org.jetbrains.kotlin.android:2.1.20"
 gradleVersions = "com.github.ben-manes.versions:0.52.0"

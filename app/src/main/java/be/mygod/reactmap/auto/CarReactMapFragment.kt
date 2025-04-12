@@ -9,6 +9,7 @@ import android.view.View
 import android.webkit.JsResult
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
+import androidx.core.net.toUri
 import be.mygod.reactmap.App.Companion.app
 import be.mygod.reactmap.R
 import be.mygod.reactmap.webkit.BaseReactMapFragment
@@ -50,7 +51,7 @@ class CarReactMapFragment : BaseReactMapFragment() {
         val s = uri.toString()
         if (s.startsWith("https://maps.google.com/maps/place/")) {
             return mainActivity.startCarActivity(Intent(Intent.ACTION_VIEW,
-                Uri.parse("google.navigation:q=${s.substring(35)}")))
+                "google.navigation:q=${s.substring(35)}".toUri()))
         }
         // support ACTION_DIAL tel:URL or starting other car apps?
         try {

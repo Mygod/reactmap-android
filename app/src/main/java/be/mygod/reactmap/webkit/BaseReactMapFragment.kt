@@ -141,7 +141,7 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
     protected open fun onHistoryUpdated() { }
     protected open fun onPageStarted() { }
     protected open fun onPageFinished() { }
-    protected open fun findActiveUrl() = app.activeUrl.also { hostname = Uri.parse(it).host!! }
+    protected open fun findActiveUrl() = app.activeUrl.also { hostname = it.toUri().host!! }
     protected open fun onConfigAvailable(config: JSONObject) { }
     protected open fun onUnsupportedUri(uri: Uri) = app.launchUrl(requireContext(), uri)
     protected open fun onAuthUri(url: Uri) = false
