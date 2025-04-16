@@ -72,7 +72,15 @@
                 <data android:path="/place" />
                 <data android:queryPrefix="coordinate=" tools:targetApi="35" />
             </intent-filter>
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
         </activity>
+        <activity
+            android:name=".SplitscreenShortcut"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:excludeFromRecents="true"
+            android:taskAffinity=""/>
         <service
             android:name=".auto.MainService"
             android:exported="true">

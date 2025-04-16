@@ -30,6 +30,8 @@
     <string name="error_webhook_human_not_found">Human not found</string>
 
     <string name="pip_phone_enter_split">Enter split screen</string>
+    <string name="shortcut_splitscreen_short">Split screen</string>
+    <string name="shortcut_splitscreen_long">Start split screen with game</string>
     <string name="web_refresh">Refresh</string>
 
     <string name="car_agreement_template"><big><b>Terms of Use</b></big>\nBy using %s (“the Map”) on your vehicle, you
