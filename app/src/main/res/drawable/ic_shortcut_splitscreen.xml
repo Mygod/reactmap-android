@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:left="2dp"
+        android:top="2dp"
+        android:right="2dp"
+        android:bottom="2dp">
+        <shape
+            android:shape="oval">
+            <solid android:color="@color/material_grey_100" />
+            <size android:width="44dp" android:height="44dp" />
+        </shape>
+    </item>
+
+    <item
+        android:drawable="@drawable/ic_device_splitscreen"
+        android:left="12dp"
+        android:top="12dp"
+        android:right="12dp"
+        android:bottom="12dp" />
+</layer-list>

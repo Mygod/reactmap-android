@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="splitScreen"
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_splitscreen"
+        android:shortcutShortLabel="@string/shortcut_splitscreen_short"
+        android:shortcutLongLabel="@string/shortcut_splitscreen_long">
+        <intent
+            android:action="be.mygod.reactmap.action.SPLITSCREEN"
+            android:targetPackage="be.mygod.reactmap"
+            android:targetClass="be.mygod.reactmap.SplitscreenShortcut" />
+    </shortcut>
+</shortcuts>

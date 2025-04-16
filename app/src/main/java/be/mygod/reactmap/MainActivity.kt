@@ -37,6 +37,8 @@ class MainActivity : FragmentActivity(), Shizuku.OnRequestPermissionResultListen
         const val ACTION_RESTART_GAME = "be.mygod.reactmap.action.RESTART_GAME"
         const val ACTION_ACCUWEATHER = "be.mygod.reactmap.action.ACCUWEATHER"
         private const val KEY_WELCOME = "welcome"
+        private const val PACKAGE_POKEMON_GO = "com.nianticlabs.pokemongo"
+        private const val PACKAGE_POKEMON_GO_ARES = "com.nianticlabs.pokemongo.ares"
 
         private val forceStopPackage by lazy {
             Class.forName("android.app.IActivityManager").getDeclaredMethod(
@@ -99,6 +101,7 @@ class MainActivity : FragmentActivity(), Shizuku.OnRequestPermissionResultListen
                 Snackbar.make(findViewById(R.id.content), R.string.restart_game_dialog_message,
                     Snackbar.LENGTH_LONG).show()
             }
+            "be.mygod.reactmap.action.SPLITSCREEN" -> pendingSplitscreen = true
             Intent.ACTION_VIEW -> {
                 Timber.d("Handling URI ${intent.data}")
                 if (currentFragment?.handleUri(intent.data) != true) pendingOverrideUri = intent.data
@@ -121,14 +124,28 @@ class MainActivity : FragmentActivity(), Shizuku.OnRequestPermissionResultListen
             setPadding(padding, 0, padding, 0)
         }
         setView(switch)
-        setPositiveButton(R.string.restart_game_standard) { _, _ ->
-            restartGame("com.nianticlabs.pokemongo", switch.isChecked)
-        }
+        setPositiveButton(R.string.restart_game_standard) { _, _ -> restartGame(PACKAGE_POKEMON_GO, switch.isChecked) }
         setNegativeButton(R.string.restart_game_samsung) { _, _ ->
-            restartGame("com.nianticlabs.pokemongo.ares", switch.isChecked)
+            restartGame(PACKAGE_POKEMON_GO_ARES, switch.isChecked)
         }
         setNeutralButton(android.R.string.cancel, null)
     }.show()
+    private var pendingSplitscreen = false
+    override fun onEnterAnimationComplete() {
+        if (!pendingSplitscreen) return
+        startActivity(listOf(PACKAGE_POKEMON_GO, PACKAGE_POKEMON_GO_ARES)
+            .mapNotNull(app.packageManager::getLaunchIntentForPackage).let { list ->
+                when (list.size) {
+                    0 -> Intent(Intent.ACTION_CHOOSER).putExtra(Intent.EXTRA_INTENT, Intent())
+                    1 -> list.first()
+                    else -> Intent(Intent.ACTION_CHOOSER).apply {
+                        putExtra(Intent.EXTRA_INTENT, list.first())
+                        putExtra(Intent.EXTRA_ALTERNATE_INTENTS, list.drop(1).toTypedArray())
+                    }
+                }
+            }.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT))
+        pendingSplitscreen = false
+    }
 
     override fun onRequestPermissionResult(requestCode: Int, grantResult: Int) {
         if (grantResult != PackageManager.PERMISSION_GRANTED) {
