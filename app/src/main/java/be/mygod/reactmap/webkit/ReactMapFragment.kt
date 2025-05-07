@@ -1,6 +1,7 @@
 package be.mygod.reactmap.webkit
 
 import android.Manifest
+import android.content.ComponentName
 import android.content.pm.PackageManager
 import android.content.pm.verify.domain.DomainVerificationManager
 import android.content.pm.verify.domain.DomainVerificationUserState
@@ -12,6 +13,11 @@ import android.webkit.ValueCallback
 import android.webkit.WebChromeClient.FileChooserParams
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.browser.auth.AuthTabCallback
+import androidx.browser.auth.AuthTabIntent
+import androidx.browser.auth.AuthTabSession
+import androidx.browser.customtabs.CustomTabsClient
+import androidx.browser.customtabs.CustomTabsServiceConnection
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import androidx.core.view.WindowCompat
@@ -139,16 +145,41 @@ class ReactMapFragment : BaseReactMapFragment() {
         }
     }
 
-    override fun onAuthUri(url: Uri) = (if (Build.VERSION.SDK_INT < 31) {
-        // INTENT_FILTER_DOMAIN_VERIFICATION_STATUS_ALWAYS
-        getIntentVerificationStatusAsUser(app.packageManager, app.packageName, app.userId) == 2
-    } else when (dvm.getDomainVerificationUserState(app.packageName)?.run {
-        if (isLinkHandlingAllowed) hostToStateMap[hostname] else null
-    }) {
-        DomainVerificationUserState.DOMAIN_STATE_SELECTED, DomainVerificationUserState.DOMAIN_STATE_VERIFIED -> true
-        else -> false
-    }).also {
-        if (it) app.launchUrl(requireContext(), url)
+    private var pendingUrl: Uri? = null
+    private val authLauncher = AuthTabIntent.registerActivityResultLauncher(this) { result ->
+        when (result.resultCode) {
+            AuthTabIntent.RESULT_OK -> web.loadUrl(result.resultUri!!.toString())
+            AuthTabIntent.RESULT_CANCELED, AuthTabIntent.RESULT_VERIFICATION_TIMED_OUT -> { }
+            else -> {
+                shouldHandleAuth = false
+                web.loadUrl(pendingUrl!!.toString())
+            }
+        }
+        pendingUrl = null
+    }
+    override fun onAuthUri(url: Uri, callback: Uri) = requireContext().let { context ->
+        val browserPackage = CustomTabsClient.getPackageName(context, null)
+        if (browserPackage != null) {
+            CustomTabsClient.bindCustomTabsService(context, browserPackage, object : CustomTabsServiceConnection() {
+                override fun onCustomTabsServiceConnected(name: ComponentName, client: CustomTabsClient) {
+                    val session = client.newAuthTabSession(null, null)
+                    if (session == null) {
+                        shouldHandleAuth = false
+                        web.loadUrl(url.toString())
+                        return
+                    }
+                    pendingUrl = url
+                    AuthTabIntent.Builder().apply {
+                        setSession(session)
+                    }.build().launch(authLauncher, url, hostname, callback.path!!)
+                    context.unbindService(this)
+                }
+
+                override fun onServiceDisconnected(name: ComponentName?) {
+                }
+            })
+            true
+        } else false
     }
 
     override fun onRenderProcessGone() {

@@ -4,7 +4,7 @@ shizuku = "13.1.5"
 [libraries]
 activity = "androidx.activity:activity:1.10.1"
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version = "1.2.1" }
-browser = "androidx.browser:browser:1.8.0"
+browser = "androidx.browser:browser:1.9.0-alpha03"
 core-i18n = "androidx.core:core-i18n:1.0.0"
 core-ktx = "androidx.core:core-ktx:1.16.0"
 desugar = "com.android.tools:desugar_jdk_libs:2.1.5"

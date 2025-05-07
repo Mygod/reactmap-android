@@ -126,7 +126,12 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
     protected lateinit var web: WebView
     protected lateinit var glocation: Glocation
     private lateinit var postInterceptor: PostInterceptor
-    protected lateinit var hostname: String
+    protected var hostname = ""
+        set(value) {
+            field = value
+            shouldHandleAuth = true
+        }
+    protected var shouldHandleAuth = true
 
     private var loginText: String? = null
     protected var loaded = false
@@ -144,7 +149,7 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
     protected open fun findActiveUrl() = app.activeUrl.also { hostname = it.toUri().host!! }
     protected open fun onConfigAvailable(config: JSONObject) { }
     protected open fun onUnsupportedUri(uri: Uri) = app.launchUrl(requireContext(), uri)
-    protected open fun onAuthUri(url: Uri) = false
+    protected open fun onAuthUri(url: Uri, callback: Uri) = false
     protected open fun onJsAlert(message: String?, result: JsResult) = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -219,6 +224,7 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
                     ReactMapHttpEngine.updateCookie()
                 }
 
+                private var currentUrl: Uri? = null
                 override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
                     val parsed = request.url
                     if ("http".equals(parsed.scheme, true)) {
@@ -227,8 +233,11 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
                     }
                     val host = parsed.host?.lowercase(Locale.ENGLISH)
                     return when {
-                        hostname.equals(host, true) -> false
-                        host in supportedHosts -> onAuthUri(parsed)
+                        hostname.equals(host, true) -> {
+                            currentUrl = parsed
+                            false
+                        }
+                        host in supportedHosts -> shouldHandleAuth && onAuthUri(parsed, currentUrl!!)
                         else -> {
                             onUnsupportedUri(parsed)
                             true
