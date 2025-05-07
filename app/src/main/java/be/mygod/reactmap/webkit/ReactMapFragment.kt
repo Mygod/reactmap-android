@@ -1,18 +1,13 @@
 package be.mygod.reactmap.webkit
 
 import android.Manifest
-import android.content.pm.PackageManager
-import android.content.pm.verify.domain.DomainVerificationManager
-import android.content.pm.verify.domain.DomainVerificationUserState
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient.FileChooserParams
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.setFragmentResult
@@ -39,12 +34,6 @@ class ReactMapFragment : BaseReactMapFragment() {
 
         private val filenameExtractor = "filename=(\"([^\"]+)\"|[^;]+)".toRegex(RegexOption.IGNORE_CASE)
         private val flyToMatcher = "/@/([0-9.-]+)/([0-9.-]+)(?:/([0-9.-]+))?/?".toRegex()
-
-        private val getIntentVerificationStatusAsUser by lazy {
-            PackageManager::class.java.getDeclaredMethod("getIntentVerificationStatusAsUser",
-                String::class.java, Int::class.java)
-        }
-        private val dvm by lazy { app.getSystemService<DomainVerificationManager>()!! }
     }
 
     private lateinit var siteController: SiteController
@@ -137,18 +126,6 @@ class ReactMapFragment : BaseReactMapFragment() {
                         .firstOrNull { obj -> obj.getString("name") == name }?.optString("style") != "dark"
             }
         }
-    }
-
-    override fun onAuthUri(url: Uri) = (if (Build.VERSION.SDK_INT < 31) {
-        // INTENT_FILTER_DOMAIN_VERIFICATION_STATUS_ALWAYS
-        getIntentVerificationStatusAsUser(app.packageManager, app.packageName, app.userId) == 2
-    } else when (dvm.getDomainVerificationUserState(app.packageName)?.run {
-        if (isLinkHandlingAllowed) hostToStateMap[hostname] else null
-    }) {
-        DomainVerificationUserState.DOMAIN_STATE_SELECTED, DomainVerificationUserState.DOMAIN_STATE_VERIFIED -> true
-        else -> false
-    }).also {
-        if (it) app.launchUrl(requireContext(), url)
     }
 
     override fun onRenderProcessGone() {
