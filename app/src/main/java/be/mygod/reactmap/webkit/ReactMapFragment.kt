@@ -142,7 +142,9 @@ class ReactMapFragment : BaseReactMapFragment() {
     override fun onAuthUri(url: Uri) = (if (Build.VERSION.SDK_INT < 31) {
         // INTENT_FILTER_DOMAIN_VERIFICATION_STATUS_ALWAYS
         getIntentVerificationStatusAsUser(app.packageManager, app.packageName, app.userId) == 2
-    } else when (dvm.getDomainVerificationUserState(app.packageName)?.hostToStateMap[hostname]) {
+    } else when (dvm.getDomainVerificationUserState(app.packageName)?.run {
+        if (isLinkHandlingAllowed) hostToStateMap[hostname] else null
+    }) {
         DomainVerificationUserState.DOMAIN_STATE_SELECTED, DomainVerificationUserState.DOMAIN_STATE_VERIFIED -> true
         else -> false
     }).also {
