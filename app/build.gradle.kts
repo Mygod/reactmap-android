@@ -28,6 +28,11 @@ android {
             buildConfigField("String", "DEFAULT_DOMAIN", "\"$defaultDomain\"")
         }
         androidResources.localeFilters += listOf("en-rUS", "pl")
+        externalNativeBuild.cmake.arguments += listOf("-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON")   // TODO remove for NDK r28
+    }
+    dependenciesInfo {
+        includeInApk = false
+        includeInBundle = false
     }
 
     buildTypes {
