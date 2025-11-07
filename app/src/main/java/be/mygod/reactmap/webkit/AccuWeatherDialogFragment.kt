@@ -50,7 +50,8 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
         private fun URLConnection.setUserAgent() = setRequestProperty("User-Agent", "Mozilla/5.0 (Linux; Android 10)")
         suspend fun newInstance(cell: S2LatLng): AccuWeatherDialogFragment {
             val keyResponse = ReactMapHttpEngine.connectCancellable(
-                "https://www.accuweather.com/web-api/three-day-redirect?lat=${cell.latDegrees()}&lon=${cell.lngDegrees()}") { conn ->
+                "https://www.accuweather.com/web-api/three-day-redirect?lat=${cell.latDegrees()}&lon=${
+                    cell.lngDegrees()}") { conn ->
                 conn.setUserAgent()
                 conn.instanceFollowRedirects = false
                 if (conn.responseCode != 302) throw Exception(

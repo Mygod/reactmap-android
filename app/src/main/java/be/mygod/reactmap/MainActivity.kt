@@ -118,7 +118,7 @@ class MainActivity : FragmentActivity(), Shizuku.OnRequestPermissionResultListen
             setText(R.string.pip_phone_enter_split)
             isChecked = isInMultiWindowMode
             val padding = context.obtainStyledAttributes(intArrayOf(
-                com.google.android.material.R.attr.dialogPreferredPadding)).use {
+                androidx.appcompat.R.attr.dialogPreferredPadding)).use {
                 it.getDimensionPixelOffset(0, 0)
             }
             setPadding(padding, 0, padding, 0)
