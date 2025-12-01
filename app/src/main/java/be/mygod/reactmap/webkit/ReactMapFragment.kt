@@ -21,6 +21,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.common.geometry.S2CellId
 import com.google.common.geometry.S2LatLng
 import kotlinx.coroutines.launch
+import org.json.JSONException
 import org.json.JSONObject
 import org.json.JSONTokener
 import timber.log.Timber
@@ -170,7 +171,13 @@ class ReactMapFragment : BaseReactMapFragment() {
     }
 
     fun accuWeather() = web.evaluateJavascript("window._hijackedMap.getCenter()") { evalResult ->
-        val center = JSONObject(evalResult)
+        val center = try {
+            JSONObject(evalResult)
+        } catch (e: JSONException) {
+            Snackbar.make(web, e.readableMessage, Snackbar.LENGTH_LONG).show()
+            Timber.d(e)
+            return@evaluateJavascript
+        }
         val cell = S2CellId.fromLatLng(S2LatLng.fromDegrees(center.getDouble("lat"), center.getDouble("lng")))
             .parent(10).toLatLng()
         lifecycleScope.launch {
