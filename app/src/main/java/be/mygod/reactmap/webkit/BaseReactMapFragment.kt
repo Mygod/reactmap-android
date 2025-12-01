@@ -306,12 +306,16 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
     private fun buildResponse(request: WebResourceRequest, transform: (Reader) -> String) = try {
         val url = request.url.toString()
         val conn = ReactMapHttpEngine.connectWithCookie(url) { conn -> setupConnection(request, conn) }
-        createResponse(conn) { charset -> if (conn.responseCode in 200..299) try {
-            transform(conn.inputStream.bufferedReader(charset)).byteInputStream(charset)
-        } catch (e: IOException) {
-            Timber.d(e)
-            conn.inputStream.bufferedReader(charset).readText().byteInputStream(charset)
-        } else conn.findErrorStream.bufferedReader(charset).readText().byteInputStream(charset) }
+        createResponse(conn) { charset ->
+            if (conn.responseCode in 200..299) try {
+                transform(conn.inputStream.bufferedReader(charset)).byteInputStream(charset)
+            } catch (e: IOException) {
+                Timber.d(e)
+                conn.inputStream.bufferedReader(charset).readText().byteInputStream(charset)
+            } else conn.findErrorStream.bufferedReader(charset).readText().also { r ->
+                Timber.d("$url returned ${conn.responseCode}: $r")
+            }.byteInputStream(charset)
+        }
     } catch (e: IOException) {
         Timber.d(e)
         null
