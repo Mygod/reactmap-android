@@ -83,17 +83,6 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
          */
         private val injectMapFlyTo = "([;}]\\s*this\\._stop\\(\\);)(?=\\s*var )".toPattern()
         /**
-         * Raw regex: (,\s*maxHeight:\s*null,\s*autoPan:\s*)(?:true|!0)(?=,\s*autoPanPaddingTopLeft:\s*null,)
-         *           minWidth: 50,
-         *           maxHeight: null,
-         *           autoPan: true,
-         *           autoPanPaddingTopLeft: null,
-         *           autoPanPaddingBottomRight: null,
-         * or match minimized fragment: ",maxHeight:null,autoPan:!0,autoPanPaddingTopLeft:null,"
-         */
-        private val injectPopupAutoPan = "(,\\s*maxHeight:\\s*null,\\s*autoPan:\\s*)(?:true|!0)(?=,\\s*autoPanPaddingTopLeft:\\s*null,)"
-            .toPattern()
-        /**
          * Raw regex: ([,;]\s*this\._map\.on\("locationfound",\s*this\._onLocationFound,\s*)(?=this\)[,;])
          *             this._active = true;
          *             this._map.on("locationfound", this._onLocationFound, this);
@@ -367,12 +356,6 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
                 return@buildResponse response
             }
             replace("$1window._hijackedLocateControl&&(window._hijackedLocateControl._userPanned=!0);")
-            matcher.usePattern(injectPopupAutoPan)
-            if (!matcher.find()) {
-                Timber.w(Exception("injectPopupAutoPan unmatched"))
-                return@buildResponse response
-            }
-            replace("$1!1")
             matcher.usePattern(injectLocateControlActivate)
             if (!matcher.find()) {
                 Timber.w(Exception("injectLocateControlActivate unmatched"))
