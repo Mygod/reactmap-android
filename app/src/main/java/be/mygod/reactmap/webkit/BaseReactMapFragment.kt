@@ -381,18 +381,29 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
             replace("$1window._hijackedLocateControl=")
         }
     }
-    private fun handleGraphql(request: WebResourceRequest, body: String) = try {
+    @Volatile
+    private var skipCompression = false
+    private fun handleGraphql(request: WebResourceRequest, body: String) = if (skipCompression) null else try {
         val url = request.url.toString()
         val conn = ReactMapHttpEngine.connectWithCookie(url) { conn ->
             setupConnection(request, conn)
             ReactMapHttpEngine.writeCompressed(conn, body)
         }
-        if (conn.responseCode == 302) {
-            ReactMapHttpEngine.detectBrotliError(conn)?.let {
-                lifecycleScope.launch { Snackbar.make(web, it, Snackbar.LENGTH_LONG).show() }
+        when (conn.responseCode) {
+            302 -> {
+                ReactMapHttpEngine.detectBrotliError(conn)?.let {
+                    lifecycleScope.launch { Snackbar.make(web, it, Snackbar.LENGTH_LONG).show() }
+                    skipCompression = true
+                }
+                null
             }
-            null
-        } else createResponse(conn) { _ -> conn.findErrorStream }
+            403 -> {
+                Timber.w("Compressed GraphQL blocked: ${conn.findErrorStream.bufferedReader().readText()}")
+                skipCompression = true
+                null
+            }
+            else -> createResponse(conn) { _ -> conn.findErrorStream }
+        }
     } catch (e: IOException) {
         Timber.d(e)
         null
