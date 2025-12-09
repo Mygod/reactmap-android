@@ -14,7 +14,6 @@ Use ReactMap as an Android app with battery improvements, including:
 * Use Google location services to follow location.
 * Reduce animations.
 * Pause location following when jumping to a new location.
-* Disable popups from automatically panning the map.
 
 Other features:
 
