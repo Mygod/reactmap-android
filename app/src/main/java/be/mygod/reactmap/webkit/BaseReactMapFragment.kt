@@ -83,6 +83,17 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
          */
         private val injectMapFlyTo = "([;}]\\s*this\\._stop\\(\\);)(?=\\s*var )".toPattern()
         /**
+         * Raw regex: (initialize\([^)]+\)\{)(?=for\(const \w+ in \w+\))
+         *           initialize(options) {
+         *             for (const key in options) { ... }
+         *           }
+         * or match minimized fragment: "},initialize(e){for(const"
+         *
+         * Used to capture LocateControl at construction time and auto-start following on add.
+         */
+        private val injectLocateControlInitialize =
+            "(initialize\\([^)]*\\)\\{)(?=for\\(const\\s+\\w+\\s+in\\s+\\w+\\))".toPattern()
+        /**
          * Raw regex: ([,;]\s*this\._map\.on\("locationfound",\s*this\._onLocationFound,\s*)(?=this\)[,;])
          *             this._active = true;
          *             this._map.on("locationfound", this._onLocationFound, this);
@@ -341,6 +352,7 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
         work { matcher.appendReplacement(s, it) }
         matcher.appendTail(s)
     }).toString()
+    protected open val shouldAutoFollow get() = false
     private fun handleVendorJs(request: WebResourceRequest) = buildResponse(request) { reader ->
         val response = reader.readText()
         val matcher = injectMapInitialize.matcher(response)
@@ -356,6 +368,20 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
                 return@buildResponse response
             }
             replace("$1window._hijackedLocateControl&&(window._hijackedLocateControl._userPanned=!0);")
+            if (shouldAutoFollow) {
+                matcher.usePattern(injectLocateControlInitialize)
+                if (!matcher.find()) {
+                    Timber.w(Exception("injectLocateControlInitialize unmatched"))
+                    return@buildResponse response
+                }
+                replace("$1window._hijackedLocateControl=this;" +
+                        "this._autoStartWrapped||(this._autoStartWrapped=!0," +
+                        "this.onAdd=((o)=>function(m){" +
+                        "var r=o.call(this,m);" +
+                        "window._locateAutoStarted||(window._locateAutoStarted=!0,this.start&&this.start());" +
+                        "return r" +
+                        "})(this.onAdd));")
+            }
             matcher.usePattern(injectLocateControlActivate)
             if (!matcher.find()) {
                 Timber.w(Exception("injectLocateControlActivate unmatched"))

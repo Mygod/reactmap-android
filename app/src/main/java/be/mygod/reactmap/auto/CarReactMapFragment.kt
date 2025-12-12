@@ -20,6 +20,7 @@ class CarReactMapFragment : BaseReactMapFragment() {
     private val mainActivity by lazy { context as MainCarActivity }
     private lateinit var carKeyboard: CarKeyboard
     private lateinit var siteController: CarSiteController
+    override val shouldAutoFollow get() = true
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

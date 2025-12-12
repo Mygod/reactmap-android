@@ -24,7 +24,7 @@ timber = "com.jakewharton.timber:timber:5.0.1"
 work = "androidx.work:work-runtime:2.11.0"
 
 [plugins]
-androidApplication = "com.android.application:8.13.1"
+androidApplication = "com.android.application:8.13.2"
 firebaseCrashlytics = "com.google.firebase.crashlytics:3.0.6"
 googleServices = "com.google.gms.google-services:4.4.4"
 kotlinAndroid = "org.jetbrains.kotlin.android:2.2.21"
