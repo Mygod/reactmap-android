@@ -37,13 +37,13 @@ import java.util.regex.Pattern
 class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.Arg, Empty>() {
     companion object {
         private val weatherForecastMatcher = "^/en/([^/]*/[^/]*/[^/]*)/weather-forecast/([^?]*)".toRegex()
-        // raw: <div id="(\d+)" data-qa="\1" class="accordion-item hour".*?data-src="/images/weathericons/(\d+).svg".*?<div class="phrase">([^<]*)</div>.*?(\d+) km/h.*?(\d+) km/h
+        // raw: <div id="(\d+)" data-qa="\1" class="accordion-item hour".*?data-src="/images/weathericons/(?:v2a/)?(\d+).svg".*?<div class="phrase">([^<]*)</div>.*?<p...>Wind<span class="value">...(\d+) km/h</span></p>(?:.*?<p...>Wind Gusts<span class="value">...(\d+) km/h</span></p>)?
         private val hourlyMatcher =
-            "<div id=\"(\\d+)\" data-qa=\"\\1\" class=\"accordion-item hour\".*?data-src=\"/images/weathericons/(\\d+).svg\".*?<div class=\"phrase\">([^<]*)</div>.*?(\\d+) km/h.*?(\\d+) km/h"
+            "<div id=\"(\\d+)\" data-qa=\"\\1\" class=\"accordion-item hour\".*?data-src=\"/images/weathericons/(?:v2a/)?(\\d+)\\.svg\".*?<div class=\"phrase\">([^<]*)</div>.*?<p[^>]*>\\s*Wind\\s*<span class=\"value\">[^<]*?(\\d+) km/h</span></p>(?:.*?<p[^>]*>\\s*Wind Gusts\\s*<span class=\"value\">[^<]*?(\\d+) km/h</span></p>)?"
                 .toPattern(Pattern.DOTALL)
-        // raw: <span class="module-header sub date">([^<]*)</span>.*?data-src="/images/weathericons/(\d+).svg".*?<div class="phrase">([^<]*)</div>.*?(\d+) km/h(?:[^b]*?(\d+) km/h)?
+        // raw: <span class="module-header sub date">([^<]*)</span>.*?data-src="/images/weathericons/(?:v2a/)?(\d+).svg".*?<div class="phrase">([^<]*)</div>.*?<p...>Wind<span class="value">...(\d+) km/h</span></p>(?:.*?<p...>Wind Gusts<span class="value">...(\d+) km/h</span></p>)?
         private val dailyMatcher =
-            "<span class=\"module-header sub date\">([^<]*)</span>.*?data-src=\"/images/weathericons/(\\d+).svg\".*?<div class=\"phrase\">([^<]*)</div>.*?(\\d+) km/h(?:[^b]*?(\\d+) km/h)?"
+            "<span class=\"module-header sub date\">([^<]*)</span>.*?data-src=\"/images/weathericons/(?:v2a/)?(\\d+)\\.svg\".*?<div class=\"phrase\">([^<]*)</div>.*?<p[^>]*>\\s*Wind\\s*<span class=\"value\">[^<]*?(\\d+) km/h</span></p>(?:.*?<p[^>]*>\\s*Wind Gusts\\s*<span class=\"value\">[^<]*?(\\d+) km/h</span></p>)?"
                 .toPattern(Pattern.DOTALL)
         private val dayFormat = SimpleDateFormat("M/d", Locale.US)
 
@@ -105,7 +105,10 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
                 if (conn.responseCode != 200) return@connectCancellable "${conn.responseCode}: ${conn.findErrorStream.bufferedReader().readText()}"
                 val response = conn.inputStream.bufferedReader().readText()
                 val matcher = (if (daily) dailyMatcher else hourlyMatcher).matcher(response)
-                if (!matcher.find()) return@connectCancellable response
+                if (!matcher.find()) {
+                    Timber.w("AccuWeather parser mismatch for ${if (daily) "daily" else "hourly"} forecast page")
+                    return@connectCancellable "Failed to parse forecast data from AccuWeather."
+                }
                 val result = SpannableStringBuilder()
                 do {
                     if (result.isNotEmpty()) result.appendLine()
