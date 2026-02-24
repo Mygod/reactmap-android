@@ -6,6 +6,7 @@ import android.icu.util.Calendar
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
+import android.text.Html
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ImageSpan
@@ -37,17 +38,18 @@ import java.util.regex.Pattern
 class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.Arg, Empty>() {
     companion object {
         private val weatherForecastMatcher = "^/en/([^/]*/[^/]*/[^/]*)/weather-forecast/([^?]*)".toRegex()
-        // raw: <div id="(\d+)" data-qa="\1" class="accordion-item hour".*?data-src="/images/weathericons/(?:v2a/)?(\d+).svg".*?<div class="phrase">([^<]*)</div>.*?<p...>Wind<span class="value">...(\d+) km/h</span></p>(?:.*?<p...>Wind Gusts<span class="value">...(\d+) km/h</span></p>)?
+        // raw: <div id="(\d+)" data-qa="\1" class="accordion-item hour".*?data-src="/images/weathericons/(?:v2a/)?(\d+).svg".*?<div class="phrase">([^<]*)</div>.*?<span class="value">...(\d+) km/h</span>(?:.*?<span class="value">...(\d+) km/h</span>)?
         private val hourlyMatcher =
-            "<div id=\"(\\d+)\" data-qa=\"\\1\" class=\"accordion-item hour\".*?data-src=\"/images/weathericons/(?:v2a/)?(\\d+)\\.svg\".*?<div class=\"phrase\">([^<]*)</div>.*?<p[^>]*>\\s*Wind\\s*<span class=\"value\">[^<]*?(\\d+) km/h</span></p>(?:.*?<p[^>]*>\\s*Wind Gusts\\s*<span class=\"value\">[^<]*?(\\d+) km/h</span></p>)?"
+            "<div id=\"(\\d+)\" data-qa=\"\\1\" class=\"accordion-item hour\".*?data-src=\"/images/weathericons/(?:v2a/)?(\\d+)\\.svg\".*?<div class=\"phrase\">([^<]*)</div>.*?<span class=\"value\">[^<]*?(\\d+) km/h</span>(?:.*?<span class=\"value\">[^<]*?(\\d+) km/h</span>)?"
                 .toPattern(Pattern.DOTALL)
-        // raw: <span class="module-header sub date">([^<]*)</span>.*?data-src="/images/weathericons/(?:v2a/)?(\d+).svg".*?<div class="phrase">([^<]*)</div>.*?<p...>Wind<span class="value">...(\d+) km/h</span></p>(?:.*?<p...>Wind Gusts<span class="value">...(\d+) km/h</span></p>)?
+        // raw: <span class="module-header sub date">([^<]*)</span>.*?data-src="/images/weathericons/(?:v2a/)?(\d+).svg".*?<div class="phrase">([^<]*)</div>.*?<span class="value">...(\d+) km/h</span>(?:(?:(?!<span class="module-header sub date">).)*?<span class="value">...(\d+) km/h</span>)?
         private val dailyMatcher =
-            "<span class=\"module-header sub date\">([^<]*)</span>.*?data-src=\"/images/weathericons/(?:v2a/)?(\\d+)\\.svg\".*?<div class=\"phrase\">([^<]*)</div>.*?<p[^>]*>\\s*Wind\\s*<span class=\"value\">[^<]*?(\\d+) km/h</span></p>(?:.*?<p[^>]*>\\s*Wind Gusts\\s*<span class=\"value\">[^<]*?(\\d+) km/h</span></p>)?"
+            "<span class=\"module-header sub date\">([^<]*)</span>.*?data-src=\"/images/weathericons/(?:v2a/)?(\\d+)\\.svg\".*?<div class=\"phrase\">([^<]*)</div>.*?<span class=\"value\">[^<]*?(\\d+) km/h</span>(?:(?:(?!<span class=\"module-header sub date\">).)*?<span class=\"value\">[^<]*?(\\d+) km/h</span>)?"
                 .toPattern(Pattern.DOTALL)
         private val dayFormat = SimpleDateFormat("M/d", Locale.US)
 
         private fun URLConnection.setUserAgent() = setRequestProperty("User-Agent", "Mozilla/5.0 (Linux; Android 10)")
+
         suspend fun newInstance(cell: S2LatLng): AccuWeatherDialogFragment {
             val keyResponse = ReactMapHttpEngine.connectCancellable(
                 "https://www.accuweather.com/web-api/three-day-redirect?lat=${cell.latDegrees()}&lon=${
@@ -96,12 +98,18 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
     private val calendar = Calendar.getInstance()
     private fun AlertDialog.fetchData(id: Int, format: DateTimeFormatter, param: String = "",
                                       daily: Boolean = false) = lifecycleScope.launch {
+        val locales = resources.configuration.locales
+        val language = (if (locales.isEmpty) null else locales[0])
+            ?.toLanguageTag()
+            ?.lowercase(Locale.ROOT)
+            ?.takeUnless { it.isBlank() || it == "und" } ?: "en"
         val out = try {
             ReactMapHttpEngine.connectCancellable(
-                "https://www.accuweather.com/en/${arg.locationDescription}/${if (daily) {
+                "https://www.accuweather.com/$language/${arg.locationDescription}/${if (daily) {
                     "dai"
                 } else "hour"}ly-weather-forecast/${arg.locationKey}?unit=c$param") { conn ->
                 conn.setUserAgent()
+                conn.setRequestProperty("Accept-Language", locales.toLanguageTags().ifBlank { "en" })
                 if (conn.responseCode != 200) return@connectCancellable "${conn.responseCode}: ${conn.findErrorStream.bufferedReader().readText()}"
                 val response = conn.inputStream.bufferedReader().readText()
                 val matcher = (if (daily) dailyMatcher else hourlyMatcher).matcher(response)
@@ -137,7 +145,7 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
                             R.drawable.ic_family_link
                         } else icon), i, i + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     }
-                    result.append("${if (daily) try {
+                    result.append(if (daily) try {
                         dayFormat.parse(matcher.group(1), calendar, ParsePosition(0))
                         format.format(calendar.time)
                     } catch (e: ParseException) {
@@ -145,7 +153,11 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
                         matcher.group(1)
                     } else {
                         format.format(matcher.group(1)!!.toLong() * 1000)
-                    }}\n${matcher.group(3)}. ${matcher.group(4)}")
+                    })
+                    result.append('\n')
+                    result.append(Html.fromHtml(matcher.group(3), Html.FROM_HTML_MODE_LEGACY))
+                    result.append(". ")
+                    result.append(matcher.group(4))
                     matcher.group(5)?.let { result.append("-$it") }
                     result.append(" km/h")
                 } while (matcher.find())
