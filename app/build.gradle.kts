@@ -1,4 +1,8 @@
 import com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.gradle.api.tasks.compile.JavaCompile
+
+private val javaVersion = JavaVersion.VERSION_11
 
 plugins {
     alias(libs.plugins.androidApplication)
@@ -14,19 +18,20 @@ android {
     compileSdk = 36
 
     defaultConfig {
-        applicationId = extra["reactmap.packageName"] as String?
+        applicationId = providers.gradleProperty("reactmap.packageName").orNull
         minSdk = 26
         targetSdk = 36
-        versionCode = (extra["reactmap.versionCode"] as String?)?.toInt()
-        versionName = extra["reactmap.versionName"] as String?
+        versionCode = providers.gradleProperty("reactmap.versionCode").orNull?.toInt()
+        versionName = providers.gradleProperty("reactmap.versionName").orNull
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        if (extra.has("reactmap.appName")) resValue("string", "app_name", extra["reactmap.appName"] as String)
-        extra["reactmap.defaultDomain"]!!.let { defaultDomain ->
-            manifestPlaceholders["defaultDomain"] = defaultDomain
-            buildConfigField("String", "DEFAULT_DOMAIN", "\"$defaultDomain\"")
-        }
+        providers.gradleProperty("reactmap.appName").orNull
+            ?.let { resValue("string", "app_name", it) }
+        val defaultDomain = providers.gradleProperty("reactmap.defaultDomain").orNull
+            ?: error("Missing required gradle property reactmap.defaultDomain")
+        manifestPlaceholders["defaultDomain"] = defaultDomain
+        buildConfigField("String", "DEFAULT_DOMAIN", "\"$defaultDomain\"")
         androidResources.localeFilters += listOf("en-rUS", "pl")
         externalNativeBuild.cmake.arguments += listOf("-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON")   // TODO remove for NDK r28
     }
@@ -50,18 +55,15 @@ android {
         }
     }
     buildFeatures.buildConfig = true
-    val javaVersion = JavaVersion.VERSION_11
     compileOptions {
         sourceCompatibility = javaVersion
         targetCompatibility = javaVersion
     }
-    kotlinOptions.jvmTarget = javaVersion.toString()
     packaging.resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"
     lint.informational.add("MissingTranslation")
 
     sourceSets.getByName("main") {
-        java.srcDirs("../brotli/java")
-        java.excludes.add("**/brotli/**/*Test.java")
+        java.directories.add("../brotli/java")
     }
     externalNativeBuild {
         cmake {
@@ -74,6 +76,16 @@ android {
         isEnable = true
         reset()
         include("arm64-v8a", "armeabi-v7a", "x86", "x86_64")
+    }
+}
+
+tasks.withType<JavaCompile>().configureEach {
+    exclude("**/brotli/**/*Test.java")
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = JvmTarget.fromTarget(javaVersion.toString())
     }
 }
 

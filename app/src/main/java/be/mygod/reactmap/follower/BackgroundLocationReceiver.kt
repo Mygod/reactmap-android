@@ -9,6 +9,8 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.location.Location
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import androidx.annotation.MainThread
 import androidx.work.BackoffPolicy
 import androidx.work.Constraints
@@ -128,7 +130,10 @@ class BackgroundLocationReceiver : BroadcastReceiver() {
             ExistingWorkPolicy.REPLACE, OneTimeWorkRequestBuilder<LocationSetter>().apply {
                 setBackoffCriteria(BackoffPolicy.LINEAR, WorkRequest.MIN_BACKOFF_MILLIS, TimeUnit.MILLISECONDS)
                 setConstraints(Constraints.Builder().apply {
-                    setRequiredNetworkType(NetworkType.CONNECTED)
+                    setRequiredNetworkRequest(NetworkRequest.Builder()
+                        .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                        .addCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+                        .build(), NetworkType.CONNECTED)
                     // Expedited jobs only support network and storage constraints
 //                    setRequiresBatteryNotLow(true)
                 }.build())
