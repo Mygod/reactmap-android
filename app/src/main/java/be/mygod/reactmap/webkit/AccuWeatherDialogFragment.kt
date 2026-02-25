@@ -138,6 +138,15 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
     @Parcelize
     data class Arg(val locationDescription: String, val locationKey: String) : Parcelable
 
+    private data class ForecastRow(
+        val timeText: CharSequence,
+        val phrase: CharSequence,
+        val windSpeed: Int,
+        val windGust: Int?,
+        var weatherCode: Int,
+        val aiContextHtml: String?,
+    )
+
     override fun AlertDialog.Builder.prepare(listener: DialogInterface.OnClickListener) {
         setView(R.layout.dialog_accuweather)
         setTitle("${Uri.decode(arg.locationDescription)} (${arg.locationKey})")
@@ -162,60 +171,81 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
     }
 
     private val calendar = Calendar.getInstance()
+    private fun buildForecastText(rows: List<ForecastRow>) = SpannableStringBuilder().apply {
+        rows.forEachIndexed { index, row ->
+            if (index != 0) appendLine()
+            // https://github.com/5310/discord-bot-castform/issues/2#issuecomment-1687783087
+            // https://docs.google.com/spreadsheets/d/1v51qbI1egh6eBTk-NTaRy3Qlx2Y2v9kDYqmvHlmntJE/edit
+            val (baseIcon, windyOverride) = when (row.weatherCode) {
+                1, 2 -> R.drawable.ic_image_wb_sunny to true
+                3, 4 -> R.drawable.ic_partly_cloudy_day to true
+                5, 6, 7, 8, 37, 38 -> R.drawable.ic_file_cloud to true
+                11 -> R.drawable.ic_mist to false
+                12, 15, 18, 26, 29 -> R.drawable.ic_places_beach_access to false
+                13, 16, 20, 23, 40, 42 -> R.drawable.ic_file_cloud to false
+                14, 17, 21 -> R.drawable.ic_partly_cloudy_day to false
+                19, 22, 24, 25, 43, 44 -> R.drawable.ic_places_ac_unit to false
+                32 -> R.drawable.ic_family_link to false
+                33, 34 -> R.drawable.ic_image_bedtime to true
+                35, 36 -> R.drawable.ic_partly_cloudy_night to true
+                39, 41 -> R.drawable.ic_partly_cloudy_night to false
+                else -> 0 to false
+            }
+            val icon = if (baseIcon == 0) 0 else if (windyOverride &&
+                (row.windSpeed > 20 || row.windGust?.let { it > 30 } == true)) {
+                R.drawable.ic_family_link
+            } else baseIcon
+            if (icon != 0) {
+                val i = length
+                append("  ")
+                setSpan(ImageSpan(requireContext(), icon), i, i + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+            append(row.timeText)
+            append('\n')
+            append(row.phrase)
+            append(". ")
+            append(row.windSpeed.toString())
+            row.windGust?.let { append("-$it") }
+            append(" km/h")
+        }
+    }
     private fun AlertDialog.fetchData(id: Int, format: DateTimeFormatter, param: String = "",
                                       daily: Boolean = false) = lifecycleScope.launch {
+        val frame = findViewById<ViewGroup>(id)!!
+        val textView = frame[1] as TextView
+        fun show(out: CharSequence) {
+            textView.apply {
+                text = out
+                isGone = false
+            }
+            if (frame.childCount > 1) frame.removeViewAt(0)
+        }
         val locales = resources.configuration.locales
         val language = (if (locales.isEmpty) null else locales[0])
             ?.toLanguageTag()
             ?.lowercase(Locale.ROOT)
             ?.takeUnless { it.isBlank() || it == "und" } ?: "en"
-        val out = try {
+        val rows = try {
             ReactMapHttpEngine.connectCancellable(
                 "https://www.accuweather.com/$language/${arg.locationDescription}/${if (daily) {
                     "dai"
                 } else "hour"}ly-weather-forecast/${arg.locationKey}?unit=c$param") { conn ->
                 conn.setUserAgent()
                 conn.setRequestProperty("Accept-Language", locales.toLanguageTags().ifBlank { "en" })
-                if (conn.responseCode != 200) return@connectCancellable "${conn.responseCode}: ${conn.findErrorStream.bufferedReader().readText()}"
+                if (conn.responseCode != 200) throw Exception(
+                    "${conn.responseCode}: ${conn.findErrorStream.bufferedReader().readText()}"
+                )
                 val response = conn.inputStream.bufferedReader().readText()
                 val matcher = (if (daily) dailyMatcher else hourlyMatcher).matcher(response)
                 if (!matcher.find()) {
                     Timber.w("AccuWeather parser mismatch for ${if (daily) "daily" else "hourly"} forecast page")
-                    return@connectCancellable "Failed to parse forecast data from AccuWeather."
+                    return@connectCancellable null
                 }
-                val result = SpannableStringBuilder()
+                val rows = mutableListOf<ForecastRow>()
                 do {
-                    if (result.isNotEmpty()) result.appendLine()
-                    // https://github.com/5310/discord-bot-castform/issues/2#issuecomment-1687783087
-                    // https://docs.google.com/spreadsheets/d/1v51qbI1egh6eBTk-NTaRy3Qlx2Y2v9kDYqmvHlmntJE/edit
                     val originalWeatherCode = matcher.group(2)!!.toInt()
-                    val weatherCode = if (daily && originalWeatherCode in aiGuessedDailyIconIds) {
-                        guessDailyIconFromAi(matcher.group(0)!!) ?: originalWeatherCode
-                    } else originalWeatherCode
-                    val (icon, windyOverride) = when (weatherCode) {
-                        1, 2 -> R.drawable.ic_image_wb_sunny to true
-                        3, 4 -> R.drawable.ic_partly_cloudy_day to true
-                        5, 6, 7, 8, 37, 38 -> R.drawable.ic_file_cloud to true
-                        11 -> R.drawable.ic_mist to false
-                        12, 15, 18, 26, 29 -> R.drawable.ic_places_beach_access to false
-                        13, 16, 20, 23, 40, 42 -> R.drawable.ic_file_cloud to false
-                        14, 17, 21 -> R.drawable.ic_partly_cloudy_day to false
-                        19, 22, 24, 25, 43, 44 -> R.drawable.ic_places_ac_unit to false
-                        32 -> R.drawable.ic_family_link to false
-                        33, 34 -> R.drawable.ic_image_bedtime to true
-                        35, 36 -> R.drawable.ic_partly_cloudy_night to true
-                        39, 41 -> R.drawable.ic_partly_cloudy_night to false
-                        else -> 0 to false
-                    }
-                    val i = result.length
-                    if (icon != 0) {
-                        result.append("  ")
-                        result.setSpan(ImageSpan(requireContext(), if (windyOverride &&
-                            (matcher.group(4)!!.toInt() > 20 || matcher.group(5)?.run { toInt() > 30 } == true)) {
-                            R.drawable.ic_family_link
-                        } else icon), i, i + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    }
-                    result.append(if (daily) try {
+                    rows.add(ForecastRow(
+                        timeText = if (daily) try {
                         dayFormat.parse(matcher.group(1), calendar, ParsePosition(0))
                         format.format(calendar.time)
                     } catch (e: ParseException) {
@@ -223,29 +253,42 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
                         matcher.group(1)
                     } else {
                         format.format(matcher.group(1)!!.toLong() * 1000)
-                    })
-                    result.append('\n')
-                    result.append(Html.fromHtml(matcher.group(3), Html.FROM_HTML_MODE_LEGACY))
-                    result.append(". ")
-                    result.append(matcher.group(4))
-                    matcher.group(5)?.let { result.append("-$it") }
-                    result.append(" km/h")
+                    },
+                        phrase = Html.fromHtml(matcher.group(3), Html.FROM_HTML_MODE_LEGACY),
+                        windSpeed = matcher.group(4)!!.toInt(),
+                        windGust = matcher.group(5)?.toInt(),
+                        weatherCode = originalWeatherCode,
+                        aiContextHtml = if (daily && originalWeatherCode in aiGuessedDailyIconIds) {
+                            matcher.group(0)
+                        } else null,
+                    ))
                 } while (matcher.find())
-                result
+                rows
             }
         } catch (e: IOException) {
             Timber.d(e)
-            e.readableMessage
+            show(e.readableMessage)
+            return@launch
         } catch (e: Exception) {
             Timber.w(e)
-            e.readableMessage
+            show(e.readableMessage)
+            return@launch
         }
-        findViewById<ViewGroup>(id)!!.let { frame ->
-            (frame[1] as TextView).apply {
-                text = out
-                isGone = false
+        if (rows == null) {
+            show("Failed to parse forecast data from AccuWeather.")
+            return@launch
+        }
+        show(buildForecastText(rows))
+        if (daily) rows.forEach { row ->
+            val contextHtml = row.aiContextHtml ?: return@forEach
+            launch {
+                val guessedCode = guessDailyIconFromAi(contextHtml) ?: return@launch
+                val originalCode = row.weatherCode
+                if (guessedCode == originalCode || !isAdded) return@launch
+                row.weatherCode = guessedCode
+                Timber.d("AI guessed AccuWeather icon $guessedCode for original icon $originalCode")
+                textView.text = buildForecastText(rows)
             }
-            frame.removeViewAt(0)
         }
     }
 }
