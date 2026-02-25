@@ -28,6 +28,7 @@ import com.google.common.geometry.S2LatLng
 import com.google.firebase.Firebase
 import com.google.firebase.ai.ai
 import com.google.firebase.ai.type.GenerativeBackend
+import com.google.firebase.ai.type.QuotaExceededException
 import com.google.firebase.ai.type.Schema
 import com.google.firebase.ai.type.generationConfig
 import kotlinx.coroutines.launch
@@ -104,8 +105,11 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
                 contextHtml.replace(aiContextCleanupRegex, " ").trim()
             val raw = try {
                 dailyWeatherGuessModel.generateContent(prompt).text?.trim()
+            } catch (e: QuotaExceededException) {
+                Timber.d(e.localizedMessage)
+                return null
             } catch (e: Exception) {
-                Timber.d(e, "AI daily weather guess failed for $prompt")
+                Timber.w(e, "AI daily weather guess failed for $prompt")
                 return null
             } ?: return null
             Timber.d("AI daily weather guesses $raw from: $prompt")
@@ -122,8 +126,8 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
                     "${conn.responseCode}: ${conn.findErrorStream.bufferedReader().readText()}")
                 conn.headerLocation
             }
-            val match = weatherForecastMatcher.find(keyResponse)
-            if (match == null) throw Exception("Unknown redirect target $keyResponse")
+            val match = weatherForecastMatcher.find(keyResponse) ?:
+                throw Exception("Unknown redirect target $keyResponse")
             return AccuWeatherDialogFragment().apply {
                 arg(Arg(match.groupValues[1], match.groupValues[2]))
                 key()
