@@ -25,6 +25,11 @@ import be.mygod.reactmap.util.findErrorStream
 import be.mygod.reactmap.util.headerLocation
 import be.mygod.reactmap.util.readableMessage
 import com.google.common.geometry.S2LatLng
+import com.google.firebase.Firebase
+import com.google.firebase.ai.ai
+import com.google.firebase.ai.type.GenerativeBackend
+import com.google.firebase.ai.type.Schema
+import com.google.firebase.ai.type.generationConfig
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
@@ -47,8 +52,65 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
             "<span class=\"module-header sub date\">([^<]*)</span>.*?data-src=\"/images/weathericons/(?:v2a/)?(\\d+)\\.svg\".*?<div class=\"phrase\">([^<]*)</div>.*?<span class=\"value\">[^<]*?(\\d+) km/h</span>(?:(?:(?!<span class=\"module-header sub date\">).)*?<span class=\"value\">[^<]*?(\\d+) km/h</span>)?"
                 .toPattern(Pattern.DOTALL)
         private val dayFormat = SimpleDateFormat("M/d", Locale.US)
+        private val aiGuessedDailyIconIds = setOf(30, 31)
+        private val aiGuessableConditions = mapOf(
+            "Sunny" to 1,
+            "Mostly Sunny" to 2,
+            "Partly Sunny" to 3,
+            "Intermittent Clouds" to 4,
+            "Hazy Sunshine" to 5,
+            "Mostly Cloudy" to 6,
+            "Cloudy" to 7,
+            "Dreary (Overcast)" to 8,
+            "Fog" to 11,
+            "Showers" to 12,
+            "Mostly Cloudy w/ Showers" to 13,
+            "Partly Sunny w/ Showers" to 14,
+            "T-Storms" to 15,
+            "Mostly Cloudy w/ T-Storms" to 16,
+            "Partly Sunny w/ T-Storms" to 17,
+            "Rain" to 18,
+            "Flurries" to 19,
+            "Mostly Cloudy w/ Flurries" to 20,
+            "Partly Sunny w/ Flurries" to 21,
+            "Snow" to 22,
+            "Mostly Cloudy w/ Snow" to 23,
+            "Ice" to 24,
+            "Sleet" to 25,
+            "Freezing Rain" to 26,
+            "Rain and Snow" to 29,
+            "Windy" to 32,
+        )
+        private val aiContextCleanupRegex = Regex(
+            "<svg\\b[^>]*>.*?</svg>|\\s+",
+            setOf(RegexOption.IGNORE_CASE, RegexOption.DOT_MATCHES_ALL),
+        )
 
         private fun URLConnection.setUserAgent() = setRequestProperty("User-Agent", "Mozilla/5.0 (Linux; Android 10)")
+        private val dailyWeatherGuessModel by lazy {
+            Firebase.ai(backend = GenerativeBackend.googleAI()).generativeModel(
+                modelName = "gemini-2.5-flash",
+                generationConfig = generationConfig {
+                    responseMimeType = "text/x.enum"
+                    responseSchema = Schema.enumeration(aiGuessableConditions.keys.toList())
+                    temperature = 0f
+                },
+            )
+        }
+
+        private suspend fun guessDailyIconFromAi(contextHtml: String): Int? {
+            val prompt = "Classify this AccuWeather daily forecast HTML snippet. " +
+                "Choose the single best label based only on weather content.\n\n" +
+                contextHtml.replace(aiContextCleanupRegex, " ").trim()
+            val raw = try {
+                dailyWeatherGuessModel.generateContent(prompt).text?.trim()
+            } catch (e: Exception) {
+                Timber.d(e, "AI daily weather guess failed for $prompt")
+                return null
+            } ?: return null
+            Timber.d("AI daily weather guesses $raw from: $prompt")
+            return aiGuessableConditions[raw.trim()]
+        }
 
         suspend fun newInstance(cell: S2LatLng): AccuWeatherDialogFragment {
             val keyResponse = ReactMapHttpEngine.connectCancellable(
@@ -122,7 +184,11 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
                     if (result.isNotEmpty()) result.appendLine()
                     // https://github.com/5310/discord-bot-castform/issues/2#issuecomment-1687783087
                     // https://docs.google.com/spreadsheets/d/1v51qbI1egh6eBTk-NTaRy3Qlx2Y2v9kDYqmvHlmntJE/edit
-                    val (icon, windyOverride) = when (matcher.group(2)!!.toInt()) {
+                    val originalWeatherCode = matcher.group(2)!!.toInt()
+                    val weatherCode = if (daily && originalWeatherCode in aiGuessedDailyIconIds) {
+                        guessDailyIconFromAi(matcher.group(0)!!) ?: originalWeatherCode
+                    } else originalWeatherCode
+                    val (icon, windyOverride) = when (weatherCode) {
                         1, 2 -> R.drawable.ic_image_wb_sunny to true
                         3, 4 -> R.drawable.ic_partly_cloudy_day to true
                         5, 6, 7, 8, 37, 38 -> R.drawable.ic_file_cloud to true
