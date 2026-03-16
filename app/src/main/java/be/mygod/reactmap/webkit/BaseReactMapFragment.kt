@@ -27,7 +27,6 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import be.mygod.reactmap.App.Companion.app
@@ -271,8 +270,9 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
                     if (detail.didCrash()) {
                         Timber.w(Exception("WebView crashed @ priority ${detail.rendererPriorityAtExit()}"))
                     } else if (isAdded) {
-                        FirebaseAnalytics.getInstance(context).logEvent("webviewExit",
-                            bundleOf("priority" to detail.rendererPriorityAtExit()))
+                        FirebaseAnalytics.getInstance(context).logEvent("webviewExit", Bundle().apply {
+                            putInt("priority", detail.rendererPriorityAtExit())
+                        })
                     }
                     onRenderProcessGone()
                     return true

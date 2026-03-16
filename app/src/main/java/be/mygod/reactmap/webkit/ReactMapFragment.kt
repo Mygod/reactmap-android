@@ -146,7 +146,8 @@ class ReactMapFragment : BaseReactMapFragment() {
             }
         }
     }
-    fun handleUri(uri: Uri?) = uri?.host?.let { host ->
+    fun handleUri(uri: Uri?): Boolean? {
+        val host = uri?.host ?: return null
         if (view == null || !loaded) return false
         if (HOST_APPLE_MAPS.equals(host, true)) {
             val daddr = uri.appleMapCoordinate
@@ -167,7 +168,7 @@ class ReactMapFragment : BaseReactMapFragment() {
             return false
         }
         flyToUrl("${match.groupValues[1]}, ${match.groupValues[2]}", match.groups[3]?.value) { uri.toString() }
-        false
+        return false
     }
 
     fun accuWeather() = web.evaluateJavascript("window._hijackedMap.getCenter()") { evalResult ->
