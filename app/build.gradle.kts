@@ -126,6 +126,7 @@ dependencies {
     implementation(libs.core.ktx)
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.ai)
+    implementation(libs.firebase.ai.ondevice)
     implementation(libs.firebase.crashlytics.ndk)
     implementation(libs.fragment.ktx)
     implementation(libs.hiddenapibypass)

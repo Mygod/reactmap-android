@@ -29,11 +29,22 @@ import be.mygod.reactmap.util.headerLocation
 import be.mygod.reactmap.util.readableMessage
 import com.google.common.geometry.S2LatLng
 import com.google.firebase.Firebase
+import com.google.firebase.ai.InferenceMode
+import com.google.firebase.ai.OnDeviceConfig
 import com.google.firebase.ai.ai
+import com.google.firebase.ai.ondevice.DownloadStatus
+import com.google.firebase.ai.ondevice.FirebaseAIOnDevice
+import com.google.firebase.ai.ondevice.OnDeviceModelStatus
 import com.google.firebase.ai.type.GenerativeBackend
+import com.google.firebase.ai.type.PublicPreviewAPI
 import com.google.firebase.ai.type.QuotaExceededException
 import com.google.firebase.ai.type.Schema
 import com.google.firebase.ai.type.generationConfig
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
@@ -45,7 +56,9 @@ import java.util.Locale
 import java.util.regex.Pattern
 
 class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.Arg, Empty>() {
+    @OptIn(PublicPreviewAPI::class)
     companion object {
+        private const val dailyWeatherGuessModelName = "gemini-2.5-flash"
         private val weatherForecastMatcher = "^/en/([^/]*/[^/]*/[^/]*)/weather-forecast/([^?]*)".toRegex()
         // raw: <div id="(\d+)" data-qa="\1" class="accordion-item hour".*?data-src="/images/weathericons/(?:v2a/)?(\d+).svg".*?<div class="phrase">([^<]*)</div>.*?<span class="value">...(\d+) km/h</span>(?:.*?<span class="value">...(\d+) km/h</span>)?
         private val hourlyMatcher =
@@ -89,6 +102,7 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
             "<svg\\b[^>]*>.*?</svg>|\\s+",
             setOf(RegexOption.IGNORE_CASE, RegexOption.DOT_MATCHES_ALL),
         )
+        private val aiGuessableConditionLabels = aiGuessableConditions.keys.toList()
 
         private fun URLConnection.setAccuWeatherHeaders(context: Context) {
             setRequestProperty("User-Agent", runCatching {
@@ -100,32 +114,188 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
             setRequestProperty("Sec-Fetch-Site", "none")
             setRequestProperty("Sec-Fetch-User", "?1")
         }
-        private val dailyWeatherGuessModel by lazy {
+        private val dailyWeatherGuessModelCloud by lazy {
             Firebase.ai(backend = GenerativeBackend.googleAI()).generativeModel(
-                modelName = "gemini-2.5-flash",
+                modelName = dailyWeatherGuessModelName,
                 generationConfig = generationConfig {
                     responseMimeType = "text/x.enum"
-                    responseSchema = Schema.enumeration(aiGuessableConditions.keys.toList())
+                    responseSchema = Schema.enumeration(aiGuessableConditionLabels)
                     temperature = 0f
                 },
             )
         }
+        private val dailyWeatherGuessModelOnDevice by lazy {
+            Firebase.ai(backend = GenerativeBackend.googleAI()).generativeModel(
+                modelName = dailyWeatherGuessModelName,
+                generationConfig = generationConfig {
+                    temperature = 0f
+                },
+                onDeviceConfig = OnDeviceConfig(
+                    mode = InferenceMode.ONLY_ON_DEVICE,
+                    temperature = 0f,
+                ),
+            )
+        }
+        private var onDeviceDownloadDeferred: CompletableDeferred<Boolean>? = null
+
+        @Synchronized
+        private fun getOrStartOnDeviceDownload(): CompletableDeferred<Boolean> {
+            onDeviceDownloadDeferred?.takeUnless { it.isCompleted }?.let { return it }
+            return CompletableDeferred<Boolean>().also { deferred ->
+                onDeviceDownloadDeferred = deferred
+                CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
+                    try {
+                        when (FirebaseAIOnDevice.checkStatus()) {
+                            OnDeviceModelStatus.AVAILABLE -> {
+                                Timber.i("On-device AI model is already available")
+                                deferred.complete(true)
+                            }
+                            OnDeviceModelStatus.DOWNLOADABLE -> {
+                                Timber.i("Starting on-device AI model download")
+                                FirebaseAIOnDevice.download().collect { status ->
+                                    when (status) {
+                                        is DownloadStatus.DownloadStarted ->
+                                            Timber.i("On-device AI model download started: ${status.bytesToDownload} bytes")
+                                        is DownloadStatus.DownloadInProgress ->
+                                            Timber.d(
+                                                "On-device AI model download progress: ${status.totalBytesDownloaded} bytes"
+                                            )
+                                        is DownloadStatus.DownloadCompleted -> {
+                                            Timber.i("On-device AI model download completed")
+                                            deferred.complete(true)
+                                        }
+                                        is DownloadStatus.DownloadFailed -> {
+                                            Timber.w("On-device AI model download failed")
+                                            deferred.complete(false)
+                                        }
+                                    }
+                                }
+                                if (!deferred.isCompleted) {
+                                    deferred.complete(FirebaseAIOnDevice.checkStatus() == OnDeviceModelStatus.AVAILABLE)
+                                }
+                            }
+                            OnDeviceModelStatus.DOWNLOADING -> {
+                                Timber.i("Waiting for on-device AI model download already in progress")
+                                while (true) when (FirebaseAIOnDevice.checkStatus()) {
+                                    OnDeviceModelStatus.AVAILABLE -> {
+                                        deferred.complete(true)
+                                        break
+                                    }
+                                    OnDeviceModelStatus.DOWNLOADABLE -> {
+                                        Timber.i("Resuming on-device AI model download")
+                                        FirebaseAIOnDevice.download().collect { status ->
+                                            when (status) {
+                                                is DownloadStatus.DownloadStarted ->
+                                                    Timber.i("On-device AI model download started: ${status.bytesToDownload} bytes")
+                                                is DownloadStatus.DownloadInProgress ->
+                                                    Timber.d(
+                                                        "On-device AI model download progress: ${status.totalBytesDownloaded} bytes"
+                                                    )
+                                                is DownloadStatus.DownloadCompleted -> {
+                                                    Timber.i("On-device AI model download completed")
+                                                    deferred.complete(true)
+                                                }
+                                                is DownloadStatus.DownloadFailed -> {
+                                                    Timber.w("On-device AI model download failed")
+                                                    deferred.complete(false)
+                                                }
+                                            }
+                                        }
+                                        if (!deferred.isCompleted) {
+                                            deferred.complete(FirebaseAIOnDevice.checkStatus() == OnDeviceModelStatus.AVAILABLE)
+                                        }
+                                        break
+                                    }
+                                    OnDeviceModelStatus.DOWNLOADING -> delay(250)
+                                    OnDeviceModelStatus.UNAVAILABLE -> {
+                                        Timber.i("On-device AI model is unavailable while waiting")
+                                        deferred.complete(false)
+                                        break
+                                    }
+                                    else -> {
+                                        Timber.w("Unknown on-device AI model status while waiting")
+                                        deferred.complete(false)
+                                        break
+                                    }
+                                }
+                            }
+                            OnDeviceModelStatus.UNAVAILABLE -> {
+                                Timber.i("On-device AI model is unavailable")
+                                deferred.complete(false)
+                            }
+                            else -> {
+                                Timber.w("Unknown on-device AI model status")
+                                deferred.complete(false)
+                            }
+                        }
+                    } catch (e: Exception) {
+                        Timber.w(e, "Failed to prepare on-device AI model")
+                        deferred.complete(false)
+                    } finally {
+                        if (onDeviceDownloadDeferred === deferred) onDeviceDownloadDeferred = null
+                    }
+                }
+            }
+        }
 
         private suspend fun guessDailyIconFromAi(contextHtml: String): Int? {
-            val prompt = "Classify this AccuWeather daily forecast HTML snippet. " +
+            val normalizedContext = contextHtml.replace(aiContextCleanupRegex, " ").trim()
+            val onDevicePrompt = buildString {
+                append("Classify this AccuWeather daily forecast HTML snippet. ")
+                append("Choose the single best label based only on weather content.\n\n")
+                append("You may reason briefly before answering. ")
+                append("If the forecast phrase closely matches one allowed label, return the most specific matching label. ")
+                append("If an allowed label appears verbatim or nearly verbatim in the forecast phrase, return that label instead of a broader one. ")
+                append("The very last non-empty line must be exactly one allowed label and nothing else.\n\n")
+                append("Allowed labels:\n")
+                append(aiGuessableConditionLabels.joinToString("\n") { "- $it" })
+                append("\n\nForecast HTML snippet:\n")
+                append(normalizedContext)
+            }
+            try {
+                val onDeviceModelReady = when (FirebaseAIOnDevice.checkStatus()) {
+                    OnDeviceModelStatus.AVAILABLE -> true
+                    OnDeviceModelStatus.DOWNLOADABLE, OnDeviceModelStatus.DOWNLOADING -> {
+                        Timber.i("Waiting for on-device AI model download before running AccuWeather AI inference")
+                        getOrStartOnDeviceDownload().await()
+                    }
+                    else -> false
+                }
+                if (onDeviceModelReady) {
+                    val onDeviceResponse = dailyWeatherGuessModelOnDevice.generateContent(onDevicePrompt)
+                    val onDeviceRaw = onDeviceResponse.text?.trim()
+                    if (onDeviceRaw != null) {
+                        val onDeviceLabel = onDeviceRaw.lineSequence()
+                            .map { it.trim() }
+                            .filter { it.isNotEmpty() }
+                            .lastOrNull()
+                        Timber.d(
+                            "AI daily weather guesses $onDeviceRaw (parsed label: $onDeviceLabel) via on-device from: $onDevicePrompt"
+                        )
+                        aiGuessableConditions[onDeviceLabel]?.let { return it }
+                        Timber.w(Exception("Falling back to cloud-only daily weather guess after unsupported on-device output: $onDeviceRaw"))
+                    }
+                } else {
+                    Timber.i("Falling back to cloud-only daily weather guess because the on-device model is unavailable")
+                }
+            } catch (e: Exception) {
+                Timber.w(e, "Falling back to cloud-only daily weather guess after on-device failure")
+            }
+            val cloudPrompt = "Classify this AccuWeather daily forecast HTML snippet. " +
                 "Choose the single best label based only on weather content.\n\n" +
-                contextHtml.replace(aiContextCleanupRegex, " ").trim()
-            val raw = try {
-                dailyWeatherGuessModel.generateContent(prompt).text?.trim()
+                normalizedContext
+            val cloudResponse = try {
+                dailyWeatherGuessModelCloud.generateContent(cloudPrompt)
             } catch (e: QuotaExceededException) {
                 Timber.d(e.localizedMessage)
                 return null
             } catch (e: Exception) {
-                Timber.w(e, "AI daily weather guess failed for $prompt")
+                Timber.w(e, "AI daily weather guess failed for $cloudPrompt")
                 return null
-            } ?: return null
-            Timber.d("AI daily weather guesses $raw from: $prompt")
-            return aiGuessableConditions[raw.trim()]
+            }
+            val cloudRaw = cloudResponse.text?.trim() ?: return null
+            Timber.d("AI daily weather guesses $cloudRaw via cloud from: $cloudPrompt")
+            return aiGuessableConditions[cloudRaw]
         }
 
         suspend fun newInstance(cell: S2LatLng): AccuWeatherDialogFragment {
