@@ -222,7 +222,7 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
         }
         val locales = resources.configuration.locales
         val language = (if (locales.isEmpty) null else locales[0])
-            ?.toLanguageTag()
+            ?.language
             ?.lowercase(Locale.ROOT)
             ?.takeUnless { it.isBlank() || it == "und" } ?: "en"
         val rows = try {
