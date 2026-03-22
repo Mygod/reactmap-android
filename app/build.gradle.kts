@@ -1,5 +1,38 @@
+
 import com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
+abstract class GenerateMainManifestTask : DefaultTask() {
+    @get:InputFile
+    @get:PathSensitive(PathSensitivity.RELATIVE)
+    abstract val baseManifest: RegularFileProperty
+
+    @get:Input
+    abstract val primaryDomain: Property<String>
+
+    @get:Input
+    abstract val additionalDomains: ListProperty<String>
+
+    @get:OutputFile
+    abstract val generatedManifest: RegularFileProperty
+
+    @TaskAction
+    fun generate() {
+        val supportedDomains = (listOf(primaryDomain.get()) + additionalDomains.get())
+            .map(String::trim)
+            .filter(String::isNotEmpty)
+            .distinct()
+        val manifestFile = baseManifest.get().asFile
+        val manifestText = manifestFile.readText()
+        val marker = """                <data android:host="${'$'}{defaultDomain}" />"""
+        val replacement = supportedDomains.joinToString("\n") { """                <data android:host="$it" />""" }
+        check(manifestText.contains(marker)) { "Could not find $marker in $manifestFile" }
+        generatedManifest.get().asFile.apply {
+            parentFile.mkdirs()
+            writeText(manifestText.replace(marker, replacement))
+        }
+    }
+}
 
 private val javaVersion = JavaVersion.VERSION_11
 private val defaultDomain = providers.gradleProperty("reactmap.defaultDomain").orNull
@@ -7,27 +40,15 @@ private val defaultDomain = providers.gradleProperty("reactmap.defaultDomain").o
 private val supportedDomainsProperty = providers.gradleProperty("reactmap.supportedDomains").orNull
 val baseMainManifest = layout.projectDirectory.file("src/main/AndroidManifest.xml")
 val generatedMainManifest = layout.buildDirectory.file("generated/local-manifest/AndroidManifest.xml")
-val generateMainManifest by tasks.registering {
-    inputs.file(baseMainManifest)
-    inputs.property("supportedDomains", supportedDomainsProperty ?: "")
-    outputs.file(generatedMainManifest)
-
-    doLast {
-        val supportedDomains = (listOf(defaultDomain) + supportedDomainsProperty
-            ?.split(',')
-            .orEmpty()
-            .map(String::trim)
-            .filter(String::isNotEmpty))
-            .distinct()
-        val manifestText = baseMainManifest.asFile.readText()
-        val marker = """                <data android:host="${'$'}{defaultDomain}" />"""
-        val replacement = supportedDomains.joinToString("\n") { """                <data android:host="$it" />""" }
-        check(manifestText.contains(marker)) { "Could not find $marker in ${baseMainManifest.asFile}" }
-        generatedMainManifest.get().asFile.apply {
-            parentFile.mkdirs()
-            writeText(manifestText.replace(marker, replacement))
-        }
-    }
+val generateMainManifest by tasks.registering(GenerateMainManifestTask::class) {
+    baseManifest.set(baseMainManifest)
+    primaryDomain.set(defaultDomain)
+    additionalDomains.set(supportedDomainsProperty
+        ?.split(',')
+        .orEmpty()
+        .map(String::trim)
+        .filter(String::isNotEmpty))
+    generatedManifest.set(generatedMainManifest)
 }
 
 plugins {
