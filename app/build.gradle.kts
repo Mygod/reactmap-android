@@ -1,8 +1,34 @@
 import com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.gradle.api.tasks.compile.JavaCompile
 
 private val javaVersion = JavaVersion.VERSION_11
+private val defaultDomain = providers.gradleProperty("reactmap.defaultDomain").orNull
+    ?: error("Missing required gradle property reactmap.defaultDomain")
+private val supportedDomainsProperty = providers.gradleProperty("reactmap.supportedDomains").orNull
+val baseMainManifest = layout.projectDirectory.file("src/main/AndroidManifest.xml")
+val generatedMainManifest = layout.buildDirectory.file("generated/local-manifest/AndroidManifest.xml")
+val generateMainManifest by tasks.registering {
+    inputs.file(baseMainManifest)
+    inputs.property("supportedDomains", supportedDomainsProperty ?: "")
+    outputs.file(generatedMainManifest)
+
+    doLast {
+        val supportedDomains = (listOf(defaultDomain) + supportedDomainsProperty
+            ?.split(',')
+            .orEmpty()
+            .map(String::trim)
+            .filter(String::isNotEmpty))
+            .distinct()
+        val manifestText = baseMainManifest.asFile.readText()
+        val marker = """                <data android:host="${'$'}{defaultDomain}" />"""
+        val replacement = supportedDomains.joinToString("\n") { """                <data android:host="$it" />""" }
+        check(manifestText.contains(marker)) { "Could not find $marker in ${baseMainManifest.asFile}" }
+        generatedMainManifest.get().asFile.apply {
+            parentFile.mkdirs()
+            writeText(manifestText.replace(marker, replacement))
+        }
+    }
+}
 
 plugins {
     alias(libs.plugins.androidApplication)
@@ -28,9 +54,6 @@ android {
 
         providers.gradleProperty("reactmap.appName").orNull
             ?.let { resValue("string", "app_name", it) }
-        val defaultDomain = providers.gradleProperty("reactmap.defaultDomain").orNull
-            ?: error("Missing required gradle property reactmap.defaultDomain")
-        manifestPlaceholders["defaultDomain"] = defaultDomain
         buildConfigField("String", "DEFAULT_DOMAIN", "\"$defaultDomain\"")
         androidResources.localeFilters += listOf("en-rUS", "pl")
         externalNativeBuild.cmake.arguments += listOf("-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON")   // TODO remove for NDK r28
@@ -63,6 +86,7 @@ android {
     lint.informational.add("MissingTranslation")
 
     sourceSets.getByName("main") {
+        manifest.srcFile(generatedMainManifest)
         java.directories.add("../brotli/java")
     }
     externalNativeBuild {
@@ -77,6 +101,10 @@ android {
         reset()
         include("arm64-v8a", "armeabi-v7a", "x86", "x86_64")
     }
+}
+
+tasks.named("preBuild").configure {
+    dependsOn(generateMainManifest)
 }
 
 tasks.withType<JavaCompile>().configureEach {
