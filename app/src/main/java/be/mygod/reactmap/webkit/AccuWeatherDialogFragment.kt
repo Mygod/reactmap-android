@@ -1,5 +1,6 @@
 package be.mygod.reactmap.webkit
 
+import android.content.Context
 import android.content.DialogInterface
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
@@ -11,6 +12,7 @@ import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ImageSpan
 import android.view.ViewGroup
+import android.webkit.WebSettings
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.i18n.DateTimeFormatter
@@ -18,6 +20,7 @@ import androidx.core.i18n.DateTimeFormatterSkeletonOptions
 import androidx.core.view.get
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
+import be.mygod.reactmap.App.Companion.app
 import be.mygod.reactmap.R
 import be.mygod.reactmap.util.AlertDialogFragment
 import be.mygod.reactmap.util.Empty
@@ -87,7 +90,16 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
             setOf(RegexOption.IGNORE_CASE, RegexOption.DOT_MATCHES_ALL),
         )
 
-        private fun URLConnection.setUserAgent() = setRequestProperty("User-Agent", "Mozilla/5.0 (Linux; Android 10)")
+        private fun URLConnection.setAccuWeatherHeaders(context: Context) {
+            setRequestProperty("User-Agent", runCatching {
+                WebSettings.getDefaultUserAgent(context)
+            }.getOrDefault("Mozilla/5.0 (Linux; Android 10)"))
+            setRequestProperty("Priority", "u=0, i")
+            setRequestProperty("Sec-Fetch-Dest", "document")
+            setRequestProperty("Sec-Fetch-Mode", "navigate")
+            setRequestProperty("Sec-Fetch-Site", "none")
+            setRequestProperty("Sec-Fetch-User", "?1")
+        }
         private val dailyWeatherGuessModel by lazy {
             Firebase.ai(backend = GenerativeBackend.googleAI()).generativeModel(
                 modelName = "gemini-2.5-flash",
@@ -120,7 +132,7 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
             val keyResponse = ReactMapHttpEngine.connectCancellable(
                 "https://www.accuweather.com/web-api/three-day-redirect?lat=${cell.latDegrees()}&lon=${
                     cell.lngDegrees()}") { conn ->
-                conn.setUserAgent()
+                conn.setAccuWeatherHeaders(app)
                 conn.instanceFollowRedirects = false
                 if (conn.responseCode != 302) throw Exception(
                     "${conn.responseCode}: ${conn.findErrorStream.bufferedReader().readText()}")
@@ -230,7 +242,7 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
                 "https://www.accuweather.com/$language/${arg.locationDescription}/${if (daily) {
                     "dai"
                 } else "hour"}ly-weather-forecast/${arg.locationKey}?unit=c$param") { conn ->
-                conn.setUserAgent()
+                conn.setAccuWeatherHeaders(requireContext())
                 conn.setRequestProperty("Accept-Language", locales.toLanguageTags().ifBlank { "en" })
                 if (conn.responseCode != 200) throw Exception(
                     "${conn.responseCode}: ${conn.findErrorStream.bufferedReader().readText()}"
