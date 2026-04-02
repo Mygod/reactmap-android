@@ -60,14 +60,28 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
     companion object {
         private const val dailyWeatherGuessModelName = "gemini-2.5-flash"
         private val weatherForecastMatcher = "^/en/([^/]*/[^/]*/[^/]*)/weather-forecast/([^?]*)".toRegex()
-        // raw: <div id="(\d+)" data-qa="\1" class="accordion-item hour".*?data-src="/images/weathericons/(?:v2a/)?(\d+).svg".*?<div class="phrase">([^<]*)</div>.*?<span class="value">...(\d+) km/h</span>(?:.*?<span class="value">...(\d+) km/h</span>)?
-        private val hourlyMatcher =
-            "<div id=\"(\\d+)\" data-qa=\"\\1\" class=\"accordion-item hour\".*?data-src=\"/images/weathericons/(?:v2a/)?(\\d+)\\.svg\".*?<div class=\"phrase\">([^<]*)</div>.*?<span class=\"value\">[^<]*?(\\d+) km/h</span>(?:.*?<span class=\"value\">[^<]*?(\\d+) km/h</span>)?"
-                .toPattern(Pattern.DOTALL)
-        // raw: <span class="module-header sub date">([^<]*)</span>.*?data-src="/images/weathericons/(?:v2a/)?(\d+).svg".*?<div class="phrase">([^<]*)</div>.*?<span class="value">...(\d+) km/h</span>(?:(?:(?!<span class="module-header sub date">).)*?<span class="value">...(\d+) km/h</span>)?
-        private val dailyMatcher =
-            "<span class=\"module-header sub date\">([^<]*)</span>.*?data-src=\"/images/weathericons/(?:v2a/)?(\\d+)\\.svg\".*?<div class=\"phrase\">([^<]*)</div>.*?<span class=\"value\">[^<]*?(\\d+) km/h</span>(?:(?:(?!<span class=\"module-header sub date\">).)*?<span class=\"value\">[^<]*?(\\d+) km/h</span>)?"
-                .toPattern(Pattern.DOTALL)
+        private val hourlyMatcher = (
+            "<div id=\"(\\d+)\"[^>]*class=\"accordion-item hour\"[^>]*>" +
+                "(?:(?!<div id=\"\\d+\"[^>]*class=\"accordion-item hour\").)*?" +
+                "<img class=\"icon\" src=\"/images/weathericons/(?:v2a/)?(\\d+)\\.svg\"" +
+                "(?:(?!<div id=\"\\d+\"[^>]*class=\"accordion-item hour\").)*?" +
+                "<div class=\"phrase\">([^<]*)</div>" +
+                "(?:(?!<div id=\"\\d+\"[^>]*class=\"accordion-item hour\").)*?" +
+                "<p(?: class=\"panel-item\")?>Wind<span class=\"value\">[^<]*?(\\d+) km/h</span></p>" +
+                "(?:(?:(?!<div id=\"\\d+\"[^>]*class=\"accordion-item hour\").)*?" +
+                "<p(?: class=\"panel-item\")?>Wind Gusts<span class=\"value\">[^<]*?(\\d+) km/h</span></p>)?"
+            ).toPattern(Pattern.DOTALL)
+        private val dailyMatcher = (
+            "<span class=\"module-header sub date\">([^<]*)</span>" +
+                "(?:(?!<div class=\"daily-wrapper\").)*?" +
+                "<img class=\"icon\" src=\"/images/weathericons/(?:v2a/)?(\\d+)\\.svg\"" +
+                "(?:(?!<div class=\"daily-wrapper\").)*?" +
+                "<div class=\"phrase\">([^<]*)</div>" +
+                "(?:(?!<div class=\"daily-wrapper\").)*?" +
+                "<p(?: class=\"panel-item\")?>Wind<span class=\"value\">[^<]*?(\\d+) km/h</span></p>" +
+                "(?:(?:(?!<div class=\"daily-wrapper\").)*?" +
+                "<p(?: class=\"panel-item\")?>Wind Gusts<span class=\"value\">[^<]*?(\\d+) km/h</span></p>)?"
+            ).toPattern(Pattern.DOTALL)
         private val dayFormat = SimpleDateFormat("M/d", Locale.US)
         private val aiGuessedDailyIconIds = setOf(30, 31)
         private val aiGuessableConditions = mapOf(
