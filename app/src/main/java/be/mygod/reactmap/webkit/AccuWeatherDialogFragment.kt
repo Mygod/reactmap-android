@@ -29,12 +29,11 @@ import be.mygod.reactmap.util.headerLocation
 import be.mygod.reactmap.util.readableMessage
 import com.google.common.geometry.S2LatLng
 import com.google.firebase.Firebase
+import com.google.firebase.ai.DownloadStatus
 import com.google.firebase.ai.InferenceMode
 import com.google.firebase.ai.OnDeviceConfig
+import com.google.firebase.ai.OnDeviceModelStatus
 import com.google.firebase.ai.ai
-import com.google.firebase.ai.ondevice.DownloadStatus
-import com.google.firebase.ai.ondevice.FirebaseAIOnDevice
-import com.google.firebase.ai.ondevice.OnDeviceModelStatus
 import com.google.firebase.ai.type.GenerativeBackend
 import com.google.firebase.ai.type.PublicPreviewAPI
 import com.google.firebase.ai.type.QuotaExceededException
@@ -150,6 +149,9 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
                 ),
             )
         }
+        private val dailyWeatherGuessOnDevice get() = checkNotNull(dailyWeatherGuessModelOnDevice.onDeviceExtension) {
+            "On-device AI extension is unavailable"
+        }
         private var onDeviceDownloadDeferred: CompletableDeferred<Boolean>? = null
 
         @Synchronized
@@ -159,14 +161,14 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
                 onDeviceDownloadDeferred = deferred
                 CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
                     try {
-                        when (FirebaseAIOnDevice.checkStatus()) {
+                        when (dailyWeatherGuessOnDevice.checkStatus()) {
                             OnDeviceModelStatus.AVAILABLE -> {
                                 Timber.i("On-device AI model is already available")
                                 deferred.complete(true)
                             }
                             OnDeviceModelStatus.DOWNLOADABLE -> {
                                 Timber.i("Starting on-device AI model download")
-                                FirebaseAIOnDevice.download().collect { status ->
+                                dailyWeatherGuessOnDevice.download().collect { status ->
                                     when (status) {
                                         is DownloadStatus.DownloadStarted ->
                                             Timber.i("On-device AI model download started: ${status.bytesToDownload} bytes")
@@ -185,19 +187,19 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
                                     }
                                 }
                                 if (!deferred.isCompleted) {
-                                    deferred.complete(FirebaseAIOnDevice.checkStatus() == OnDeviceModelStatus.AVAILABLE)
+                                    deferred.complete(dailyWeatherGuessOnDevice.checkStatus() == OnDeviceModelStatus.AVAILABLE)
                                 }
                             }
                             OnDeviceModelStatus.DOWNLOADING -> {
                                 Timber.i("Waiting for on-device AI model download already in progress")
-                                while (true) when (FirebaseAIOnDevice.checkStatus()) {
+                                while (true) when (dailyWeatherGuessOnDevice.checkStatus()) {
                                     OnDeviceModelStatus.AVAILABLE -> {
                                         deferred.complete(true)
                                         break
                                     }
                                     OnDeviceModelStatus.DOWNLOADABLE -> {
                                         Timber.i("Resuming on-device AI model download")
-                                        FirebaseAIOnDevice.download().collect { status ->
+                                        dailyWeatherGuessOnDevice.download().collect { status ->
                                             when (status) {
                                                 is DownloadStatus.DownloadStarted ->
                                                     Timber.i("On-device AI model download started: ${status.bytesToDownload} bytes")
@@ -216,7 +218,8 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
                                             }
                                         }
                                         if (!deferred.isCompleted) {
-                                            deferred.complete(FirebaseAIOnDevice.checkStatus() == OnDeviceModelStatus.AVAILABLE)
+                                            deferred.complete(
+                                                dailyWeatherGuessOnDevice.checkStatus() == OnDeviceModelStatus.AVAILABLE)
                                         }
                                         break
                                     }
@@ -267,7 +270,7 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
                 append(normalizedContext)
             }
             try {
-                val onDeviceModelReady = when (FirebaseAIOnDevice.checkStatus()) {
+                val onDeviceModelReady = when (dailyWeatherGuessOnDevice.checkStatus()) {
                     OnDeviceModelStatus.AVAILABLE -> true
                     OnDeviceModelStatus.DOWNLOADABLE, OnDeviceModelStatus.DOWNLOADING -> {
                         Timber.i("Waiting for on-device AI model download before running AccuWeather AI inference")

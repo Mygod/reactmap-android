@@ -55,7 +55,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.firebaseCrashlytics)
     // https://developers.google.com/android/guides/google-services-plugin#processing_the_json_file
-//    alias(libs.plugins.googleServices)
+    alias(libs.plugins.googleServices)
     alias(libs.plugins.kotlinAndroid)
     id("kotlin-parcelize")
 }
@@ -63,6 +63,7 @@ plugins {
 android {
     namespace = "be.mygod.reactmap"
     compileSdk = 36
+    compileSdkMinor = 1
 
     defaultConfig {
         applicationId = providers.gradleProperty("reactmap.packageName").orNull
