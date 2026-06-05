@@ -1,7 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Theme.ReactMap" parent="@style/Theme.Material3.DynamicColors.DayNight">
+    <style name="Theme.ReactMap" parent="@style/Theme.Material3Expressive.DynamicColors.DayNight">
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.ReactMap.MaterialAlertDialog</item>
+        <item name="materialSwitchStyle">@style/Widget.ReactMap.MaterialSwitch</item>
         <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="s">@mipmap/splash</item>
         <item name="android:windowSplashscreenContent">@mipmap/splash</item>
+    </style>
+
+    <style name="ThemeOverlay.ReactMap.MaterialAlertDialog" parent="@style/ThemeOverlay.Material3Expressive.MaterialAlertDialog">
+        <item name="buttonBarPositiveButtonStyle">@style/Widget.ReactMap.Button.Dialog.Positive</item>
+    </style>
+
+    <style name="Widget.ReactMap.Button.Dialog.Positive" parent="@style/Widget.Material3Expressive.Button">
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:singleLine">false</item>
+    </style>
+
+    <style name="Widget.ReactMap.MaterialSwitch" parent="@style/Widget.Material3.CompoundButton.MaterialSwitch">
+        <item name="thumbIcon">@drawable/switch_thumb_icon</item>
     </style>
 </resources>

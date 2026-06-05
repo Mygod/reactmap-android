@@ -56,14 +56,12 @@ plugins {
     alias(libs.plugins.firebaseCrashlytics)
     // https://developers.google.com/android/guides/google-services-plugin#processing_the_json_file
     alias(libs.plugins.googleServices)
-    alias(libs.plugins.kotlinAndroid)
-    id("kotlin-parcelize")
+    id("org.jetbrains.kotlin.plugin.parcelize")
 }
 
 android {
     namespace = "be.mygod.reactmap"
-    compileSdk = 36
-    compileSdkMinor = 1
+    compileSdk = 37
 
     defaultConfig {
         applicationId = providers.gradleProperty("reactmap.packageName").orNull
@@ -110,6 +108,7 @@ android {
     sourceSets.getByName("main") {
         manifest.srcFile(generatedMainManifest)
         java.directories.add("../brotli/java")
+        kotlin.directories.add("../brotli/java")
     }
     externalNativeBuild {
         cmake {
