@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">Helskärmskontroller för webbplatsen</string>
+    <string name="notification_channel_webhook_failed">Bakgrundsuppdatering av plats misslyckades</string>
+    <string name="notification_channel_webhook_updated">Bakgrundsplats uppdaterad</string>
+    <string name="notification_channel_webhook_updating">Bakgrundsplats uppdateras</string>
+    <string name="notification_site_controller_message">Tryck för att konfigurera</string>
+    <string name="notification_action_restart_game">Starta om spel</string>
+    <string name="notification_webhook_failed_title">Det gick inte att uppdatera platsen</string>
+    <string name="notification_webhook_updated_title">Plats uppdaterad</string>
+    <string name="notification_webhook_updating_title">Plats uppdateras</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f från %3$s</string>
+    <string name="config_dialog_title">ReactMap-URL:</string>
+    <string name="config_welcome">Du kan återgå till den här dialogrutan senare genom att trycka på aviseringen.</string>
+    <string name="config_switch_webhook_follow_location">Låt aviseringar följa platsen i bakgrunden\n(observera att du delar din plats med kartan)</string>
+    <string name="restart_game_dialog_title">Välj spelversion att starta om</string>
+    <string name="restart_game_dialog_message">Den här funktionen kräver Shizuku/Sui</string>
+    <string name="restart_game_standard">Standardfärger</string>
+    <string name="title_loading">Läser in…</string>
+    <string name="error_https_only">Endast HTTPS tillåts</string>
+    <string name="error_missing_bg_location_permission">Behörighet för bakgrundsplats saknas</string>
+    <string name="error_missing_location_permission">Platsbehörighet saknas</string>
+    <string name="error_unsupported_download">Nedladdning stöds inte: %1$s</string>
+    <string name="error_webhook_human_not_found">Användaren hittades inte</string>
+    <string name="pip_phone_enter_split">Starta delad skärm</string>
+    <string name="shortcut_splitscreen_short">Delad skärm</string>
+    <string name="shortcut_splitscreen_long">Starta delad skärm med spelet</string>
+    <string name="web_refresh">Uppdatera</string>
+    <string name="car_agreement_template"><big><b>Användarvillkor</b></big>\n<ul><li>Genom att använda %s (“kartan”) i ditt fordon godkänner du att den endast är för utveckling och testning, kan vara felaktig, används på egen risk, förare endast får använda den när fordonet står stilla och det är säkert, passagerare inte får distrahera föraren, trafiklagar måste följas och utvecklarna inte ansvarar.</li></ul></string>
+    <string name="car_agreement_proceed">Fortsätt</string>
+    <string name="car_toast_complicated_action">Utför den här åtgärden på din enhet</string>
+    <string name="car_toast_unsupported_url">Försöker öppna målwebbsidan på din enhet. Detta kan kräva att appen öppnas eller behörighet att visas över andra appar</string>
+    <string name="notification_channel_car_site_controller">Android Auto-kartkontroller</string>
+    <string name="notification_car_site_controller_message">Tryck för att avsluta sessionen</string>
+</resources>

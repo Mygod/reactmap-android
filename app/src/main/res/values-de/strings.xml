@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">Vollbild-Steuerung für die Website</string>
+    <string name="notification_channel_webhook_failed">Hintergrundaktualisierung des Standorts fehlgeschlagen</string>
+    <string name="notification_channel_webhook_updated">Hintergrundstandort aktualisiert</string>
+    <string name="notification_channel_webhook_updating">Hintergrundstandort wird aktualisiert</string>
+    <string name="notification_site_controller_message">Zum Konfigurieren tippen</string>
+    <string name="notification_action_restart_game">Spiel neustarten</string>
+    <string name="notification_webhook_failed_title">Standort konnte nicht aktualisiert werden</string>
+    <string name="notification_webhook_updated_title">Standort aktualisiert</string>
+    <string name="notification_webhook_updating_title">Standort wird aktualisiert</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f von %3$s</string>
+    <string name="config_dialog_title">ReactMap-URL:</string>
+    <string name="config_welcome">Du kannst später durch Tippen auf die Benachrichtigung zu diesem Dialog zurückkehren.</string>
+    <string name="config_switch_webhook_follow_location">Warnungen sollen dem Standort im Hintergrund folgen\n(beachte, dass du deinen Standort mit der Karte teilst)</string>
+    <string name="restart_game_dialog_title">Spielversion zum Neustarten auswählen</string>
+    <string name="restart_game_dialog_message">Diese Funktion erfordert Shizuku/Sui</string>
+    <string name="title_loading">Ladevorgang …</string>
+    <string name="error_https_only">Nur HTTPS ist erlaubt</string>
+    <string name="error_missing_bg_location_permission">Berechtigung für Hintergrundstandort fehlt</string>
+    <string name="error_missing_location_permission">Standortberechtigung fehlt</string>
+    <string name="error_unsupported_download">Nicht unterstützter Download: %1$s</string>
+    <string name="error_webhook_human_not_found">Benutzer nicht gefunden</string>
+    <string name="pip_phone_enter_split">„Geteilter Bildschirm“ aktivieren</string>
+    <string name="shortcut_splitscreen_short">Geteilter Bildschirm</string>
+    <string name="shortcut_splitscreen_long">Geteilten Bildschirm mit Spiel starten</string>
+    <string name="web_refresh">Aktualisieren</string>
+    <string name="car_agreement_template"><big><b>Nutzungsbedingungen</b></big>\n<ul><li>Durch die Nutzung von %s („die Karte“) in deinem Fahrzeug stimmst du zu, dass sie nur für Entwicklung und Tests bestimmt ist, ungenau sein kann, auf eigene Gefahr verwendet wird, Fahrer sie nur bei stehendem Fahrzeug und sicherer Situation nutzen dürfen, Mitfahrer den Fahrer nicht ablenken dürfen, Verkehrsregeln einzuhalten sind und die Entwickler nicht haften.</li></ul></string>
+    <string name="car_agreement_proceed">Fortfahren</string>
+    <string name="car_toast_complicated_action">Bitte führe diese Aktion stattdessen auf deinem Gerät aus</string>
+    <string name="car_toast_unsupported_url">Es wird versucht, die Zielwebseite auf deinem Gerät zu öffnen. Dazu muss möglicherweise die App geöffnet werden oder die Berechtigung zum Anzeigen über anderen Apps erteilt sein</string>
+    <string name="notification_channel_car_site_controller">Android Auto-Kartensteuerung</string>
+    <string name="notification_car_site_controller_message">Tippen, um die Sitzung zu beenden</string>
+</resources>

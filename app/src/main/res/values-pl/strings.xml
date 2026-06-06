@@ -30,4 +30,10 @@
     <string name="shortcut_splitscreen_short">Podzielony ekran</string>
     <string name="shortcut_splitscreen_long">Podziel ekran z grą</string>
     <string name="web_refresh">Odśwież</string>
+    <string name="car_agreement_template"><big><b>Warunki korzystania</b></big>\n<ul><li>Używając %s („Mapy”) w pojeździe, zgadzasz się, że służy ona wyłącznie do rozwoju i testów, może być niedokładna, używasz jej na własne ryzyko, kierowcy mogą jej używać tylko, gdy pojazd stoi i jest to bezpieczne, pasażerowie nie mogą rozpraszać kierowcy, należy przestrzegać przepisów ruchu drogowego, a deweloperzy nie ponoszą odpowiedzialności.</li></ul></string>
+    <string name="car_agreement_proceed">Dalej</string>
+    <string name="car_toast_complicated_action">Wykonaj tę czynność na swoim urządzeniu</string>
+    <string name="car_toast_unsupported_url">Próba otwarcia docelowej strony internetowej na urządzeniu. Może to wymagać otwarcia aplikacji lub uprawnienia do wyświetlania nad innymi aplikacjami</string>
+    <string name="notification_channel_car_site_controller">Sterowanie mapą Android Auto</string>
+    <string name="notification_car_site_controller_message">Kliknij, aby zakończyć sesję</string>
 </resources>

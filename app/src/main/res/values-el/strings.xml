@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">Στοιχεία ελέγχου ιστότοπου πλήρους οθόνης</string>
+    <string name="notification_channel_webhook_failed">Η ενημέρωση τοποθεσίας στο παρασκήνιο απέτυχε</string>
+    <string name="notification_channel_webhook_updated">Η τοποθεσία στο παρασκήνιο ενημερώθηκε</string>
+    <string name="notification_channel_webhook_updating">Η τοποθεσία στο παρασκήνιο ενημερώνεται</string>
+    <string name="notification_site_controller_message">Πατήστε για διαμόρφωση</string>
+    <string name="notification_action_restart_game">Επανεκκίνηση παιχνιδιού</string>
+    <string name="notification_webhook_failed_title">Αποτυχία ενημέρωσης τοποθεσίας</string>
+    <string name="notification_webhook_updated_title">Η τοποθεσία ενημερώθηκε</string>
+    <string name="notification_webhook_updating_title">Ενημέρωση τοποθεσίας</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f από %3$s</string>
+    <string name="config_dialog_title">URL ReactMap:</string>
+    <string name="config_welcome">Μπορείτε να επιστρέψετε σε αυτό το παράθυρο αργότερα πατώντας την ειδοποίηση.</string>
+    <string name="config_switch_webhook_follow_location">Να ακολουθούν οι ειδοποιήσεις την τοποθεσία στο παρασκήνιο\n(λάβετε υπόψη ότι θα κοινοποιείτε την τοποθεσία σας στον χάρτη)</string>
+    <string name="restart_game_dialog_title">Επιλέξτε έκδοση παιχνιδιού για επανεκκίνηση</string>
+    <string name="restart_game_dialog_message">Αυτή η λειτουργία απαιτεί Shizuku/Sui</string>
+    <string name="restart_game_standard">Τυπικός</string>
+    <string name="title_loading">Φόρτωση…</string>
+    <string name="error_https_only">Επιτρέπεται μόνο HTTPS</string>
+    <string name="error_missing_bg_location_permission">Λείπει άδεια τοποθεσίας στο παρασκήνιο</string>
+    <string name="error_missing_location_permission">Λείπει άδεια τοποθεσίας</string>
+    <string name="error_unsupported_download">Μη υποστηριζόμενη λήψη: %1$s</string>
+    <string name="error_webhook_human_not_found">Ο χρήστης δεν βρέθηκε</string>
+    <string name="pip_phone_enter_split">Μετάβαση σε διαχωρισμό οθόνης</string>
+    <string name="shortcut_splitscreen_short">Διαχωρισμός οθόνης</string>
+    <string name="shortcut_splitscreen_long">Έναρξη διαίρεσης οθόνης με το παιχνίδι</string>
+    <string name="web_refresh">Ανανέωση</string>
+    <string name="car_agreement_template"><big><b>Όροι χρήσης</b></big>\n<ul><li>Χρησιμοποιώντας το %s (“ο Χάρτης”) στο όχημά σας, συμφωνείτε ότι προορίζεται μόνο για ανάπτυξη και δοκιμές, μπορεί να είναι ανακριβές, χρησιμοποιείται με δική σας ευθύνη, οι οδηγοί πρέπει να το χρησιμοποιούν μόνο όταν το όχημα είναι σταματημένο και είναι ασφαλές, οι επιβάτες δεν πρέπει να αποσπούν την προσοχή του οδηγού, πρέπει να τηρούνται οι νόμοι κυκλοφορίας και οι προγραμματιστές δεν ευθύνονται.</li></ul></string>
+    <string name="car_agreement_proceed">Συνέχεια</string>
+    <string name="car_toast_complicated_action">Εκτελέστε αυτή την ενέργεια στη συσκευή σας</string>
+    <string name="car_toast_unsupported_url">Γίνεται προσπάθεια ανοίγματος της ιστοσελίδας προορισμού στη συσκευή σας. Αυτό μπορεί να απαιτεί άνοιγμα της εφαρμογής ή άδεια εμφάνισης πάνω από άλλες εφαρμογές</string>
+    <string name="notification_channel_car_site_controller">Στοιχεία ελέγχου χάρτη Android Auto</string>
+    <string name="notification_car_site_controller_message">Πατήστε για τερματισμό συνεδρίας</string>
+</resources>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">Commandes du site en plein écran</string>
+    <string name="notification_channel_webhook_failed">Échec de la mise à jour de la position en arrière-plan</string>
+    <string name="notification_channel_webhook_updated">Position en arrière-plan mise à jour</string>
+    <string name="notification_channel_webhook_updating">Mise à jour de la position en arrière-plan</string>
+    <string name="notification_site_controller_message">Touchez pour configurer</string>
+    <string name="notification_action_restart_game">Recommencer la partie</string>
+    <string name="notification_webhook_failed_title">Échec de la mise à jour de la position</string>
+    <string name="notification_webhook_updated_title">Position mise à jour</string>
+    <string name="notification_webhook_updating_title">Mise à jour de la position</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f depuis %3$s</string>
+    <string name="config_dialog_title">URL ReactMap :</string>
+    <string name="config_welcome">Vous pouvez revenir à cette boîte de dialogue plus tard en touchant la notification.</string>
+    <string name="config_switch_webhook_follow_location">Faire suivre la position aux alertes en arrière-plan\n(notez que vous partagerez votre position avec la carte)</string>
+    <string name="restart_game_dialog_title">Choisir la version du jeu à redémarrer</string>
+    <string name="restart_game_dialog_message">Cette fonction nécessite Shizuku/Sui</string>
+    <string name="restart_game_standard">Couleurs normales</string>
+    <string name="title_loading">Chargement…</string>
+    <string name="error_https_only">Seul HTTPS est autorisé</string>
+    <string name="error_missing_bg_location_permission">Autorisation de position en arrière-plan manquante</string>
+    <string name="error_missing_location_permission">Autorisation de position manquante</string>
+    <string name="error_unsupported_download">Téléchargement non pris en charge : %1$s</string>
+    <string name="error_webhook_human_not_found">Utilisateur introuvable</string>
+    <string name="pip_phone_enter_split">Accéder à l’écran partagé</string>
+    <string name="shortcut_splitscreen_short">Écran partagé</string>
+    <string name="shortcut_splitscreen_long">Démarrer l’écran partagé avec le jeu</string>
+    <string name="web_refresh">Actualiser</string>
+    <string name="car_agreement_template"><big><b>Conditions d’utilisation</b></big>\n<ul><li>En utilisant %s (« la carte ») dans votre véhicule, vous acceptez qu’elle soit destinée uniquement au développement et aux tests, qu’elle puisse être inexacte, qu’elle soit utilisée à vos propres risques, que les conducteurs ne l’utilisent que lorsque le véhicule est à l’arrêt et que cela est sûr, que les passagers ne distraient pas le conducteur, que le code de la route soit respecté et que les développeurs ne soient pas responsables.</li></ul></string>
+    <string name="car_agreement_proceed">Continuer</string>
+    <string name="car_toast_complicated_action">Veuillez effectuer cette action sur votre appareil</string>
+    <string name="car_toast_unsupported_url">Tentative d’ouverture de la page Web cible sur votre appareil. Cela peut nécessiter d’ouvrir l’application ou l’autorisation d’afficher par-dessus d’autres applications</string>
+    <string name="notification_channel_car_site_controller">Commandes de la carte Android Auto</string>
+    <string name="notification_car_site_controller_message">Touchez pour terminer la session</string>
+</resources>

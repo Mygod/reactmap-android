@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">Comenzi site pe ecran complet</string>
+    <string name="notification_channel_webhook_failed">Actualizarea locației în fundal a eșuat</string>
+    <string name="notification_channel_webhook_updated">Locația în fundal a fost actualizată</string>
+    <string name="notification_channel_webhook_updating">Se actualizează locația în fundal</string>
+    <string name="notification_site_controller_message">Atinge pentru configurare</string>
+    <string name="notification_action_restart_game">Reîncepe jocul</string>
+    <string name="notification_webhook_failed_title">Actualizarea locației a eșuat</string>
+    <string name="notification_webhook_updated_title">Locație actualizată</string>
+    <string name="notification_webhook_updating_title">Se actualizează locația</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f de la %3$s</string>
+    <string name="config_dialog_title">URL ReactMap:</string>
+    <string name="config_welcome">Puteți reveni la acest dialog mai târziu atingând notificarea.</string>
+    <string name="config_switch_webhook_follow_location">Permite alertelor să urmeze locația în fundal\n(rețineți că veți partaja locația cu harta)</string>
+    <string name="restart_game_dialog_title">Alegeți versiunea jocului de repornit</string>
+    <string name="restart_game_dialog_message">Această funcție necesită Shizuku/Sui</string>
+    <string name="title_loading">Se încarcă…</string>
+    <string name="error_https_only">Este permis doar HTTPS</string>
+    <string name="error_missing_bg_location_permission">Lipsește permisiunea de locație în fundal</string>
+    <string name="error_missing_location_permission">Lipsește permisiunea de locație</string>
+    <string name="error_unsupported_download">Descărcare neacceptată: %1$s</string>
+    <string name="error_webhook_human_not_found">Utilizatorul nu a fost găsit</string>
+    <string name="pip_phone_enter_split">Accesează ecranul împărțit</string>
+    <string name="shortcut_splitscreen_short">Ecran împărțit</string>
+    <string name="shortcut_splitscreen_long">Pornește ecran divizat cu jocul</string>
+    <string name="web_refresh">Reîmprospătează</string>
+    <string name="car_agreement_template"><big><b>Termeni de utilizare</b></big>\n<ul><li>Folosind %s („Harta”) în vehicul, sunteți de acord că este doar pentru dezvoltare și testare, poate fi inexactă, este utilizată pe propriul risc, șoferii trebuie să o folosească doar când vehiculul este oprit și este sigur, pasagerii nu trebuie să distragă șoferul, legile rutiere trebuie respectate, iar dezvoltatorii nu sunt responsabili.</li></ul></string>
+    <string name="car_agreement_proceed">Continuă</string>
+    <string name="car_toast_complicated_action">Efectuați această acțiune pe dispozitiv</string>
+    <string name="car_toast_unsupported_url">Se încearcă deschiderea paginii web țintă pe dispozitiv. Poate fi necesară deschiderea aplicației sau permisiunea de afișare peste alte aplicații</string>
+    <string name="notification_channel_car_site_controller">Comenzi hartă Android Auto</string>
+    <string name="notification_car_site_controller_message">Atinge pentru a încheia sesiunea</string>
+</resources>

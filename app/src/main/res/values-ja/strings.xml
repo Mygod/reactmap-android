@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">全画面サイトコントロール</string>
+    <string name="notification_channel_webhook_failed">バックグラウンド位置情報の更新に失敗しました</string>
+    <string name="notification_channel_webhook_updated">バックグラウンド位置情報を更新しました</string>
+    <string name="notification_channel_webhook_updating">バックグラウンド位置情報を更新中</string>
+    <string name="notification_site_controller_message">タップして設定</string>
+    <string name="notification_action_restart_game">ゲームを再起動</string>
+    <string name="notification_webhook_failed_title">位置情報を更新できませんでした</string>
+    <string name="notification_webhook_updated_title">位置情報を更新しました</string>
+    <string name="notification_webhook_updating_title">位置情報を更新中</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f（%3$s から）</string>
+    <string name="config_welcome">通知をタップすると、後でこのダイアログに戻れます。</string>
+    <string name="config_switch_webhook_follow_location">バックグラウンドでアラートが位置情報に追従するようにする\n（位置情報をマップと共有することに注意してください）</string>
+    <string name="restart_game_dialog_title">再起動するゲームのバージョンを選択</string>
+    <string name="restart_game_dialog_message">この機能には Shizuku/Sui が必要です</string>
+    <string name="restart_game_standard">標準</string>
+    <string name="title_loading">読み込み中…</string>
+    <string name="error_https_only">HTTPS のみ許可されています</string>
+    <string name="error_missing_bg_location_permission">バックグラウンド位置情報の権限がありません</string>
+    <string name="error_missing_location_permission">位置情報の権限がありません</string>
+    <string name="error_unsupported_download">未対応のダウンロード: %1$s</string>
+    <string name="error_webhook_human_not_found">ユーザーが見つかりません</string>
+    <string name="pip_phone_enter_split">分割画面に切り替え</string>
+    <string name="shortcut_splitscreen_short">分割画面</string>
+    <string name="shortcut_splitscreen_long">ゲームと分割画面を開始</string>
+    <string name="web_refresh">更新</string>
+    <string name="car_agreement_template"><big><b>利用規約</b></big>\n<ul><li>車両内で %s（「マップ」）を使用することで、これは開発およびテスト専用であり、不正確な場合があり、自己責任で使用すること、運転者は車両が停止して安全な場合にのみ使用すること、同乗者は運転者の注意をそらさないこと、交通法規を守ること、開発者は責任を負わないことに同意します。</li></ul></string>
+    <string name="car_agreement_proceed">続行</string>
+    <string name="car_toast_complicated_action">この操作は端末で行ってください</string>
+    <string name="car_toast_unsupported_url">対象のウェブページを端末で開こうとしています。アプリを開くこと、または他のアプリの上に表示する権限が必要になる場合があります</string>
+    <string name="notification_channel_car_site_controller">Android Auto マップコントロール</string>
+    <string name="notification_car_site_controller_message">タップしてセッションを終了</string>
+</resources>

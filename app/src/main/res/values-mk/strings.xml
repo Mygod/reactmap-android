@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">Контроли на страницата на цел екран</string>
+    <string name="notification_channel_webhook_failed">Ажурирањето на локацијата во позадина не успеа</string>
+    <string name="notification_channel_webhook_updated">Локацијата во позадина е ажурирана</string>
+    <string name="notification_channel_webhook_updating">Локацијата во позадина се ажурира</string>
+    <string name="notification_site_controller_message">Допрете за конфигурирање</string>
+    <string name="notification_action_restart_game">Рестартирај игра</string>
+    <string name="notification_webhook_failed_title">Не успеа ажурирањето на локацијата</string>
+    <string name="notification_webhook_updated_title">Локацијата е ажурирана</string>
+    <string name="notification_webhook_updating_title">Локацијата се ажурира</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f од %3$s</string>
+    <string name="config_dialog_title">URL на ReactMap:</string>
+    <string name="config_welcome">Можете подоцна да се вратите на овој дијалог со допирање на известувањето.</string>
+    <string name="config_switch_webhook_follow_location">Нека предупредувањата ја следат локацијата во позадина\n(имајте предвид дека ќе ја споделувате локацијата со картата)</string>
+    <string name="restart_game_dialog_title">Изберете верзија на играта за рестартирање</string>
+    <string name="restart_game_dialog_message">Оваа функција бара Shizuku/Sui</string>
+    <string name="restart_game_standard">Стандардно</string>
+    <string name="title_loading">Вчитувам...</string>
+    <string name="error_https_only">Дозволен е само HTTPS</string>
+    <string name="error_missing_bg_location_permission">Недостига дозвола за локација во позадина</string>
+    <string name="error_missing_location_permission">Недостига дозвола за локација</string>
+    <string name="error_unsupported_download">Неподдржано преземање: %1$s</string>
+    <string name="error_webhook_human_not_found">Корисникот не е пронајден</string>
+    <string name="pip_phone_enter_split">Влези во поделен екран</string>
+    <string name="shortcut_splitscreen_short">Поделен екран</string>
+    <string name="shortcut_splitscreen_long">Започни поделен екран со играта</string>
+    <string name="web_refresh">Освежи</string>
+    <string name="car_agreement_template"><big><b>Услови за користење</b></big>\n<ul><li>Со користење на %s (“Картата”) во вашето возило, се согласувате дека е само за развој и тестирање, може да биде неточна, ја користите на сопствен ризик, возачите треба да ја користат само кога возилото е запрено и е безбедно, патниците не смеат да го одвлекуваат вниманието на возачот, мора да се почитуваат сообраќајните закони и програмерите не се одговорни.</li></ul></string>
+    <string name="car_agreement_proceed">Продолжи</string>
+    <string name="car_toast_complicated_action">Извршете ја оваа акција на вашиот уред</string>
+    <string name="car_toast_unsupported_url">Се обидува да ја отвори целната веб-страница на вашиот уред. Ова може да бара отворање на апликацијата или дозвола за прикажување над други апликации</string>
+    <string name="notification_channel_car_site_controller">Контроли на картата Android Auto</string>
+    <string name="notification_car_site_controller_message">Допрете за завршување на сесијата</string>
+</resources>

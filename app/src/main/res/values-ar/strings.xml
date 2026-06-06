@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">عناصر تحكم الموقع بملء الشاشة</string>
+    <string name="notification_channel_webhook_failed">فشل تحديث الموقع في الخلفية</string>
+    <string name="notification_channel_webhook_updated">تم تحديث الموقع في الخلفية</string>
+    <string name="notification_channel_webhook_updating">جارٍ تحديث الموقع في الخلفية</string>
+    <string name="notification_site_controller_message">انقر للتهيئة</string>
+    <string name="notification_action_restart_game">إعادة تشغيل اللعبة</string>
+    <string name="notification_webhook_failed_title">تعذّر تحديث الموقع</string>
+    <string name="notification_webhook_updated_title">تم تحديث الموقع</string>
+    <string name="notification_webhook_updating_title">جارٍ تحديث الموقع</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f من %3$s</string>
+    <string name="config_dialog_title">عنوان ReactMap:</string>
+    <string name="config_welcome">يمكنك الرجوع إلى مربع الحوار هذا لاحقًا بالنقر على الإشعار.</string>
+    <string name="config_switch_webhook_follow_location">اجعل التنبيهات تتبع الموقع في الخلفية\n(انتبه إلى أنك ستشارك موقعك مع الخريطة)</string>
+    <string name="restart_game_dialog_title">اختر إصدار اللعبة لإعادة تشغيله</string>
+    <string name="restart_game_dialog_message">تتطلب هذه الميزة Shizuku/Sui</string>
+    <string name="restart_game_standard">قياسي</string>
+    <string name="title_loading">يُحمّل…</string>
+    <string name="error_https_only">يُسمح بـ HTTPS فقط</string>
+    <string name="error_missing_bg_location_permission">إذن الموقع في الخلفية مفقود</string>
+    <string name="error_missing_location_permission">إذن الموقع مفقود</string>
+    <string name="error_unsupported_download">تنزيل غير مدعوم: %1$s</string>
+    <string name="error_webhook_human_not_found">لم يتم العثور على المستخدم</string>
+    <string name="pip_phone_enter_split">الدخول في وضع تقسيم الشاشة</string>
+    <string name="shortcut_splitscreen_short">تقسيم الشاشة</string>
+    <string name="shortcut_splitscreen_long">بدء تقسيم الشاشة مع اللعبة</string>
+    <string name="web_refresh">حدّث</string>
+    <string name="car_agreement_template"><big><b>شروط الاستخدام</b></big>\n<ul><li>باستخدام %s (“الخريطة”) في مركبتك، فإنك توافق على أنها مخصصة للتطوير والاختبار فقط، وقد تكون غير دقيقة، وتُستخدم على مسؤوليتك الخاصة، وأن السائقين لا يستخدمونها إلا عندما تكون المركبة متوقفة ويكون ذلك آمنًا، وألا يشتت الركاب انتباه السائق، وأنه يجب الالتزام بقوانين المرور، وأن المطورين غير مسؤولين.</li></ul></string>
+    <string name="car_agreement_proceed">متابعة</string>
+    <string name="car_toast_complicated_action">يرجى تنفيذ هذا الإجراء على جهازك بدلًا من ذلك</string>
+    <string name="car_toast_unsupported_url">تتم محاولة فتح صفحة الويب الهدف على جهازك. قد يتطلب ذلك فتح التطبيق أو منح إذن العرض فوق التطبيقات الأخرى</string>
+    <string name="notification_channel_car_site_controller">عناصر تحكم خريطة Android Auto</string>
+    <string name="notification_car_site_controller_message">انقر لإنهاء الجلسة</string>
+</resources>

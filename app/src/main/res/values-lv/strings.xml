@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">Pilnekrāna vietnes vadīklas</string>
+    <string name="notification_channel_webhook_failed">Fona atrašanās vietas atjaunināšana neizdevās</string>
+    <string name="notification_channel_webhook_updated">Fona atrašanās vieta atjaunināta</string>
+    <string name="notification_channel_webhook_updating">Fona atrašanās vieta tiek atjaunināta</string>
+    <string name="notification_site_controller_message">Pieskarieties, lai konfigurētu</string>
+    <string name="notification_action_restart_game">Pārstartēt spēli</string>
+    <string name="notification_webhook_failed_title">Neizdevās atjaunināt atrašanās vietu</string>
+    <string name="notification_webhook_updated_title">Atrašanās vieta atjaunināta</string>
+    <string name="notification_webhook_updating_title">Atrašanās vieta tiek atjaunināta</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f no %3$s</string>
+    <string name="config_welcome">Varat atgriezties šajā dialogā vēlāk, pieskaroties paziņojumam.</string>
+    <string name="config_switch_webhook_follow_location">Lai brīdinājumi fonā seko atrašanās vietai\n(ņemiet vērā, ka kopīgosit savu atrašanās vietu ar karti)</string>
+    <string name="restart_game_dialog_title">Izvēlieties restartējamo spēles versiju</string>
+    <string name="restart_game_dialog_message">Šai funkcijai nepieciešams Shizuku/Sui</string>
+    <string name="restart_game_standard">Standarta</string>
+    <string name="title_loading">Ielādē…</string>
+    <string name="error_https_only">Atļauts tikai HTTPS</string>
+    <string name="error_missing_bg_location_permission">Trūkst fona atrašanās vietas atļaujas</string>
+    <string name="error_missing_location_permission">Trūkst atrašanās vietas atļaujas</string>
+    <string name="error_unsupported_download">Neatbalstīta lejupielāde: %1$s</string>
+    <string name="error_webhook_human_not_found">Lietotājs nav atrasts</string>
+    <string name="pip_phone_enter_split">Piekļūt ekrāna sadalīšanas režīmam</string>
+    <string name="shortcut_splitscreen_short">Sadalīt ekrānu</string>
+    <string name="shortcut_splitscreen_long">Sākt dalīto ekrānu ar spēli</string>
+    <string name="web_refresh">Atsvaidzināt</string>
+    <string name="car_agreement_template"><big><b>Lietošanas noteikumi</b></big>\n<ul><li>Izmantojot %s (“karti”) savā transportlīdzeklī, jūs piekrītat, ka tā paredzēta tikai izstrādei un testēšanai, var būt neprecīza, tiek izmantota uz jūsu risku, vadītāji to drīkst lietot tikai tad, kad transportlīdzeklis stāv un tas ir droši, pasažieri nedrīkst novērst vadītāja uzmanību, jāievēro satiksmes noteikumi un izstrādātāji nav atbildīgi.</li></ul></string>
+    <string name="car_agreement_proceed">Turpināt</string>
+    <string name="car_toast_complicated_action">Veiciet šo darbību savā ierīcē</string>
+    <string name="car_toast_unsupported_url">Mēģina atvērt mērķa tīmekļa lapu jūsu ierīcē. Tam var būt nepieciešams atvērt lietotni vai atļauja rādīt virs citām lietotnēm</string>
+    <string name="notification_channel_car_site_controller">Android Auto kartes vadīklas</string>
+    <string name="notification_car_site_controller_message">Pieskarieties, lai beigtu sesiju</string>
+</resources>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">Stýringar vefs í fullum skjá</string>
+    <string name="notification_channel_webhook_failed">Uppfærsla staðsetningar í bakgrunni mistókst</string>
+    <string name="notification_channel_webhook_updated">Staðsetning í bakgrunni uppfærð</string>
+    <string name="notification_channel_webhook_updating">Staðsetning í bakgrunni er uppfærð</string>
+    <string name="notification_site_controller_message">Pikkaðu til að stilla</string>
+    <string name="notification_action_restart_game">Endurræsa leik</string>
+    <string name="notification_webhook_failed_title">Mistókst að uppfæra staðsetningu</string>
+    <string name="notification_webhook_updated_title">Staðsetning uppfærð</string>
+    <string name="notification_webhook_updating_title">Staðsetning er uppfærð</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f frá %3$s</string>
+    <string name="config_dialog_title">ReactMap-slóð:</string>
+    <string name="config_welcome">Þú getur farið aftur í þennan glugga síðar með því að pikka á tilkynninguna.</string>
+    <string name="config_switch_webhook_follow_location">Láta viðvaranir fylgja staðsetningu í bakgrunni\n(athugaðu að þú deilir staðsetningu þinni með kortinu)</string>
+    <string name="restart_game_dialog_title">Veldu útgáfu leiks til að endurræsa</string>
+    <string name="restart_game_dialog_message">Þessi eiginleiki krefst Shizuku/Sui</string>
+    <string name="restart_game_standard">Hefðbundnir</string>
+    <string name="title_loading">Hleð inn…</string>
+    <string name="error_https_only">Aðeins HTTPS er leyft</string>
+    <string name="error_missing_bg_location_permission">Vantar heimild fyrir staðsetningu í bakgrunni</string>
+    <string name="error_missing_location_permission">Vantar staðsetningarheimild</string>
+    <string name="error_unsupported_download">Óstutt niðurhal: %1$s</string>
+    <string name="error_webhook_human_not_found">Notandi fannst ekki</string>
+    <string name="pip_phone_enter_split">Opna skjáskiptingu</string>
+    <string name="shortcut_splitscreen_short">Skipta skjá</string>
+    <string name="shortcut_splitscreen_long">Ræsa skiptan skjá með leiknum</string>
+    <string name="web_refresh">Uppfæra</string>
+    <string name="car_agreement_template"><big><b>Notkunarskilmálar</b></big>\n<ul><li>Með því að nota %s (“kortið”) í ökutækinu samþykkirðu að það sé aðeins fyrir þróun og prófanir, geti verið ónákvæmt, sé notað á eigin ábyrgð, ökumenn noti það aðeins þegar ökutækið er kyrrt og það er öruggt, farþegar trufli ekki ökumann, umferðarlögum sé fylgt og forritarar beri ekki ábyrgð.</li></ul></string>
+    <string name="car_agreement_proceed">Halda áfram</string>
+    <string name="car_toast_complicated_action">Framkvæmdu þessa aðgerð í tækinu þínu</string>
+    <string name="car_toast_unsupported_url">Reynt er að opna markvefsíðuna í tækinu þínu. Það kann að krefjast þess að opna forritið eða heimildar til að birta yfir öðrum forritum</string>
+    <string name="notification_channel_car_site_controller">Android Auto kortastýringar</string>
+    <string name="notification_car_site_controller_message">Pikkaðu til að ljúka lotu</string>
+</resources>

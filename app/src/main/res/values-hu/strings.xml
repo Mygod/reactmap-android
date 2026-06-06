@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">Teljes képernyős webhelyvezérlők</string>
+    <string name="notification_channel_webhook_failed">A háttérbeli helyfrissítés sikertelen</string>
+    <string name="notification_channel_webhook_updated">Háttérbeli hely frissítve</string>
+    <string name="notification_channel_webhook_updating">Háttérbeli hely frissítése</string>
+    <string name="notification_site_controller_message">Koppintson a beállításhoz</string>
+    <string name="notification_action_restart_game">Játék újraindítása</string>
+    <string name="notification_webhook_failed_title">Nem sikerült frissíteni a helyet</string>
+    <string name="notification_webhook_updated_title">Hely frissítve</string>
+    <string name="notification_webhook_updating_title">Hely frissítése</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f innen: %3$s</string>
+    <string name="config_dialog_title">ReactMap URL-címe:</string>
+    <string name="config_welcome">Később az értesítésre koppintva visszatérhet ehhez a párbeszédhez.</string>
+    <string name="config_switch_webhook_follow_location">A riasztások kövessék a helyet a háttérben\n(ne feledje, hogy megosztja helyét a térképpel)</string>
+    <string name="restart_game_dialog_title">Válassza ki az újraindítandó játékverziót</string>
+    <string name="restart_game_dialog_message">Ehhez a funkcióhoz Shizuku/Sui szükséges</string>
+    <string name="restart_game_standard">Szabványos</string>
+    <string name="title_loading">Betöltés…</string>
+    <string name="error_https_only">Csak HTTPS engedélyezett</string>
+    <string name="error_missing_bg_location_permission">Hiányzik a háttérbeli helyengedély</string>
+    <string name="error_missing_location_permission">Hiányzik a helyengedély</string>
+    <string name="error_unsupported_download">Nem támogatott letöltés: %1$s</string>
+    <string name="error_webhook_human_not_found">A felhasználó nem található</string>
+    <string name="pip_phone_enter_split">Váltás osztott képernyőre</string>
+    <string name="shortcut_splitscreen_short">Osztott képernyő</string>
+    <string name="shortcut_splitscreen_long">Osztott képernyő indítása a játékkal</string>
+    <string name="web_refresh">Frissítés</string>
+    <string name="car_agreement_template"><big><b>Felhasználási feltételek</b></big>\n<ul><li>A %s („a térkép”) járműben való használatával elfogadja, hogy az csak fejlesztésre és tesztelésre szolgál, pontatlan lehet, saját felelősségére használja, a vezetők csak álló járműben és biztonságos helyzetben használhatják, az utasok nem zavarhatják a vezetőt, be kell tartani a közlekedési szabályokat, és a fejlesztők nem vállalnak felelősséget.</li></ul></string>
+    <string name="car_agreement_proceed">Tovább</string>
+    <string name="car_toast_complicated_action">Ezt a műveletet az eszközén hajtsa végre</string>
+    <string name="car_toast_unsupported_url">A cél weboldal megnyitása az eszközön. Ehhez szükség lehet az alkalmazás megnyitására vagy a más alkalmazások feletti megjelenítés engedélyére</string>
+    <string name="notification_channel_car_site_controller">Android Auto térképvezérlők</string>
+    <string name="notification_car_site_controller_message">Koppintson a munkamenet befejezéséhez</string>
+</resources>

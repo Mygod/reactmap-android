@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">Volskerm-werfkontroles</string>
+    <string name="notification_channel_webhook_failed">Agtergrondliggingopdatering het misluk</string>
+    <string name="notification_channel_webhook_updated">Agtergrondligging opgedateer</string>
+    <string name="notification_channel_webhook_updating">Agtergrondligging word opgedateer</string>
+    <string name="notification_site_controller_message">Tik om op te stel</string>
+    <string name="notification_action_restart_game">Herbegin speletjie</string>
+    <string name="notification_webhook_failed_title">Kon ligging nie opdateer nie</string>
+    <string name="notification_webhook_updated_title">Ligging opgedateer</string>
+    <string name="notification_webhook_updating_title">Ligging word opgedateer</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f vanaf %3$s</string>
+    <string name="config_dialog_title">ReactMap-URL:</string>
+    <string name="config_welcome">Jy kan later na hierdie dialoog terugkeer deur op die kennisgewing te tik.</string>
+    <string name="config_switch_webhook_follow_location">Laat waarskuwings die ligging in die agtergrond volg\n(let daarop dat jy jou ligging met die kaart deel)</string>
+    <string name="restart_game_dialog_title">Kies spelweergawe om te herbegin</string>
+    <string name="restart_game_dialog_message">Hierdie kenmerk vereis Shizuku/Sui</string>
+    <string name="restart_game_standard">Standaard</string>
+    <string name="title_loading">Laai tans…</string>
+    <string name="error_https_only">Slegs HTTPS word toegelaat</string>
+    <string name="error_missing_bg_location_permission">Agtergrondliggingtoestemming ontbreek</string>
+    <string name="error_missing_location_permission">Liggingtoestemming ontbreek</string>
+    <string name="error_unsupported_download">Nie-ondersteunde aflaai: %1$s</string>
+    <string name="error_webhook_human_not_found">Mens nie gevind nie</string>
+    <string name="pip_phone_enter_split">Gaan by verdeelde skerm in</string>
+    <string name="shortcut_splitscreen_short">Verdeelde skerm</string>
+    <string name="shortcut_splitscreen_long">Begin verdeelde skerm met speletjie</string>
+    <string name="web_refresh">Verfris</string>
+    <string name="car_agreement_template"><big><b>Gebruiksvoorwaardes</b></big>\n<ul><li>Deur %s (“die Kaart”) in jou voertuig te gebruik, stem jy saam dat dit net vir ontwikkeling en toetsing is, onakkuraat kan wees, op eie risiko gebruik word, bestuurders dit net mag gebruik wanneer die voertuig stil staan en dit veilig is, passasiers nie die bestuurder mag aflei nie, verkeerswette gevolg moet word, en die ontwikkelaars nie aanspreeklik is nie.</li></ul></string>
+    <string name="car_agreement_proceed">Gaan voort</string>
+    <string name="car_toast_complicated_action">Voer asseblief hierdie aksie eerder op jou toestel uit</string>
+    <string name="car_toast_unsupported_url">Probeer om die teikenwebblad op jou toestel oop te maak. Dit kan vereis dat die toepassing oopgemaak word of toestemming het om oor ander programme te vertoon</string>
+    <string name="notification_channel_car_site_controller">Android Auto-kaartkontroles</string>
+    <string name="notification_car_site_controller_message">Tik om sessie te beëindig</string>
+</resources>

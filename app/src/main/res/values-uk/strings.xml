@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">Елементи керування сайтом на весь екран</string>
+    <string name="notification_channel_webhook_failed">Не вдалося оновити місцезнаходження у фоновому режимі</string>
+    <string name="notification_channel_webhook_updated">Фонове місцезнаходження оновлено</string>
+    <string name="notification_channel_webhook_updating">Фонове місцезнаходження оновлюється</string>
+    <string name="notification_site_controller_message">Торкніться, щоб налаштувати</string>
+    <string name="notification_action_restart_game">Перезапустити гру</string>
+    <string name="notification_webhook_failed_title">Не вдалося оновити місцезнаходження</string>
+    <string name="notification_webhook_updated_title">Місцезнаходження оновлено</string>
+    <string name="notification_webhook_updating_title">Місцезнаходження оновлюється</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f з %3$s</string>
+    <string name="config_dialog_title">URL ReactMap:</string>
+    <string name="config_welcome">Ви можете повернутися до цього діалогу пізніше, торкнувшись сповіщення.</string>
+    <string name="config_switch_webhook_follow_location">Нехай сповіщення відстежують місцезнаходження у фоні\n(зверніть увагу, що ви ділитиметеся своїм місцезнаходженням із картою)</string>
+    <string name="restart_game_dialog_title">Виберіть версію гри для перезапуску</string>
+    <string name="restart_game_dialog_message">Для цієї функції потрібен Shizuku/Sui</string>
+    <string name="restart_game_standard">Стандартний</string>
+    <string name="title_loading">Завантаження…</string>
+    <string name="error_https_only">Дозволено лише HTTPS</string>
+    <string name="error_missing_bg_location_permission">Немає дозволу на фонове місцезнаходження</string>
+    <string name="error_missing_location_permission">Немає дозволу на місцезнаходження</string>
+    <string name="error_unsupported_download">Непідтримуване завантаження: %1$s</string>
+    <string name="error_webhook_human_not_found">Користувача не знайдено</string>
+    <string name="pip_phone_enter_split">Розділити екран</string>
+    <string name="shortcut_splitscreen_short">Розділити екран</string>
+    <string name="shortcut_splitscreen_long">Запустити розділений екран із грою</string>
+    <string name="web_refresh">Оновити</string>
+    <string name="car_agreement_template"><big><b>Умови використання</b></big>\n<ul><li>Використовуючи %s («Карту») у своєму транспортному засобі, ви погоджуєтеся, що вона призначена лише для розробки та тестування, може бути неточною, використовується на ваш ризик, водії мають користуватися нею лише коли транспортний засіб стоїть і це безпечно, пасажири не повинні відволікати водія, правила дорожнього руху мають виконуватися, а розробники не несуть відповідальності.</li></ul></string>
+    <string name="car_agreement_proceed">Продовжити</string>
+    <string name="car_toast_complicated_action">Виконайте цю дію на своєму пристрої</string>
+    <string name="car_toast_unsupported_url">Спроба відкрити цільову вебсторінку на вашому пристрої. Для цього може знадобитися відкрити застосунок або дозвіл показу поверх інших застосунків</string>
+    <string name="notification_channel_car_site_controller">Керування картою Android Auto</string>
+    <string name="notification_car_site_controller_message">Торкніться, щоб завершити сеанс</string>
+</resources>

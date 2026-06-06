@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">فل اسکرین سائٹ کنٹرولز</string>
+    <string name="notification_channel_webhook_failed">پس منظر مقام اپ ڈیٹ ناکام ہوئی</string>
+    <string name="notification_channel_webhook_updated">پس منظر مقام اپ ڈیٹ ہو گیا</string>
+    <string name="notification_channel_webhook_updating">پس منظر مقام اپ ڈیٹ ہو رہا ہے</string>
+    <string name="notification_site_controller_message">ترتیب دینے کے لیے ٹیپ کریں</string>
+    <string name="notification_action_restart_game">گیم دوبارہ شروع کریں</string>
+    <string name="notification_webhook_failed_title">مقام اپ ڈیٹ کرنے میں ناکامی</string>
+    <string name="notification_webhook_updated_title">مقام اپ ڈیٹ ہو گیا</string>
+    <string name="notification_webhook_updating_title">مقام اپ ڈیٹ ہو رہا ہے</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f از %3$s</string>
+    <string name="config_welcome">آپ اطلاع پر ٹیپ کر کے بعد میں اس مکالمے پر واپس آ سکتے ہیں۔</string>
+    <string name="config_switch_webhook_follow_location">الرٹس کو پس منظر میں مقام کی پیروی کرنے دیں\n(یاد رکھیں کہ آپ اپنا مقام نقشے کے ساتھ شیئر کریں گے)</string>
+    <string name="restart_game_dialog_title">دوبارہ شروع کرنے کے لیے گیم ورژن منتخب کریں</string>
+    <string name="restart_game_dialog_message">اس خصوصیت کے لیے Shizuku/Sui درکار ہے</string>
+    <string name="restart_game_standard">معیاری</string>
+    <string name="title_loading">لوڈ ہو رہی ہے…</string>
+    <string name="error_https_only">صرف HTTPS کی اجازت ہے</string>
+    <string name="error_missing_bg_location_permission">پس منظر مقام کی اجازت موجود نہیں</string>
+    <string name="error_missing_location_permission">مقام کی اجازت موجود نہیں</string>
+    <string name="error_unsupported_download">غیر معاون ڈاؤن لوڈ: %1$s</string>
+    <string name="error_webhook_human_not_found">صارف نہیں ملا</string>
+    <string name="pip_phone_enter_split">اسپلٹ اسکرین تک رسائی</string>
+    <string name="shortcut_splitscreen_short">اسپلٹ اسکرین</string>
+    <string name="shortcut_splitscreen_long">گیم کے ساتھ اسپلٹ اسکرین شروع کریں</string>
+    <string name="web_refresh">ریفریش کریں</string>
+    <string name="car_agreement_template"><big><b>استعمال کی شرائط</b></big>\n<ul><li>اپنی گاڑی میں %s (“نقشہ”) استعمال کر کے آپ اتفاق کرتے ہیں کہ یہ صرف ترقی اور جانچ کے لیے ہے، غلط ہو سکتا ہے، آپ کے اپنے خطرے پر استعمال ہوتا ہے، ڈرائیور اسے صرف گاڑی رکی ہو اور محفوظ ہو تب استعمال کریں، مسافر ڈرائیور کی توجہ نہ بھٹکائیں، ٹریفک قوانین کی پابندی کی جائے، اور ڈویلپرز ذمہ دار نہیں ہیں۔</li></ul></string>
+    <string name="car_agreement_proceed">جاری رکھیں</string>
+    <string name="car_toast_complicated_action">براہ کرم یہ عمل اپنے آلے پر انجام دیں</string>
+    <string name="car_toast_unsupported_url">ہدف ویب صفحہ آپ کے آلے پر کھولنے کی کوشش کی جا رہی ہے۔ اس کے لیے ایپ کھولنا یا دوسری ایپس کے اوپر دکھانے کی اجازت درکار ہو سکتی ہے</string>
+    <string name="notification_channel_car_site_controller">Android Auto نقشہ کنٹرولز</string>
+    <string name="notification_car_site_controller_message">سیشن ختم کرنے کے لیے ٹیپ کریں</string>
+</resources>

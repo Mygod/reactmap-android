@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">Controls del lloc a pantalla completa</string>
+    <string name="notification_channel_webhook_failed">Ha fallat l’actualització de la ubicació en segon pla</string>
+    <string name="notification_channel_webhook_updated">Ubicació en segon pla actualitzada</string>
+    <string name="notification_channel_webhook_updating">S’està actualitzant la ubicació en segon pla</string>
+    <string name="notification_site_controller_message">Toqueu per configurar</string>
+    <string name="notification_action_restart_game">Reinicia la partida</string>
+    <string name="notification_webhook_failed_title">No s’ha pogut actualitzar la ubicació</string>
+    <string name="notification_webhook_updated_title">Ubicació actualitzada</string>
+    <string name="notification_webhook_updating_title">S’està actualitzant la ubicació</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f de %3$s</string>
+    <string name="config_dialog_title">URL de ReactMap:</string>
+    <string name="config_welcome">Podeu tornar a aquest diàleg més tard tocant la notificació.</string>
+    <string name="config_switch_webhook_follow_location">Fes que les alertes segueixin la ubicació en segon pla\n(tingueu en compte que compartireu la ubicació amb el mapa)</string>
+    <string name="restart_game_dialog_title">Trieu la versió del joc per reiniciar</string>
+    <string name="restart_game_dialog_message">Aquesta funció requereix Shizuku/Sui</string>
+    <string name="restart_game_standard">Estàndard</string>
+    <string name="title_loading">S’està carregant…</string>
+    <string name="error_https_only">Només es permet HTTPS</string>
+    <string name="error_missing_bg_location_permission">Falta el permís d’ubicació en segon pla</string>
+    <string name="error_missing_location_permission">Falta el permís d’ubicació</string>
+    <string name="error_unsupported_download">Baixada no admesa: %1$s</string>
+    <string name="error_webhook_human_not_found">No s’ha trobat l’usuari</string>
+    <string name="pip_phone_enter_split">Entra al mode de pantalla dividida</string>
+    <string name="shortcut_splitscreen_short">Pantalla dividida</string>
+    <string name="shortcut_splitscreen_long">Inicia pantalla dividida amb el joc</string>
+    <string name="web_refresh">Actualitza</string>
+    <string name="car_agreement_template"><big><b>Condicions d’ús</b></big>\n<ul><li>En utilitzar %s (“el mapa”) al vehicle, accepteu que només és per a desenvolupament i proves, pot ser inexacte, s’utilitza sota la vostra responsabilitat, els conductors només l’han d’utilitzar amb el vehicle aturat i quan sigui segur, els passatgers no han de distreure el conductor, cal complir les normes de trànsit i els desenvolupadors no en són responsables.</li></ul></string>
+    <string name="car_agreement_proceed">Continua</string>
+    <string name="car_toast_complicated_action">Feu aquesta acció al dispositiu</string>
+    <string name="car_toast_unsupported_url">S’intenta obrir la pàgina web de destinació al dispositiu. Pot requerir obrir l’aplicació o el permís per mostrar-se sobre altres aplicacions</string>
+    <string name="notification_channel_car_site_controller">Controls del mapa d’Android Auto</string>
+    <string name="notification_car_site_controller_message">Toqueu per finalitzar la sessió</string>
+</resources>

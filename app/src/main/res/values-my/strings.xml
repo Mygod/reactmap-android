@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">မျက်နှာပြင်ပြည့် ဆိုက် ထိန်းချုပ်မှုများ</string>
+    <string name="notification_channel_webhook_failed">နောက်ခံ တည်နေရာ အပ်ဒိတ် မအောင်မြင်ပါ</string>
+    <string name="notification_channel_webhook_updated">နောက်ခံ တည်နေရာ အပ်ဒိတ်ပြီးပါပြီ</string>
+    <string name="notification_channel_webhook_updating">နောက်ခံ တည်နေရာ အပ်ဒိတ်လုပ်နေသည်</string>
+    <string name="notification_site_controller_message">စီစဉ်ရန် တို့ပါ</string>
+    <string name="notification_action_restart_game">ဂိမ်းကို ပြန်စတင်ပါ</string>
+    <string name="notification_webhook_failed_title">တည်နေရာ အပ်ဒိတ် မအောင်မြင်ပါ</string>
+    <string name="notification_webhook_updated_title">တည်နေရာ အပ်ဒိတ်ပြီးပါပြီ</string>
+    <string name="notification_webhook_updating_title">တည်နေရာ အပ်ဒိတ်လုပ်နေသည်</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f ကို %3$s မှ</string>
+    <string name="config_welcome">အသိပေးချက်ကို တို့ပြီး နောက်ပိုင်းတွင် ဤဒိုင်ယာလော့သို့ ပြန်လာနိုင်သည်။</string>
+    <string name="config_switch_webhook_follow_location">အသိပေးချက်များကို နောက်ခံတွင် တည်နေရာနောက်လိုက်စေပါ\n(သင့်တည်နေရာကို မြေပုံနှင့် မျှဝေမည်ကို သတိပြုပါ)</string>
+    <string name="restart_game_dialog_title">ပြန်စတင်ရန် ဂိမ်းဗားရှင်း ရွေးပါ</string>
+    <string name="restart_game_dialog_message">ဤအင်္ဂါရပ်သည် Shizuku/Sui လိုအပ်သည်</string>
+    <string name="restart_game_standard">စံ</string>
+    <string name="title_loading">တင်သွင်းနေသည်…</string>
+    <string name="error_https_only">HTTPS သာ ခွင့်ပြုသည်</string>
+    <string name="error_missing_bg_location_permission">နောက်ခံ တည်နေရာ ခွင့်ပြုချက် မရှိပါ</string>
+    <string name="error_missing_location_permission">တည်နေရာ ခွင့်ပြုချက် မရှိပါ</string>
+    <string name="error_unsupported_download">မထောက်ပံ့သော ဒေါင်းလုဒ်: %1$s</string>
+    <string name="error_webhook_human_not_found">အသုံးပြုသူ မတွေ့ပါ</string>
+    <string name="pip_phone_enter_split">မျက်နှာပြင် ခွဲ၍ပြသခြင်းသို့ ဝင်ရန်</string>
+    <string name="shortcut_splitscreen_short">မျက်နှာပြင် ခွဲ၍ပြသခြင်း</string>
+    <string name="shortcut_splitscreen_long">ဂိမ်းနှင့် ခွဲထားသော မျက်နှာပြင် စတင်ပါ</string>
+    <string name="web_refresh">ပြန်စရန်</string>
+    <string name="car_agreement_template"><big><b>အသုံးပြုမှု စည်းကမ်းများ</b></big>\n<ul><li>သင့်ယာဉ်တွင် %s (“မြေပုံ”) ကိုအသုံးပြုခြင်းဖြင့် ၎င်းသည် ဖွံ့ဖြိုးတိုးတက်မှုနှင့် စမ်းသပ်မှုအတွက်သာဖြစ်ပြီး မတိကျနိုင်ကြောင်း၊ ကိုယ်ပိုင်အန္တရာယ်ဖြင့် အသုံးပြုကြောင်း၊ ယာဉ်မောင်းများသည် ယာဉ်ရပ်နေပြီး လုံခြုံသည့်အခါတွင်သာ အသုံးပြုသင့်ကြောင်း၊ ခရီးသည်များသည် ယာဉ်မောင်းကို မအာရုံပျက်စေရကြောင်း၊ ယာဉ်စည်းကမ်းများကို လိုက်နာရမည်ဖြစ်ကြောင်းနှင့် ဖန်တီးသူများမှာ တာဝန်မရှိကြောင်း သဘောတူပါသည်။</li></ul></string>
+    <string name="car_agreement_proceed">ဆက်ရန်</string>
+    <string name="car_toast_complicated_action">ဤလုပ်ဆောင်ချက်ကို သင့်စက်ပေါ်တွင် ပြုလုပ်ပါ</string>
+    <string name="car_toast_unsupported_url">ပစ်မှတ် ဝဘ်စာမျက်နှာကို သင့်စက်ပေါ်တွင် ဖွင့်ရန် ကြိုးစားနေသည်။ အက်ပ်ဖွင့်ရန် သို့မဟုတ် အခြားအက်ပ်များပေါ်တွင် ပြသရန် ခွင့်ပြုချက် လိုအပ်နိုင်သည်</string>
+    <string name="notification_channel_car_site_controller">Android Auto မြေပုံ ထိန်းချုပ်မှုများ</string>
+    <string name="notification_car_site_controller_message">စက်ရှင်ပြီးဆုံးရန် တို့ပါ</string>
+</resources>

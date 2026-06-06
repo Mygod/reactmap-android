@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_action_restart_game">Redémarrer le jeu</string>
+    <string name="restart_game_standard">Standard</string>
+    <string name="pip_phone_enter_split">Entrer en écran partagé</string>
+</resources>

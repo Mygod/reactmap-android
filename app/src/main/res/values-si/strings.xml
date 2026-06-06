@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">පූර්ණ තිර අඩවි පාලන</string>
+    <string name="notification_channel_webhook_failed">පසුබිම් ස්ථාන යාවත්කාලීන කිරීම අසාර්ථක විය</string>
+    <string name="notification_channel_webhook_updated">පසුබිම් ස්ථානය යාවත්කාලීන විය</string>
+    <string name="notification_channel_webhook_updating">පසුබිම් ස්ථානය යාවත්කාලීන වෙමින් පවතී</string>
+    <string name="notification_site_controller_message">සකසීමට තට්ටු කරන්න</string>
+    <string name="notification_action_restart_game">ක්‍රීඩාව නැවත ආරම්භ කරන්න</string>
+    <string name="notification_webhook_failed_title">ස්ථානය යාවත්කාලීන කිරීමට අසමත් විය</string>
+    <string name="notification_webhook_updated_title">ස්ථානය යාවත්කාලීන විය</string>
+    <string name="notification_webhook_updating_title">ස්ථානය යාවත්කාලීන වෙමින් පවතී</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f %3$s වෙතින්</string>
+    <string name="config_welcome">දැනුම්දීම තට්ටු කිරීමෙන් පසුව මෙම සංවාදයට ආපසු පැමිණිය හැක.</string>
+    <string name="config_switch_webhook_follow_location">ඇඟවීම් පසුබිමේ ස්ථානය අනුගමනය කිරීමට සලස්වන්න\n(ඔබගේ ස්ථානය සිතියම සමඟ බෙදාගන්නා බව සලකන්න)</string>
+    <string name="restart_game_dialog_title">නැවත ආරම්භ කිරීමට ක්‍රීඩා අනුවාදය තෝරන්න</string>
+    <string name="restart_game_dialog_message">මෙම විශේෂාංගයට Shizuku/Sui අවශ්‍යය</string>
+    <string name="restart_game_standard">සම්මත</string>
+    <string name="title_loading">පූරණය වෙමින්...</string>
+    <string name="error_https_only">HTTPS පමණක් අවසර ඇත</string>
+    <string name="error_missing_bg_location_permission">පසුබිම් ස්ථාන අවසරය නැත</string>
+    <string name="error_missing_location_permission">ස්ථාන අවසරය නැත</string>
+    <string name="error_unsupported_download">සහාය නොදක්වන බාගැනීම: %1$s</string>
+    <string name="error_webhook_human_not_found">පරිශීලකයා හමු නොවීය</string>
+    <string name="pip_phone_enter_split">බෙදුම් තිරයට ඇතුළු වන්න</string>
+    <string name="shortcut_splitscreen_short">බෙදුම් තිරය</string>
+    <string name="shortcut_splitscreen_long">ක්‍රීඩාව සමඟ බෙදු තිරය ආරම්භ කරන්න</string>
+    <string name="web_refresh">නැවුම් කරන්න</string>
+    <string name="car_agreement_template"><big><b>භාවිත නියමයන්</b></big>\n<ul><li>ඔබගේ වාහනයේ %s (“සිතියම”) භාවිතයෙන් එය සංවර්ධන හා පරීක්ෂණ සඳහා පමණක් බව, වැරදි විය හැකි බව, ඔබගේම අවදානමෙන් භාවිත කරන බව, රියදුරන් වාහනය නතරව ඇති සහ ආරක්ෂිත විට පමණක් භාවිත කළ යුතු බව, මගීන් රියදුරා අවධානයෙන් ඉවත් නොකළ යුතු බව, රථවාහන නීති පිළිපැදිය යුතු බව සහ සංවර්ධකයින් වගකිව නොහැකි බව ඔබ එකඟ වේ.</li></ul></string>
+    <string name="car_agreement_proceed">ඉදිරියට</string>
+    <string name="car_toast_complicated_action">කරුණාකර මෙම ක්‍රියාව ඔබගේ උපාංගයේ කරන්න</string>
+    <string name="car_toast_unsupported_url">ඉලක්ක වෙබ් පිටුව ඔබගේ උපාංගයේ විවෘත කිරීමට උත්සාහ කෙරේ. මෙයට යෙදුම විවෘත කිරීම හෝ වෙනත් යෙදුම් මත පෙන්වීමට අවසර අවශ්‍ය විය හැක</string>
+    <string name="notification_channel_car_site_controller">Android Auto සිතියම් පාලන</string>
+    <string name="notification_car_site_controller_message">සැසිය අවසන් කිරීමට තට්ටු කරන්න</string>
+</resources>

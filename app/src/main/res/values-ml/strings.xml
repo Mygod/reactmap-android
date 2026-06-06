@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">പൂർണ്ണ സ്ക്രീൻ സൈറ്റ് നിയന്ത്രണങ്ങൾ</string>
+    <string name="notification_channel_webhook_failed">പശ്ചാത്തല ലൊക്കേഷൻ അപ്ഡേറ്റ് പരാജയപ്പെട്ടു</string>
+    <string name="notification_channel_webhook_updated">പശ്ചാത്തല ലൊക്കേഷൻ അപ്ഡേറ്റ് ചെയ്തു</string>
+    <string name="notification_channel_webhook_updating">പശ്ചാത്തല ലൊക്കേഷൻ അപ്ഡേറ്റ് ചെയ്യുന്നു</string>
+    <string name="notification_site_controller_message">ക്രമീകരിക്കാൻ ടാപ്പ് ചെയ്യുക</string>
+    <string name="notification_action_restart_game">ഗെയിം പുനരാരംഭിക്കുക</string>
+    <string name="notification_webhook_failed_title">ലൊക്കേഷൻ അപ്ഡേറ്റ് ചെയ്യാൻ കഴിഞ്ഞില്ല</string>
+    <string name="notification_webhook_updated_title">ലൊക്കേഷൻ അപ്ഡേറ്റ് ചെയ്തു</string>
+    <string name="notification_webhook_updating_title">ലൊക്കേഷൻ അപ്ഡേറ്റ് ചെയ്യുന്നു</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f %3$s-ൽ നിന്ന്</string>
+    <string name="config_welcome">അറിയിപ്പിൽ ടാപ്പ് ചെയ്ത് പിന്നീട് ഈ ഡയലോഗിലേക്ക് മടങ്ങാം.</string>
+    <string name="config_switch_webhook_follow_location">അലർട്ടുകൾ പശ്ചാത്തലത്തിൽ ലൊക്കേഷൻ പിന്തുടരട്ടെ\n(നിങ്ങളുടെ ലൊക്കേഷൻ മാപ്പുമായി പങ്കിടുമെന്ന് ശ്രദ്ധിക്കുക)</string>
+    <string name="restart_game_dialog_title">പുനരാരംഭിക്കാൻ ഗെയിം പതിപ്പ് തിരഞ്ഞെടുക്കുക</string>
+    <string name="restart_game_dialog_message">ഈ സവിശേഷതയ്ക്ക് Shizuku/Sui ആവശ്യമാണ്</string>
+    <string name="restart_game_standard">നിലവാരമുള്ള</string>
+    <string name="title_loading">എടുത്തുകൊണ്ടിരിക്കുന്നു…</string>
+    <string name="error_https_only">HTTPS മാത്രം അനുവദിച്ചിരിക്കുന്നു</string>
+    <string name="error_missing_bg_location_permission">പശ്ചാത്തല ലൊക്കേഷൻ അനുമതി ഇല്ല</string>
+    <string name="error_missing_location_permission">ലൊക്കേഷൻ അനുമതി ഇല്ല</string>
+    <string name="error_unsupported_download">പിന്തുണയ്ക്കാത്ത ഡൗൺലോഡ്: %1$s</string>
+    <string name="error_webhook_human_not_found">ഉപയോക്താവിനെ കണ്ടെത്താനായില്ല</string>
+    <string name="pip_phone_enter_split">സ്ക്രീൻ വിഭജന മോഡിൽ പ്രവേശിക്കുക</string>
+    <string name="shortcut_splitscreen_short">സ്‌ക്രീൻ വിഭജന മോഡ്</string>
+    <string name="shortcut_splitscreen_long">ഗെയിമിനൊപ്പം സ്പ്ലിറ്റ് സ്ക്രീൻ ആരംഭിക്കുക</string>
+    <string name="web_refresh">പുതുക്കുക</string>
+    <string name="car_agreement_template"><big><b>ഉപയോഗ നിബന്ധനകൾ</b></big>\n<ul><li>നിങ്ങളുടെ വാഹനത്തിൽ %s (“മാപ്പ്”) ഉപയോഗിക്കുന്നതിലൂടെ, ഇത് വികസനത്തിനും പരീക്ഷണത്തിനും മാത്രമാണെന്നും, കൃത്യമല്ലാതിരിക്കാമെന്നും, നിങ്ങളുടെ സ്വന്തം അപകടസാധ്യതയിൽ ഉപയോഗിക്കുന്നതാണെന്നും, ഡ്രൈവർമാർ വാഹനം നിൽക്കുമ്പോഴും സുരക്ഷിതമായിരിക്കുമ്പോഴും മാത്രമേ ഉപയോഗിക്കാവൂ എന്നും, യാത്രക്കാർ ഡ്രൈവറെ ശ്രദ്ധതിരിക്കരുതെന്നും, ഗതാഗത നിയമങ്ങൾ പാലിക്കണമെന്നും, ഡെവലപ്പർമാർ ഉത്തരവാദികളല്ലെന്നും നിങ്ങൾ സമ്മതിക്കുന്നു.</li></ul></string>
+    <string name="car_agreement_proceed">തുടരുക</string>
+    <string name="car_toast_complicated_action">ദയവായി ഈ പ്രവർത്തനം നിങ്ങളുടെ ഉപകരണത്തിൽ ചെയ്യുക</string>
+    <string name="car_toast_unsupported_url">ലക്ഷ്യ വെബ്‌പേജ് നിങ്ങളുടെ ഉപകരണത്തിൽ തുറക്കാൻ ശ്രമിക്കുന്നു. ഇതിന് ആപ്പ് തുറക്കുകയോ മറ്റ് ആപ്പുകൾക്ക് മുകളിൽ കാണിക്കാൻ അനുമതിയോ ആവശ്യമായേക്കാം</string>
+    <string name="notification_channel_car_site_controller">Android Auto മാപ്പ് നിയന്ത്രണങ്ങൾ</string>
+    <string name="notification_car_site_controller_message">സെഷൻ അവസാനിപ്പിക്കാൻ ടാപ്പ് ചെയ്യുക</string>
+</resources>

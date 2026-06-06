@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">Mga kontrol ng site sa buong screen</string>
+    <string name="notification_channel_webhook_failed">Nabigo ang pag-update ng lokasyon sa background</string>
+    <string name="notification_channel_webhook_updated">Na-update ang lokasyon sa background</string>
+    <string name="notification_channel_webhook_updating">Ina-update ang lokasyon sa background</string>
+    <string name="notification_site_controller_message">I-tap para i-configure</string>
+    <string name="notification_action_restart_game">I-restart ang laro</string>
+    <string name="notification_webhook_failed_title">Nabigong i-update ang lokasyon</string>
+    <string name="notification_webhook_updated_title">Na-update ang lokasyon</string>
+    <string name="notification_webhook_updating_title">Ina-update ang lokasyon</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f mula sa %3$s</string>
+    <string name="config_dialog_title">URL ng ReactMap:</string>
+    <string name="config_welcome">Maaari kang bumalik sa dialog na ito mamaya sa pamamagitan ng pag-tap sa notification.</string>
+    <string name="config_switch_webhook_follow_location">Hayaan ang mga alerto na sundan ang lokasyon sa background\n(tandaan na ibabahagi mo ang iyong lokasyon sa mapa)</string>
+    <string name="restart_game_dialog_title">Piliin ang bersyon ng laro na ire-restart</string>
+    <string name="restart_game_dialog_message">Kinakailangan ng feature na ito ang Shizuku/Sui</string>
+    <string name="restart_game_standard">Karaniwan</string>
+    <string name="title_loading">Naglo-load…</string>
+    <string name="error_https_only">HTTPS lang ang pinapayagan</string>
+    <string name="error_missing_bg_location_permission">Kulang ang pahintulot sa lokasyon sa background</string>
+    <string name="error_missing_location_permission">Kulang ang pahintulot sa lokasyon</string>
+    <string name="error_unsupported_download">Hindi sinusuportahang pag-download: %1$s</string>
+    <string name="error_webhook_human_not_found">Hindi nahanap ang user</string>
+    <string name="pip_phone_enter_split">Pumasok sa split screen</string>
+    <string name="shortcut_splitscreen_long">Simulan ang split screen kasama ang laro</string>
+    <string name="web_refresh">I-refresh</string>
+    <string name="car_agreement_template"><big><b>Mga Tuntunin ng Paggamit</b></big>\n<ul><li>Sa paggamit ng %s (“ang Mapa”) sa iyong sasakyan, sumasang-ayon kang ito ay para lamang sa pag-develop at pagsubok, maaaring hindi tumpak, ginagamit sa sarili mong panganib, dapat gamitin lamang ng mga driver kapag nakahinto ang sasakyan at ligtas, hindi dapat gambalain ng mga pasahero ang driver, dapat sundin ang mga batas trapiko, at hindi mananagot ang mga developer.</li></ul></string>
+    <string name="car_agreement_proceed">Magpatuloy</string>
+    <string name="car_toast_complicated_action">Pakigawa ang pagkilos na ito sa iyong device</string>
+    <string name="car_toast_unsupported_url">Sinusubukang buksan ang target na webpage sa iyong device. Maaaring kailanganing buksan ang app o pahintulot na magpakita sa ibabaw ng ibang app</string>
+    <string name="notification_channel_car_site_controller">Mga kontrol ng mapa ng Android Auto</string>
+    <string name="notification_car_site_controller_message">I-tap para tapusin ang session</string>
+</resources>

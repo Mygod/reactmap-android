@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">Ovládanie webu na celú obrazovku</string>
+    <string name="notification_channel_webhook_failed">Aktualizácia polohy na pozadí zlyhala</string>
+    <string name="notification_channel_webhook_updated">Poloha na pozadí aktualizovaná</string>
+    <string name="notification_channel_webhook_updating">Poloha na pozadí sa aktualizuje</string>
+    <string name="notification_site_controller_message">Ťuknite na konfiguráciu</string>
+    <string name="notification_action_restart_game">Reštart hry</string>
+    <string name="notification_webhook_failed_title">Nepodarilo sa aktualizovať polohu</string>
+    <string name="notification_webhook_updated_title">Poloha aktualizovaná</string>
+    <string name="notification_webhook_updating_title">Poloha sa aktualizuje</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f z %3$s</string>
+    <string name="config_dialog_title">URL ReactMap:</string>
+    <string name="config_welcome">K tomuto dialógu sa môžete neskôr vrátiť ťuknutím na upozornenie.</string>
+    <string name="config_switch_webhook_follow_location">Nech upozornenia sledujú polohu na pozadí\n(nezabudnite, že budete zdieľať svoju polohu s mapou)</string>
+    <string name="restart_game_dialog_title">Vyberte verziu hry na reštartovanie</string>
+    <string name="restart_game_dialog_message">Táto funkcia vyžaduje Shizuku/Sui</string>
+    <string name="restart_game_standard">Predvolené</string>
+    <string name="title_loading">Načítava sa…</string>
+    <string name="error_https_only">Povolené je iba HTTPS</string>
+    <string name="error_missing_bg_location_permission">Chýba povolenie polohy na pozadí</string>
+    <string name="error_missing_location_permission">Chýba povolenie polohy</string>
+    <string name="error_unsupported_download">Nepodporované stiahnutie: %1$s</string>
+    <string name="error_webhook_human_not_found">Používateľ sa nenašiel</string>
+    <string name="pip_phone_enter_split">Prejsť na rozdelenú obrazovku</string>
+    <string name="shortcut_splitscreen_short">Rozdeliť obrazovku</string>
+    <string name="shortcut_splitscreen_long">Spustiť rozdelenú obrazovku s hrou</string>
+    <string name="web_refresh">Obnoví</string>
+    <string name="car_agreement_template"><big><b>Podmienky používania</b></big>\n<ul><li>Používaním %s („mapy“) vo vozidle súhlasíte, že je určená len na vývoj a testovanie, môže byť nepresná, používate ju na vlastné riziko, vodiči ju smú používať len pri stojacom vozidle a keď je to bezpečné, cestujúci nesmú rozptyľovať vodiča, musia sa dodržiavať dopravné predpisy a vývojári nenesú zodpovednosť.</li></ul></string>
+    <string name="car_agreement_proceed">Pokračovať</string>
+    <string name="car_toast_complicated_action">Vykonajte túto akciu na svojom zariadení</string>
+    <string name="car_toast_unsupported_url">Pokus o otvorenie cieľovej webovej stránky na vašom zariadení. Môže to vyžadovať otvorenie aplikácie alebo povolenie zobraziť nad inými aplikáciami</string>
+    <string name="notification_channel_car_site_controller">Ovládanie mapy Android Auto</string>
+    <string name="notification_car_site_controller_message">Ťuknite na ukončenie relácie</string>
+</resources>

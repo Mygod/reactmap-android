@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">To‘liq ekran sayt boshqaruvlari</string>
+    <string name="notification_channel_webhook_failed">Fon joylashuvini yangilash muvaffaqiyatsiz</string>
+    <string name="notification_channel_webhook_updated">Fon joylashuvi yangilandi</string>
+    <string name="notification_channel_webhook_updating">Fon joylashuvi yangilanmoqda</string>
+    <string name="notification_site_controller_message">Sozlash uchun bosing</string>
+    <string name="notification_action_restart_game">O‘yinni qayta boshlash</string>
+    <string name="notification_webhook_failed_title">Joylashuvni yangilab bo‘lmadi</string>
+    <string name="notification_webhook_updated_title">Joylashuv yangilandi</string>
+    <string name="notification_webhook_updating_title">Joylashuv yangilanmoqda</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f %3$s dan</string>
+    <string name="config_dialog_title">ReactMap URL manzili:</string>
+    <string name="config_welcome">Bildirishnomani bosib, keyinroq ushbu dialogga qaytishingiz mumkin.</string>
+    <string name="config_switch_webhook_follow_location">Ogohlantirishlar fonda joylashuvni kuzatsin\n(joylashuvingizni xarita bilan ulashishingizni unutmang)</string>
+    <string name="restart_game_dialog_title">Qayta boshlash uchun o‘yin versiyasini tanlang</string>
+    <string name="restart_game_dialog_message">Bu funksiya Shizuku/Sui talab qiladi</string>
+    <string name="restart_game_standard">Standart</string>
+    <string name="title_loading">Yuklanmoqda...</string>
+    <string name="error_https_only">Faqat HTTPS ruxsat etiladi</string>
+    <string name="error_missing_bg_location_permission">Fon joylashuvi ruxsati yo‘q</string>
+    <string name="error_missing_location_permission">Joylashuv ruxsati yo‘q</string>
+    <string name="error_unsupported_download">Qo‘llab-quvvatlanmaydigan yuklab olish: %1$s</string>
+    <string name="error_webhook_human_not_found">Foydalanuvchi topilmadi</string>
+    <string name="pip_phone_enter_split">Ajratilgan ekranga kirish</string>
+    <string name="shortcut_splitscreen_short">Ekranni ikkiga ajratish</string>
+    <string name="shortcut_splitscreen_long">O‘yin bilan bo‘lingan ekranni boshlash</string>
+    <string name="web_refresh">Yangilash</string>
+    <string name="car_agreement_template"><big><b>Foydalanish shartlari</b></big>\n<ul><li>Transport vositangizda %s (“Xarita”)dan foydalanib, u faqat ishlab chiqish va sinov uchun ekaniga, noto‘g‘ri bo‘lishi mumkinligiga, o‘z xavfingiz ostida foydalanishingizga, haydovchilar uni faqat mashina to‘xtagan va xavfsiz bo‘lganida ishlatishi kerakligiga, yo‘lovchilar haydovchini chalg‘itmasligiga, yo‘l harakati qonunlariga rioya qilinishiga va ishlab chiquvchilar javobgar emasligiga rozilik bildirasiz.</li></ul></string>
+    <string name="car_agreement_proceed">Davom etish</string>
+    <string name="car_toast_complicated_action">Iltimos, bu amalni qurilmangizda bajaring</string>
+    <string name="car_toast_unsupported_url">Maqsadli veb-sahifani qurilmangizda ochishga urinilmoqda. Buning uchun ilovani ochish yoki boshqa ilovalar ustida ko‘rsatish ruxsati kerak bo‘lishi mumkin</string>
+    <string name="notification_channel_car_site_controller">Android Auto xarita boshqaruvlari</string>
+    <string name="notification_car_site_controller_message">Seansni tugatish uchun bosing</string>
+</resources>

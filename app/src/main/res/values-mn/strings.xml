@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">Бүтэн дэлгэцийн сайтын удирдлага</string>
+    <string name="notification_channel_webhook_failed">Арын байрлал шинэчлэлт амжилтгүй</string>
+    <string name="notification_channel_webhook_updated">Арын байрлал шинэчлэгдсэн</string>
+    <string name="notification_channel_webhook_updating">Арын байрлал шинэчлэгдэж байна</string>
+    <string name="notification_site_controller_message">Тохируулахын тулд товшино уу</string>
+    <string name="notification_action_restart_game">Тоглоомыг дахин эхлүүлэх</string>
+    <string name="notification_webhook_failed_title">Байрлалыг шинэчилж чадсангүй</string>
+    <string name="notification_webhook_updated_title">Байрлал шинэчлэгдсэн</string>
+    <string name="notification_webhook_updating_title">Байрлал шинэчлэгдэж байна</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f %3$s-ээс</string>
+    <string name="config_welcome">Дараа нь мэдэгдэл дээр товшиж энэ харилцах цонх руу буцаж болно.</string>
+    <string name="config_switch_webhook_follow_location">Анхааруулгууд ард байрлалыг дагаг\n(та байрлалаа газрын зурагтай хуваалцана гэдгийг анхаарна уу)</string>
+    <string name="restart_game_dialog_title">Дахин эхлүүлэх тоглоомын хувилбарыг сонго</string>
+    <string name="restart_game_dialog_message">Энэ боломжид Shizuku/Sui шаардлагатай</string>
+    <string name="restart_game_standard">Стандарт</string>
+    <string name="title_loading">Ачаалж байна...</string>
+    <string name="error_https_only">Зөвхөн HTTPS зөвшөөрөгдөнө</string>
+    <string name="error_missing_bg_location_permission">Арын байрлалын зөвшөөрөл алга</string>
+    <string name="error_missing_location_permission">Байрлалын зөвшөөрөл алга</string>
+    <string name="error_unsupported_download">Дэмжигдээгүй таталт: %1$s</string>
+    <string name="error_webhook_human_not_found">Хэрэглэгч олдсонгүй</string>
+    <string name="pip_phone_enter_split">Хуваасан дэлгэцийг оруулна уу</string>
+    <string name="shortcut_splitscreen_short">Дэлгэцийг хуваах</string>
+    <string name="shortcut_splitscreen_long">Тоглоомтой хуваасан дэлгэц эхлүүлэх</string>
+    <string name="web_refresh">Ахин шинэчлэх</string>
+    <string name="car_agreement_template"><big><b>Ашиглах нөхцөл</b></big>\n<ul><li>Та тээврийн хэрэгсэлдээ %s (“Газрын зураг”)-ийг ашигласнаар энэ нь зөвхөн хөгжүүлэлт ба туршилтад зориулагдсан, алдаатай байж болох, өөрийн эрсдэлээр ашиглах, жолооч зөвхөн машин зогссон бөгөөд аюулгүй үед ашиглах, зорчигч жолоочийн анхаарлыг сарниулахгүй байх, замын хөдөлгөөний хууль дагах, хөгжүүлэгчид хариуцлага хүлээхгүй гэдгийг зөвшөөрнө.</li></ul></string>
+    <string name="car_agreement_proceed">Үргэлжлүүлэх</string>
+    <string name="car_toast_complicated_action">Энэ үйлдлийг төхөөрөмж дээрээ хийнэ үү</string>
+    <string name="car_toast_unsupported_url">Зорилтот веб хуудсыг таны төхөөрөмж дээр нээхийг оролдож байна. Үүнд апп нээх эсвэл бусад аппын дээр харуулах зөвшөөрөл хэрэгтэй байж болно</string>
+    <string name="notification_channel_car_site_controller">Android Auto газрын зургийн удирдлага</string>
+    <string name="notification_car_site_controller_message">Сеанс дуусгахын тулд товшино уу</string>
+</resources>

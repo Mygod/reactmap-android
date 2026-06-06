@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">Толық экранды сайт басқару элементтері</string>
+    <string name="notification_channel_webhook_failed">Фондық орынды жаңарту сәтсіз аяқталды</string>
+    <string name="notification_channel_webhook_updated">Фондық орын жаңартылды</string>
+    <string name="notification_channel_webhook_updating">Фондық орын жаңартылуда</string>
+    <string name="notification_site_controller_message">Баптау үшін түртіңіз</string>
+    <string name="notification_action_restart_game">Ойынды қайта бастау</string>
+    <string name="notification_webhook_failed_title">Орынды жаңарту мүмкін болмады</string>
+    <string name="notification_webhook_updated_title">Орын жаңартылды</string>
+    <string name="notification_webhook_updating_title">Орын жаңартылуда</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f %3$s көзінен</string>
+    <string name="config_dialog_title">ReactMap URL мекенжайы:</string>
+    <string name="config_welcome">Бұл диалогқа кейін хабарландыруды түрту арқылы қайта орала аласыз.</string>
+    <string name="config_switch_webhook_follow_location">Ескертулер фондық режимде орынды қадағаласын\n(орныңызды картамен бөлісетініңізді ескеріңіз)</string>
+    <string name="restart_game_dialog_title">Қайта іске қосылатын ойын нұсқасын таңдаңыз</string>
+    <string name="restart_game_dialog_message">Бұл мүмкіндікке Shizuku/Sui қажет</string>
+    <string name="restart_game_standard">Қалыпты</string>
+    <string name="title_loading">Жүктеу…</string>
+    <string name="error_https_only">Тек HTTPS рұқсат етіледі</string>
+    <string name="error_missing_bg_location_permission">Фондық орын рұқсаты жоқ</string>
+    <string name="error_missing_location_permission">Орын рұқсаты жоқ</string>
+    <string name="error_unsupported_download">Қолдау көрсетілмейтін жүктеп алу: %1$s</string>
+    <string name="error_webhook_human_not_found">Пайдаланушы табылмады</string>
+    <string name="pip_phone_enter_split">Бөлінген экранға кіру</string>
+    <string name="shortcut_splitscreen_short">Экранды бөлу</string>
+    <string name="shortcut_splitscreen_long">Ойынмен бөлінген экранды бастау</string>
+    <string name="web_refresh">Жаңарту</string>
+    <string name="car_agreement_template"><big><b>Пайдалану шарттары</b></big>\n<ul><li>Көлігіңізде %s (“Карта”) пайдалану арқылы оның тек әзірлеу және сынау үшін екенін, дәл болмауы мүмкін екенін, өз тәуекеліңізбен пайдаланатыныңызды, жүргізушілер оны көлік тоқтағанда және қауіпсіз болғанда ғана қолдануы тиіс екенін, жолаушылар жүргізушіні алаңдатпауы керек екенін, жол қозғалысы заңдарын сақтау қажет екенін және әзірлеушілер жауапты емес екенін мойындайсыз.</li></ul></string>
+    <string name="car_agreement_proceed">Жалғастыру</string>
+    <string name="car_toast_complicated_action">Бұл әрекетті құрылғыңызда орындаңыз</string>
+    <string name="car_toast_unsupported_url">Мақсатты веб-бетті құрылғыңызда ашу әрекеті жасалуда. Бұл қолданбаны ашуды немесе басқа қолданбалардың үстінен көрсету рұқсатын талап етуі мүмкін</string>
+    <string name="notification_channel_car_site_controller">Android Auto карта басқару элементтері</string>
+    <string name="notification_car_site_controller_message">Сеансты аяқтау үшін түртіңіз</string>
+</resources>

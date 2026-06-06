@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">Điều khiển trang toàn màn hình</string>
+    <string name="notification_channel_webhook_failed">Cập nhật vị trí nền không thành công</string>
+    <string name="notification_channel_webhook_updated">Đã cập nhật vị trí nền</string>
+    <string name="notification_channel_webhook_updating">Đang cập nhật vị trí nền</string>
+    <string name="notification_site_controller_message">Nhấn để cấu hình</string>
+    <string name="notification_action_restart_game">Khởi động lại trò chơi</string>
+    <string name="notification_webhook_failed_title">Không thể cập nhật vị trí</string>
+    <string name="notification_webhook_updated_title">Đã cập nhật vị trí</string>
+    <string name="notification_webhook_updating_title">Đang cập nhật vị trí</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f từ %3$s</string>
+    <string name="config_dialog_title">URL ReactMap:</string>
+    <string name="config_welcome">Bạn có thể quay lại hộp thoại này sau bằng cách nhấn vào thông báo.</string>
+    <string name="config_switch_webhook_follow_location">Cho cảnh báo theo dõi vị trí trong nền\n(lưu ý rằng bạn sẽ chia sẻ vị trí của mình với bản đồ)</string>
+    <string name="restart_game_dialog_title">Chọn phiên bản trò chơi để khởi động lại</string>
+    <string name="restart_game_dialog_message">Tính năng này yêu cầu Shizuku/Sui</string>
+    <string name="restart_game_standard">Chuẩn</string>
+    <string name="title_loading">Đang tải…</string>
+    <string name="error_https_only">Chỉ cho phép HTTPS</string>
+    <string name="error_missing_bg_location_permission">Thiếu quyền vị trí nền</string>
+    <string name="error_missing_location_permission">Thiếu quyền vị trí</string>
+    <string name="error_unsupported_download">Tải xuống không được hỗ trợ: %1$s</string>
+    <string name="error_webhook_human_not_found">Không tìm thấy người dùng</string>
+    <string name="pip_phone_enter_split">Truy cập chế độ chia đôi màn hình</string>
+    <string name="shortcut_splitscreen_short">Chia đôi màn hình</string>
+    <string name="shortcut_splitscreen_long">Bắt đầu chia đôi màn hình với trò chơi</string>
+    <string name="web_refresh">Làm mới lại</string>
+    <string name="car_agreement_template"><big><b>Điều khoản sử dụng</b></big>\n<ul><li>Khi sử dụng %s (“Bản đồ”) trong xe, bạn đồng ý rằng nó chỉ dành cho phát triển và thử nghiệm, có thể không chính xác, được sử dụng theo rủi ro của riêng bạn, người lái chỉ dùng khi xe đứng yên và an toàn, hành khách không được làm người lái mất tập trung, luật giao thông phải được tuân thủ và nhà phát triển không chịu trách nhiệm.</li></ul></string>
+    <string name="car_agreement_proceed">Tiếp tục</string>
+    <string name="car_toast_complicated_action">Vui lòng thực hiện thao tác này trên thiết bị của bạn</string>
+    <string name="car_toast_unsupported_url">Đang cố mở trang web đích trên thiết bị của bạn. Việc này có thể yêu cầu mở ứng dụng hoặc quyền hiển thị trên các ứng dụng khác</string>
+    <string name="notification_channel_car_site_controller">Điều khiển bản đồ Android Auto</string>
+    <string name="notification_car_site_controller_message">Nhấn để kết thúc phiên</string>
+</resources>

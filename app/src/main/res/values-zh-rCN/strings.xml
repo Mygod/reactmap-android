@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">全屏站点控件</string>
+    <string name="notification_channel_webhook_failed">后台位置更新失败</string>
+    <string name="notification_channel_webhook_updated">后台位置已更新</string>
+    <string name="notification_channel_webhook_updating">正在更新后台位置</string>
+    <string name="notification_site_controller_message">点按以配置</string>
+    <string name="notification_action_restart_game">重新开始游戏</string>
+    <string name="notification_webhook_failed_title">位置更新失败</string>
+    <string name="notification_webhook_updated_title">位置已更新</string>
+    <string name="notification_webhook_updating_title">正在更新位置</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f 来自 %3$s</string>
+    <string name="config_dialog_title">ReactMap 网址：</string>
+    <string name="config_welcome">你以后可以点按通知返回此对话框。</string>
+    <string name="config_switch_webhook_follow_location">让提醒在后台跟随位置\n（请注意，你将与地图共享自己的位置）</string>
+    <string name="restart_game_dialog_title">选择要重启的游戏版本</string>
+    <string name="restart_game_dialog_message">此功能需要 Shizuku/Sui</string>
+    <string name="restart_game_standard">标准</string>
+    <string name="title_loading">正在加载…</string>
+    <string name="error_https_only">仅允许 HTTPS</string>
+    <string name="error_missing_bg_location_permission">缺少后台位置权限</string>
+    <string name="error_missing_location_permission">缺少位置权限</string>
+    <string name="error_unsupported_download">不支持的下载：%1$s</string>
+    <string name="error_webhook_human_not_found">未找到用户</string>
+    <string name="pip_phone_enter_split">进入分屏模式</string>
+    <string name="shortcut_splitscreen_short">分屏</string>
+    <string name="shortcut_splitscreen_long">与游戏一起启动分屏</string>
+    <string name="web_refresh">刷新</string>
+    <string name="car_agreement_template"><big><b>使用条款</b></big>\n<ul><li>在车辆中使用 %s（“地图”）即表示你同意：它仅用于开发和测试，可能不准确，由你自行承担风险使用；驾驶员只能在车辆静止且安全时使用；乘客不得分散驾驶员注意力；必须遵守交通法规；开发者不承担责任。</li></ul></string>
+    <string name="car_agreement_proceed">继续</string>
+    <string name="car_toast_complicated_action">请改在你的设备上执行此操作</string>
+    <string name="car_toast_unsupported_url">正在尝试在你的设备上打开目标网页。这可能需要打开应用，或授予在其他应用上层显示的权限</string>
+    <string name="notification_channel_car_site_controller">Android Auto 地图控件</string>
+    <string name="notification_car_site_controller_message">点按以结束会话</string>
+</resources>

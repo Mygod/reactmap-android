@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">Izilawuli zesayithi zesikrini esigcwele</string>
+    <string name="notification_channel_webhook_failed">Ukubuyekezwa kwendawo ngemuva kwehlulekile</string>
+    <string name="notification_channel_webhook_updated">Indawo yangemuva ibuyekeziwe</string>
+    <string name="notification_channel_webhook_updating">Indawo yangemuva iyabuyekezwa</string>
+    <string name="notification_site_controller_message">Thepha ukuze ulungiselele</string>
+    <string name="notification_action_restart_game">Qalisa kabusha umdlalo</string>
+    <string name="notification_webhook_failed_title">Yehlulekile ukubuyekeza indawo</string>
+    <string name="notification_webhook_updated_title">Indawo ibuyekeziwe</string>
+    <string name="notification_webhook_updating_title">Indawo iyabuyekezwa</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f kusuka ku-%3$s</string>
+    <string name="config_dialog_title">I-URL ye-ReactMap:</string>
+    <string name="config_welcome">Ungabuyela kule ngxoxo kamuva ngokuthepha isaziso.</string>
+    <string name="config_switch_webhook_follow_location">Vumela izexwayiso zilandele indawo ngemuva\n(qaphela ukuthi uzokwabelana ngendawo yakho nemephu)</string>
+    <string name="restart_game_dialog_title">Khetha inguqulo yomdlalo ozoyiqalisa kabusha</string>
+    <string name="restart_game_dialog_message">Lesi sici sidinga i-Shizuku/Sui</string>
+    <string name="restart_game_standard">Okujwayelekile</string>
+    <string name="title_loading">Kuyalayisha…</string>
+    <string name="error_https_only">Kuvunyelwe i-HTTPS kuphela</string>
+    <string name="error_missing_bg_location_permission">Imvume yendawo yangemuva ayikho</string>
+    <string name="error_missing_location_permission">Imvume yendawo ayikho</string>
+    <string name="error_unsupported_download">Ukulanda okungasekelwa: %1$s</string>
+    <string name="error_webhook_human_not_found">Umsebenzisi akatholakalanga</string>
+    <string name="pip_phone_enter_split">Faka ukuhlukanisa isikrini</string>
+    <string name="shortcut_splitscreen_short">Hlukanisa isikrini</string>
+    <string name="shortcut_splitscreen_long">Qalisa isikrini esihlukanisiwe nomdlalo</string>
+    <string name="web_refresh">Vuselela</string>
+    <string name="car_agreement_template"><big><b>Imibandela yokusebenzisa</b></big>\n<ul><li>Ngokusebenzisa %s (“Imephu”) emotweni yakho, uyavuma ukuthi yenzelwe ukuthuthukisa nokuhlola kuphela, ingaba namaphutha, uyisebenzisa ngobungozi bakho, abashayeli bayisebenzise kuphela uma imoto imile futhi kuphephile, abagibeli bangaphazamisi umshayeli, imithetho yomgwaqo ilandelwe, futhi abathuthukisi abanasibopho.</li></ul></string>
+    <string name="car_agreement_proceed">Qhubeka</string>
+    <string name="car_toast_complicated_action">Sicela wenze lesi senzo kudivayisi yakho</string>
+    <string name="car_toast_unsupported_url">Kuzanywa ukuvula ikhasi lewebhu eliqondiwe kudivayisi yakho. Lokhu kungadinga ukuvula uhlelo lokusebenza noma imvume yokubonisa phezu kwezinye izinhlelo zokusebenza</string>
+    <string name="notification_channel_car_site_controller">Izilawuli zemephu ye-Android Auto</string>
+    <string name="notification_car_site_controller_message">Thepha ukuze uqede iseshini</string>
+</resources>

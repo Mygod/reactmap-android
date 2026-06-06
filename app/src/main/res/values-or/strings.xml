@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">ପୂର୍ଣ୍ଣ ସ୍କ୍ରିନ୍ ସାଇଟ୍ ନିୟନ୍ତ୍ରଣ</string>
+    <string name="notification_channel_webhook_failed">ପୃଷ୍ଠଭୂମି ସ୍ଥାନ ଅଦ୍ୟତନ ବିଫଳ ହେଲା</string>
+    <string name="notification_channel_webhook_updated">ପୃଷ୍ଠଭୂମି ସ୍ଥାନ ଅଦ୍ୟତନ ହେଲା</string>
+    <string name="notification_channel_webhook_updating">ପୃଷ୍ଠଭୂମି ସ୍ଥାନ ଅଦ୍ୟତନ ହେଉଛି</string>
+    <string name="notification_site_controller_message">ସଂରଚନା ପାଇଁ ଟ୍ୟାପ୍ କରନ୍ତୁ</string>
+    <string name="notification_action_restart_game">ଗେମ୍ ପୁନଃଆରମ୍ଭ କରନ୍ତୁ</string>
+    <string name="notification_webhook_failed_title">ସ୍ଥାନ ଅଦ୍ୟତନ ବିଫଳ</string>
+    <string name="notification_webhook_updated_title">ସ୍ଥାନ ଅଦ୍ୟତନ ହେଲା</string>
+    <string name="notification_webhook_updating_title">ସ୍ଥାନ ଅଦ୍ୟତନ ହେଉଛି</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f %3$s ରୁ</string>
+    <string name="config_welcome">ସୂଚନାକୁ ଟ୍ୟାପ୍ କରି ଆପଣ ପରେ ଏହି ସଂଲାପକୁ ଫେରିପାରିବେ।</string>
+    <string name="config_switch_webhook_follow_location">ସତର୍କତାଗୁଡ଼ିକ ପୃଷ୍ଠଭୂମିରେ ସ୍ଥାନକୁ ଅନୁସରଣ କରୁ\n(ଆପଣ ନିଜ ସ୍ଥାନକୁ ମାନଚିତ୍ର ସହ ଭାଗ କରିବେ ବୋଲି ଧ୍ୟାନ ଦିଅନ୍ତୁ)</string>
+    <string name="restart_game_dialog_title">ପୁନଃଆରମ୍ଭ ପାଇଁ ଗେମ୍ ସଂସ୍କରଣ ବାଛନ୍ତୁ</string>
+    <string name="restart_game_dialog_message">ଏହି ବୈଶିଷ୍ଟ୍ୟ ପାଇଁ Shizuku/Sui ଆବଶ୍ୟକ</string>
+    <string name="restart_game_standard">ମାନକ</string>
+    <string name="title_loading">ଧାରଣ କରୁଅଛି…</string>
+    <string name="error_https_only">କେବଳ HTTPS ଅନୁମତି</string>
+    <string name="error_missing_bg_location_permission">ପୃଷ୍ଠଭୂମି ସ୍ଥାନ ଅନୁମତି ନାହିଁ</string>
+    <string name="error_missing_location_permission">ସ୍ଥାନ ଅନୁମତି ନାହିଁ</string>
+    <string name="error_unsupported_download">ଅସମର୍ଥିତ ଡାଉନଲୋଡ୍: %1$s</string>
+    <string name="error_webhook_human_not_found">ବ୍ୟବହାରକାରୀ ମିଳିଲେ ନାହିଁ</string>
+    <string name="pip_phone_enter_split">ସ୍ପ୍ଲିଟ ସ୍କ୍ରିନ ମୋଡ ବ୍ୟବହାର କରନ୍ତୁ</string>
+    <string name="shortcut_splitscreen_short">ସ୍କ୍ରିନ‌କୁ ସ୍ପ୍ଲିଟ୍ କରନ୍ତୁ</string>
+    <string name="shortcut_splitscreen_long">ଗେମ୍ ସହ ବିଭକ୍ତ ସ୍କ୍ରିନ୍ ଆରମ୍ଭ କରନ୍ତୁ</string>
+    <string name="web_refresh">ସତେଜନ କରନ୍ତୁ</string>
+    <string name="car_agreement_template"><big><b>ବ୍ୟବହାର ସର୍ତ୍ତାବଳୀ</b></big>\n<ul><li>ଆପଣଙ୍କ ଯାନରେ %s (“ମାନଚିତ୍ର”) ବ୍ୟବହାର କଲେ ଆପଣ ସହମତ ଯେ ଏହା କେବଳ ବିକାଶ ଓ ପରୀକ୍ଷା ପାଇଁ, ଅସଠିକ୍ ହୋଇପାରେ, ନିଜ ଝୁମ୍ପରେ ବ୍ୟବହୃତ, ଚାଳକମାନେ ଯାନ ରୁକିଥିବା ଏବଂ ସୁରକ୍ଷିତ ଥିବାବେଳେ ମାତ୍ର ବ୍ୟବହାର କରିବେ, ଯାତ୍ରୀମାନେ ଚାଳକଙ୍କୁ ବିଚଳିତ କରିବେ ନାହିଁ, ଯାତାୟାତ ନିୟମ ପାଳନ ହେବ ଏବଂ ଡେଭେଲପରମାନେ ଦାୟୀ ନୁହନ୍ତି।</li></ul></string>
+    <string name="car_agreement_proceed">ଆଗକୁ ବଢ଼ନ୍ତୁ</string>
+    <string name="car_toast_complicated_action">ଦୟାକରି ଏହି କାର୍ଯ୍ୟଟି ଆପଣଙ୍କ ଡିଭାଇସରେ କରନ୍ତୁ</string>
+    <string name="car_toast_unsupported_url">ଲକ୍ଷ୍ୟ ୱେବପୃଷ୍ଠାକୁ ଆପଣଙ୍କ ଡିଭାଇସରେ ଖୋଲିବାକୁ ଚେଷ୍ଟା କରାଯାଉଛି। ଏହା ପାଇଁ ଆପ୍ ଖୋଲିବା କିମ୍ବା ଅନ୍ୟ ଆପ୍‌ ଉପରେ ଦେଖାଇବା ଅନୁମତି ଲାଗିପାରେ</string>
+    <string name="notification_channel_car_site_controller">Android Auto ମାନଚିତ୍ର ନିୟନ୍ତ୍ରଣ</string>
+    <string name="notification_car_site_controller_message">ସେସନ୍ ସମାପ୍ତ କରିବାକୁ ଟ୍ୟାପ୍ କରନ୍ତୁ</string>
+</resources>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">የሙሉ ማያ ገጽ ድር ጣቢያ መቆጣጠሪያዎች</string>
+    <string name="notification_channel_webhook_failed">የጀርባ አካባቢ ዝማኔ አልተሳካም</string>
+    <string name="notification_channel_webhook_updated">የጀርባ አካባቢ ተዘምኗል</string>
+    <string name="notification_channel_webhook_updating">የጀርባ አካባቢ በመዘመን ላይ ነው</string>
+    <string name="notification_site_controller_message">ለማዋቀር መታ ያድርጉ</string>
+    <string name="notification_action_restart_game">ጨዋታን እንደገና ጀምር</string>
+    <string name="notification_webhook_failed_title">አካባቢን ማዘመን አልተሳካም</string>
+    <string name="notification_webhook_updated_title">አካባቢ ተዘምኗል</string>
+    <string name="notification_webhook_updating_title">አካባቢ በመዘመን ላይ ነው</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f ከ %3$s</string>
+    <string name="config_dialog_title">የReactMap URL:</string>
+    <string name="config_welcome">በኋላ ማሳወቂያውን በመንካት ወደዚህ ውይይት መመለስ ይችላሉ።</string>
+    <string name="config_switch_webhook_follow_location">ማንቂያዎች በጀርባ አካባቢዎን እንዲከተሉ አድርግ\n(አካባቢዎን ከካርታው ጋር እንደሚጋሩ ያስታውሱ)</string>
+    <string name="restart_game_dialog_title">እንደገና ለመጀመር የጨዋታ ስሪት ይምረጡ</string>
+    <string name="restart_game_dialog_message">ይህ ባህሪ Shizuku/Sui ይፈልጋል</string>
+    <string name="restart_game_standard">መደበኛ</string>
+    <string name="title_loading">በመጫን ላይ…</string>
+    <string name="error_https_only">HTTPS ብቻ ይፈቀዳል</string>
+    <string name="error_missing_bg_location_permission">የጀርባ አካባቢ ፈቃድ ይጎድላል</string>
+    <string name="error_missing_location_permission">የአካባቢ ፈቃድ ይጎድላል</string>
+    <string name="error_unsupported_download">የማይደገፍ ማውረድ: %1$s</string>
+    <string name="error_webhook_human_not_found">ሰው አልተገኘም</string>
+    <string name="pip_phone_enter_split">የተከፈለ ማያ ገጽን አስገባ</string>
+    <string name="shortcut_splitscreen_short">የተከፈለ ማያ ገጽ</string>
+    <string name="shortcut_splitscreen_long">ከጨዋታ ጋር የተከፈለ ማያ ገጽ ጀምር</string>
+    <string name="web_refresh">በድጋሚ ጀምር</string>
+    <string name="car_agreement_template"><big><b>የአጠቃቀም ውሎች</b></big>\n<ul><li>%s (“ካርታው”) በተሽከርካሪዎ ላይ በመጠቀም ይህ ለልማትና ለሙከራ ብቻ እንደሆነ፣ ስህተቶች ሊኖሩት እንደሚችል፣ በራስዎ ኃላፊነት እንደሚጠቀሙት፣ አሽከርካሪዎች ተሽከርካሪው ቆሞ እና ደህንነት ሲኖር ብቻ መጠቀም እንዳለባቸው፣ ተሳፋሪዎች አሽከርካሪውን ማስተናገድ እንደሌለባቸው፣ የትራፊክ ሕጎች መከተል እንዳለባቸው እና ገንቢዎቹ ኃላፊ እንዳልሆኑ ተስማምተዋል።</li></ul></string>
+    <string name="car_agreement_proceed">ቀጥል</string>
+    <string name="car_toast_complicated_action">እባክዎ ይህን እርምጃ በመሣሪያዎ ላይ ያከናውኑ</string>
+    <string name="car_toast_unsupported_url">የታለመውን ድረ-ገጽ በመሣሪያዎ ላይ ለመክፈት እየተሞከረ ነው። ይህ መተግበሪያውን መክፈት ወይም በሌሎች መተግበሪያዎች ላይ ለማሳየት ፈቃድ ሊፈልግ ይችላል</string>
+    <string name="notification_channel_car_site_controller">የAndroid Auto ካርታ መቆጣጠሪያዎች</string>
+    <string name="notification_car_site_controller_message">ክፍለ ጊዜውን ለመጨረስ መታ ያድርጉ</string>
+</resources>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">Ամբողջ էկրանով կայքի կառավարումներ</string>
+    <string name="notification_channel_webhook_failed">Ֆոնային տեղադրության թարմացումը ձախողվեց</string>
+    <string name="notification_channel_webhook_updated">Ֆոնային տեղադրությունը թարմացվեց</string>
+    <string name="notification_channel_webhook_updating">Ֆոնային տեղադրությունը թարմացվում է</string>
+    <string name="notification_site_controller_message">Հպեք կարգավորելու համար</string>
+    <string name="notification_action_restart_game">Վերագործարկել խաղը</string>
+    <string name="notification_webhook_failed_title">Չհաջողվեց թարմացնել տեղադրությունը</string>
+    <string name="notification_webhook_updated_title">Տեղադրությունը թարմացվեց</string>
+    <string name="notification_webhook_updating_title">Տեղադրությունը թարմացվում է</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f՝ %3$s-ից</string>
+    <string name="config_dialog_title">ReactMap URL՝</string>
+    <string name="config_welcome">Այս երկխոսությանը կարող եք վերադառնալ ավելի ուշ՝ հպելով ծանուցմանը։</string>
+    <string name="config_switch_webhook_follow_location">Թող ազդանշանները հետևեն տեղադրությանը ֆոնային ռեժիմում\n(նկատի ունեցեք, որ ձեր տեղադրությունը կկիսվեք քարտեզի հետ)</string>
+    <string name="restart_game_dialog_title">Ընտրեք խաղի տարբերակը վերագործարկելու համար</string>
+    <string name="restart_game_dialog_message">Այս գործառույթը պահանջում է Shizuku/Sui</string>
+    <string name="restart_game_standard">Սովորական</string>
+    <string name="title_loading">Բեռնվում է․․․</string>
+    <string name="error_https_only">Թույլատրվում է միայն HTTPS</string>
+    <string name="error_missing_bg_location_permission">Բացակայում է ֆոնային տեղադրության թույլտվությունը</string>
+    <string name="error_missing_location_permission">Բացակայում է տեղադրության թույլտվությունը</string>
+    <string name="error_unsupported_download">Չաջակցվող ներբեռնում՝ %1$s</string>
+    <string name="error_webhook_human_not_found">Օգտատերը չի գտնվել</string>
+    <string name="pip_phone_enter_split">Մտնել տրոհված էկրանի ռեժիմ</string>
+    <string name="shortcut_splitscreen_short">Տրոհել էկրանը</string>
+    <string name="shortcut_splitscreen_long">Սկսել բաժանված էկրան խաղի հետ</string>
+    <string name="web_refresh">Թարմացնել</string>
+    <string name="car_agreement_template"><big><b>Օգտագործման պայմաններ</b></big>\n<ul><li>Ձեր մեքենայում %s (“Քարտեզը”) օգտագործելով՝ համաձայնում եք, որ այն միայն մշակման և փորձարկման համար է, կարող է լինել ոչ ճշգրիտ, օգտագործվում է ձեր ռիսկով, վարորդները պետք է օգտագործեն այն միայն կանգնած մեքենայում և երբ անվտանգ է, ուղևորները չպետք է շեղեն վարորդին, երթևեկության օրենքները պետք է պահպանվեն, իսկ մշակողները պատասխանատվություն չեն կրում։</li></ul></string>
+    <string name="car_agreement_proceed">Շարունակել</string>
+    <string name="car_toast_complicated_action">Խնդրում ենք այս գործողությունը կատարել ձեր սարքում</string>
+    <string name="car_toast_unsupported_url">Փորձ է արվում բացել նպատակային վեբ էջը ձեր սարքում։ Սա կարող է պահանջել բացել հավելվածը կամ թույլտվություն՝ այլ հավելվածների վրայով ցուցադրելու համար</string>
+    <string name="notification_channel_car_site_controller">Android Auto քարտեզի կառավարումներ</string>
+    <string name="notification_car_site_controller_message">Հպեք՝ նիստը ավարտելու համար</string>
+</resources>

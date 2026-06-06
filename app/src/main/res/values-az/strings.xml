@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">Tam ekran sayt idarələri</string>
+    <string name="notification_channel_webhook_failed">Fon məkan yeniləməsi alınmadı</string>
+    <string name="notification_channel_webhook_updated">Fon məkanı yeniləndi</string>
+    <string name="notification_channel_webhook_updating">Fon məkanı yenilənir</string>
+    <string name="notification_site_controller_message">Qurmaq üçün toxunun</string>
+    <string name="notification_action_restart_game">Oyunu yenidən başladın</string>
+    <string name="notification_webhook_failed_title">Məkanı yeniləmək alınmadı</string>
+    <string name="notification_webhook_updated_title">Məkan yeniləndi</string>
+    <string name="notification_webhook_updating_title">Məkan yenilənir</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f %3$s mənbəyindən</string>
+    <string name="config_dialog_title">ReactMap URL-i:</string>
+    <string name="config_welcome">Sonra bildirişə toxunaraq bu dialoqa qayıda bilərsiniz.</string>
+    <string name="config_switch_webhook_follow_location">Xəbərdarlıqlar fon rejimində məkanı izləsin\n(nəzərə alın ki, məkanınızı xəritə ilə paylaşacaqsınız)</string>
+    <string name="restart_game_dialog_title">Yenidən başlatmaq üçün oyun versiyasını seçin</string>
+    <string name="restart_game_dialog_message">Bu funksiya Shizuku/Sui tələb edir</string>
+    <string name="restart_game_standard">Standart</string>
+    <string name="title_loading">Yüklənir...</string>
+    <string name="error_https_only">Yalnız HTTPS-ə icazə verilir</string>
+    <string name="error_missing_bg_location_permission">Fon məkan icazəsi yoxdur</string>
+    <string name="error_missing_location_permission">Məkan icazəsi yoxdur</string>
+    <string name="error_unsupported_download">Dəstəklənməyən endirmə: %1$s</string>
+    <string name="error_webhook_human_not_found">İstifadəçi tapılmadı</string>
+    <string name="pip_phone_enter_split">Bölünmüş ekrana daxil olun</string>
+    <string name="shortcut_splitscreen_short">Ekran bölünməsi</string>
+    <string name="shortcut_splitscreen_long">Oyunu bölünmüş ekranda başladın</string>
+    <string name="web_refresh">Təzələ</string>
+    <string name="car_agreement_template"><big><b>İstifadə şərtləri</b></big>\n<ul><li>Avtomobilinizdə %s (“Xəritə”) istifadə etməklə onun yalnız inkişaf və sınaq üçün olduğunu, qeyri-dəqiq ola biləcəyini, öz riskinizlə istifadə etdiyinizi, sürücülərin onu yalnız avtomobil dayananda və təhlükəsiz olduqda istifadə etməli olduğunu, sərnişinlərin sürücünü yayındırmamalı olduğunu, yol qaydalarına əməl edilməli olduğunu və tərtibatçıların məsuliyyət daşımadığını qəbul edirsiniz.</li></ul></string>
+    <string name="car_agreement_proceed">Davam et</string>
+    <string name="car_toast_complicated_action">Bu əməliyyatı cihazınızda yerinə yetirin</string>
+    <string name="car_toast_unsupported_url">Hədəf veb-səhifəni cihazınızda açmağa cəhd edilir. Bunun üçün tətbiqi açmaq və ya digər tətbiqlərin üzərində göstərmə icazəsi lazım ola bilər</string>
+    <string name="notification_channel_car_site_controller">Android Auto xəritə idarələri</string>
+    <string name="notification_car_site_controller_message">Sessiyanı bitirmək üçün toxunun</string>
+</resources>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">ការគ្រប់គ្រងគេហទំព័រពេញអេក្រង់</string>
+    <string name="notification_channel_webhook_failed">បរាជ័យក្នុងការធ្វើបច្ចុប្បន្នភាពទីតាំងផ្ទៃក្រោយ</string>
+    <string name="notification_channel_webhook_updated">បានធ្វើបច្ចុប្បន្នភាពទីតាំងផ្ទៃក្រោយ</string>
+    <string name="notification_channel_webhook_updating">កំពុងធ្វើបច្ចុប្បន្នភាពទីតាំងផ្ទៃក្រោយ</string>
+    <string name="notification_site_controller_message">ប៉ះដើម្បីកំណត់រចនាសម្ព័ន្ធ</string>
+    <string name="notification_action_restart_game">ចាប់ផ្តើមហ្គេមឡើងវិញ</string>
+    <string name="notification_webhook_failed_title">បរាជ័យក្នុងការធ្វើបច្ចុប្បន្នភាពទីតាំង</string>
+    <string name="notification_webhook_updated_title">បានធ្វើបច្ចុប្បន្នភាពទីតាំង</string>
+    <string name="notification_webhook_updating_title">កំពុងធ្វើបច្ចុប្បន្នភាពទីតាំង</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f ពី %3$s</string>
+    <string name="config_dialog_title">URL ReactMap:</string>
+    <string name="config_welcome">អ្នកអាចត្រឡប់មកប្រអប់នេះនៅពេលក្រោយដោយប៉ះការជូនដំណឹង។</string>
+    <string name="config_switch_webhook_follow_location">អោយការជូនដំណឹងតាមទីតាំងនៅផ្ទៃក្រោយ\n(ចងចាំថាអ្នកនឹងចែករំលែកទីតាំងរបស់អ្នកជាមួយផែនទី)</string>
+    <string name="restart_game_dialog_title">ជ្រើសកំណែហ្គេមដើម្បីចាប់ផ្តើមឡើងវិញ</string>
+    <string name="restart_game_dialog_message">មុខងារនេះត្រូវការ Shizuku/Sui</string>
+    <string name="restart_game_standard">ស្ដង់ដារ</string>
+    <string name="title_loading">កំពុង​ផ្ទុក...</string>
+    <string name="error_https_only">អនុញ្ញាតតែ HTTPS ប៉ុណ្ណោះ</string>
+    <string name="error_missing_bg_location_permission">ខ្វះការអនុញ្ញាតទីតាំងផ្ទៃក្រោយ</string>
+    <string name="error_missing_location_permission">ខ្វះការអនុញ្ញាតទីតាំង</string>
+    <string name="error_unsupported_download">ការទាញយកមិនគាំទ្រ: %1$s</string>
+    <string name="error_webhook_human_not_found">រកមិនឃើញអ្នកប្រើ</string>
+    <string name="pip_phone_enter_split">ចូលមុខងារ​បំបែកអេក្រង់</string>
+    <string name="shortcut_splitscreen_short">មុខងារ​បំបែកអេក្រង់</string>
+    <string name="shortcut_splitscreen_long">ចាប់ផ្តើមអេក្រង់បំបែកជាមួយហ្គេម</string>
+    <string name="web_refresh">ធ្វើ​ឲ្យ​ស្រស់</string>
+    <string name="car_agreement_template"><big><b>លក្ខខណ្ឌប្រើប្រាស់</b></big>\n<ul><li>ដោយប្រើ %s (“ផែនទី”) នៅក្នុងយានយន្តរបស់អ្នក អ្នកយល់ព្រមថាវាសម្រាប់ការអភិវឌ្ឍ និងការសាកល្បងប៉ុណ្ណោះ អាចមិនត្រឹមត្រូវ ប្រើដោយហានិភ័យផ្ទាល់ខ្លួន អ្នកបើកបរត្រូវប្រើតែពេលយានយន្តឈប់ និងមានសុវត្ថិភាព អ្នកដំណើរមិនត្រូវរំខានអ្នកបើកបរ ត្រូវគោរពច្បាប់ចរាចរណ៍ ហើយអ្នកអភិវឌ្ឍន៍មិនទទួលខុសត្រូវ។</li></ul></string>
+    <string name="car_agreement_proceed">បន្ត</string>
+    <string name="car_toast_complicated_action">សូមអនុវត្តសកម្មភាពនេះលើឧបករណ៍របស់អ្នក</string>
+    <string name="car_toast_unsupported_url">កំពុងព្យាយាមបើកទំព័របណ្ដាញគោលដៅលើឧបករណ៍របស់អ្នក។ វាអាចត្រូវការបើកកម្មវិធី ឬការអនុញ្ញាតឱ្យបង្ហាញលើកម្មវិធីផ្សេងទៀត</string>
+    <string name="notification_channel_car_site_controller">ការគ្រប់គ្រងផែនទី Android Auto</string>
+    <string name="notification_car_site_controller_message">ប៉ះដើម្បីបញ្ចប់សម័យ</string>
+</resources>

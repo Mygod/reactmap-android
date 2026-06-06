@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">Controlos do site em ecrã inteiro</string>
+    <string name="notification_channel_webhook_failed">Falha ao actualizar a localização em segundo plano</string>
+    <string name="notification_channel_webhook_updated">Localização em segundo plano actualizada</string>
+    <string name="notification_channel_webhook_updating">A actualizar a localização em segundo plano</string>
+    <string name="notification_site_controller_message">Toque para configurar</string>
+    <string name="notification_action_restart_game">Reinicia o jogo</string>
+    <string name="notification_webhook_failed_title">Falha ao actualizar a localização</string>
+    <string name="notification_webhook_updated_title">Localização actualizada</string>
+    <string name="notification_webhook_updating_title">A actualizar localização</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f de %3$s</string>
+    <string name="config_dialog_title">URL do ReactMap:</string>
+    <string name="config_welcome">Pode voltar a esta caixa de diálogo mais tarde tocando na notificação.</string>
+    <string name="config_switch_webhook_follow_location">Fazer com que os alertas sigam a localização em segundo plano\n(lembre-se de que irá partilhar a sua localização com o mapa)</string>
+    <string name="restart_game_dialog_title">Escolha a versão do jogo a reiniciar</string>
+    <string name="restart_game_dialog_message">Esta funcionalidade requer Shizuku/Sui</string>
+    <string name="restart_game_standard">Padrão</string>
+    <string name="title_loading">Carregando…</string>
+    <string name="error_https_only">Só é permitido HTTPS</string>
+    <string name="error_missing_bg_location_permission">Falta a permissão de localização em segundo plano</string>
+    <string name="error_missing_location_permission">Falta a permissão de localização</string>
+    <string name="error_unsupported_download">Transferência não suportada: %1$s</string>
+    <string name="error_webhook_human_not_found">Utilizador não encontrado</string>
+    <string name="pip_phone_enter_split">Dividir tela</string>
+    <string name="shortcut_splitscreen_short">Tela dividida</string>
+    <string name="shortcut_splitscreen_long">Iniciar ecrã dividido com o jogo</string>
+    <string name="web_refresh">Atualizar</string>
+    <string name="car_agreement_template"><big><b>Termos de Utilização</b></big>\n<ul><li>Ao usar %s (“o Mapa”) no seu veículo, concorda que é apenas para desenvolvimento e testes, pode ser impreciso, é usado por sua conta e risco, os condutores só o devem usar com o veículo parado e quando for seguro, os passageiros não devem distrair o condutor, as leis de trânsito devem ser cumpridas e os programadores não são responsáveis.</li></ul></string>
+    <string name="car_agreement_proceed">Continuar</string>
+    <string name="car_toast_complicated_action">Execute esta acção no seu dispositivo</string>
+    <string name="car_toast_unsupported_url">A tentar abrir a página Web de destino no seu dispositivo. Isto pode exigir abrir a aplicação ou permissão para apresentar sobre outras aplicações</string>
+    <string name="notification_channel_car_site_controller">Controlos do mapa do Android Auto</string>
+    <string name="notification_car_site_controller_message">Toque para terminar a sessão</string>
+</resources>

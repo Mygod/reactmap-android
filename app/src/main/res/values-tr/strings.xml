@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">Tam ekran site denetimleri</string>
+    <string name="notification_channel_webhook_failed">Arka plan konum güncellemesi başarısız oldu</string>
+    <string name="notification_channel_webhook_updated">Arka plan konumu güncellendi</string>
+    <string name="notification_channel_webhook_updating">Arka plan konumu güncelleniyor</string>
+    <string name="notification_site_controller_message">Yapılandırmak için dokunun</string>
+    <string name="notification_action_restart_game">Oyunu yeniden başlat</string>
+    <string name="notification_webhook_failed_title">Konum güncellenemedi</string>
+    <string name="notification_webhook_updated_title">Konum güncellendi</string>
+    <string name="notification_webhook_updating_title">Konum güncelleniyor</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f, %3$s kaynağından</string>
+    <string name="config_dialog_title">ReactMap URL’si:</string>
+    <string name="config_welcome">Daha sonra bildirime dokunarak bu iletişim kutusuna dönebilirsiniz.</string>
+    <string name="config_switch_webhook_follow_location">Uyarıların arka planda konumu takip etmesini sağla\n(konumunuzu haritayla paylaşacağınızı unutmayın)</string>
+    <string name="restart_game_dialog_title">Yeniden başlatılacak oyun sürümünü seçin</string>
+    <string name="restart_game_dialog_message">Bu özellik Shizuku/Sui gerektirir</string>
+    <string name="restart_game_standard">Standart</string>
+    <string name="title_loading">Yükleniyor…</string>
+    <string name="error_https_only">Yalnızca HTTPS’ye izin verilir</string>
+    <string name="error_missing_bg_location_permission">Arka plan konum izni eksik</string>
+    <string name="error_missing_location_permission">Konum izni eksik</string>
+    <string name="error_unsupported_download">Desteklenmeyen indirme: %1$s</string>
+    <string name="error_webhook_human_not_found">Kullanıcı bulunamadı</string>
+    <string name="pip_phone_enter_split">Bölünmüş ekrana geç</string>
+    <string name="shortcut_splitscreen_short">Bölünmüş ekran</string>
+    <string name="shortcut_splitscreen_long">Oyunla bölünmüş ekran başlat</string>
+    <string name="web_refresh">Yenile</string>
+    <string name="car_agreement_template"><big><b>Kullanım Şartları</b></big>\n<ul><li>Aracınızda %s (“Harita”) kullanarak bunun yalnızca geliştirme ve test için olduğunu, hatalı olabileceğini, kendi riskinizle kullandığınızı, sürücülerin yalnızca araç dururken ve güvenliyken kullanması gerektiğini, yolcuların sürücünün dikkatini dağıtmaması gerektiğini, trafik yasalarına uyulması gerektiğini ve geliştiricilerin sorumlu olmadığını kabul edersiniz.</li></ul></string>
+    <string name="car_agreement_proceed">Devam et</string>
+    <string name="car_toast_complicated_action">Lütfen bu işlemi cihazınızda yapın</string>
+    <string name="car_toast_unsupported_url">Hedef web sayfası cihazınızda açılmaya çalışılıyor. Bunun için uygulamanın açılması veya diğer uygulamaların üzerinde gösterme izni gerekebilir</string>
+    <string name="notification_channel_car_site_controller">Android Auto harita denetimleri</string>
+    <string name="notification_car_site_controller_message">Oturumu bitirmek için dokunun</string>
+</resources>

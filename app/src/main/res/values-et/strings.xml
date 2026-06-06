@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">Täisekraanil saidi juhtelemendid</string>
+    <string name="notification_channel_webhook_failed">Taustal asukoha värskendamine nurjus</string>
+    <string name="notification_channel_webhook_updated">Taustaasukoht värskendatud</string>
+    <string name="notification_channel_webhook_updating">Taustaasukohta värskendatakse</string>
+    <string name="notification_site_controller_message">Seadistamiseks puuduta</string>
+    <string name="notification_action_restart_game">Taaskäivita mäng</string>
+    <string name="notification_webhook_failed_title">Asukoha värskendamine nurjus</string>
+    <string name="notification_webhook_updated_title">Asukoht värskendatud</string>
+    <string name="notification_webhook_updating_title">Asukohta värskendatakse</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f allikast %3$s</string>
+    <string name="config_dialog_title">ReactMapi URL:</string>
+    <string name="config_welcome">Saad sellesse dialoogi hiljem naasta, puudutades teadet.</string>
+    <string name="config_switch_webhook_follow_location">Lase hoiatustel taustal asukohta jälgida\n(arvesta, et jagad oma asukohta kaardiga)</string>
+    <string name="restart_game_dialog_title">Vali taaskäivitamiseks mänguversioon</string>
+    <string name="restart_game_dialog_message">See funktsioon nõuab Shizuku/Sui</string>
+    <string name="restart_game_standard">Tavaline</string>
+    <string name="title_loading">Laadimine…</string>
+    <string name="error_https_only">Lubatud on ainult HTTPS</string>
+    <string name="error_missing_bg_location_permission">Taustal asukoha luba puudub</string>
+    <string name="error_missing_location_permission">Asukohaluba puudub</string>
+    <string name="error_unsupported_download">Toetamata allalaadimine: %1$s</string>
+    <string name="error_webhook_human_not_found">Kasutajat ei leitud</string>
+    <string name="pip_phone_enter_split">Ava jagatud ekraanikuva</string>
+    <string name="shortcut_splitscreen_short">Jagatud ekraanikuva</string>
+    <string name="shortcut_splitscreen_long">Käivita jagatud ekraan koos mänguga</string>
+    <string name="web_refresh">Värskenda</string>
+    <string name="car_agreement_template"><big><b>Kasutustingimused</b></big>\n<ul><li>Kasutades %s (“kaarti”) oma sõidukis, nõustud, et see on ainult arenduseks ja testimiseks, võib olla ebatäpne, seda kasutatakse omal vastutusel, juhid võivad seda kasutada ainult siis, kui sõiduk seisab ja see on ohutu, reisijad ei tohi juhti häirida, liiklusseadusi tuleb järgida ning arendajad ei vastuta.</li></ul></string>
+    <string name="car_agreement_proceed">Jätka</string>
+    <string name="car_toast_complicated_action">Tee see toiming oma seadmes</string>
+    <string name="car_toast_unsupported_url">Proovitakse sihtveebilehte sinu seadmes avada. See võib nõuda rakenduse avamist või luba kuvada teiste rakenduste peal</string>
+    <string name="notification_channel_car_site_controller">Android Auto kaardi juhtelemendid</string>
+    <string name="notification_car_site_controller_message">Puuduta seansi lõpetamiseks</string>
+</resources>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">Controlli del sito a schermo intero</string>
+    <string name="notification_channel_webhook_failed">Aggiornamento della posizione in background non riuscito</string>
+    <string name="notification_channel_webhook_updated">Posizione in background aggiornata</string>
+    <string name="notification_channel_webhook_updating">Aggiornamento della posizione in background</string>
+    <string name="notification_site_controller_message">Tocca per configurare</string>
+    <string name="notification_action_restart_game">Ricomincia partita</string>
+    <string name="notification_webhook_failed_title">Impossibile aggiornare la posizione</string>
+    <string name="notification_webhook_updated_title">Posizione aggiornata</string>
+    <string name="notification_webhook_updating_title">Aggiornamento posizione</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f da %3$s</string>
+    <string name="config_dialog_title">URL ReactMap:</string>
+    <string name="config_welcome">Puoi tornare a questa finestra più tardi toccando la notifica.</string>
+    <string name="config_switch_webhook_follow_location">Fai seguire la posizione agli avvisi in background\n(tieni presente che condividerai la tua posizione con la mappa)</string>
+    <string name="restart_game_dialog_title">Scegli la versione del gioco da riavviare</string>
+    <string name="restart_game_dialog_message">Questa funzione richiede Shizuku/Sui</string>
+    <string name="title_loading">Caricamento…</string>
+    <string name="error_https_only">È consentito solo HTTPS</string>
+    <string name="error_missing_bg_location_permission">Autorizzazione alla posizione in background mancante</string>
+    <string name="error_missing_location_permission">Autorizzazione alla posizione mancante</string>
+    <string name="error_unsupported_download">Download non supportato: %1$s</string>
+    <string name="error_webhook_human_not_found">Utente non trovato</string>
+    <string name="pip_phone_enter_split">Accedi a schermo diviso</string>
+    <string name="shortcut_splitscreen_short">Schermo diviso</string>
+    <string name="shortcut_splitscreen_long">Avvia schermo diviso con il gioco</string>
+    <string name="web_refresh">Aggiorna</string>
+    <string name="car_agreement_template"><big><b>Termini di utilizzo</b></big>\n<ul><li>Usando %s (“la Mappa”) nel veicolo, accetti che sia destinata solo a sviluppo e test, possa essere imprecisa, sia usata a tuo rischio, che i conducenti la usino solo a veicolo fermo e quando è sicuro, che i passeggeri non distraggano il conducente, che le leggi sul traffico siano rispettate e che gli sviluppatori non siano responsabili.</li></ul></string>
+    <string name="car_agreement_proceed">Procedi</string>
+    <string name="car_toast_complicated_action">Esegui questa azione sul tuo dispositivo</string>
+    <string name="car_toast_unsupported_url">Tentativo di aprire la pagina web di destinazione sul dispositivo. Potrebbe essere necessario aprire l’app o concedere il permesso di visualizzare sopra altre app</string>
+    <string name="notification_channel_car_site_controller">Controlli mappa Android Auto</string>
+    <string name="notification_car_site_controller_message">Tocca per terminare la sessione</string>
+</resources>

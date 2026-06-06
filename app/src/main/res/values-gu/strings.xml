@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">પૂર્ણ સ્ક્રીન સાઇટ નિયંત્રણો</string>
+    <string name="notification_channel_webhook_failed">પૃષ્ઠભૂમિ સ્થાન અપડેટ નિષ્ફળ થયું</string>
+    <string name="notification_channel_webhook_updated">પૃષ્ઠભૂમિ સ્થાન અપડેટ થયું</string>
+    <string name="notification_channel_webhook_updating">પૃષ્ઠભૂમિ સ્થાન અપડેટ થઈ રહ્યું છે</string>
+    <string name="notification_site_controller_message">રૂપરેખાંકિત કરવા ટૅપ કરો</string>
+    <string name="notification_action_restart_game">ગેમ ફરી શરૂ કરો</string>
+    <string name="notification_webhook_failed_title">સ્થાન અપડેટ કરવામાં નિષ્ફળ</string>
+    <string name="notification_webhook_updated_title">સ્થાન અપડેટ થયું</string>
+    <string name="notification_webhook_updating_title">સ્થાન અપડેટ થઈ રહ્યું છે</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f %3$s માંથી</string>
+    <string name="config_welcome">તમે સૂચના પર ટૅપ કરીને પછી આ સંવાદમાં પાછા આવી શકો છો.</string>
+    <string name="config_switch_webhook_follow_location">ચેતવણીઓને પૃષ્ઠભૂમિમાં સ્થાન અનુસરવા દો\n(ધ્યાનમાં રાખો કે તમે તમારું સ્થાન નકશા સાથે શેર કરશો)</string>
+    <string name="restart_game_dialog_title">ફરી શરૂ કરવા માટે ગેમ આવૃત્તિ પસંદ કરો</string>
+    <string name="restart_game_dialog_message">આ સુવિધા માટે Shizuku/Sui જરૂરી છે</string>
+    <string name="restart_game_standard">પ્રમાણભૂત</string>
+    <string name="title_loading">લાવી રહ્યા છે…</string>
+    <string name="error_https_only">માત્ર HTTPS મંજૂર છે</string>
+    <string name="error_missing_bg_location_permission">પૃષ્ઠભૂમિ સ્થાન પરવાનગી ખૂટે છે</string>
+    <string name="error_missing_location_permission">સ્થાન પરવાનગી ખૂટે છે</string>
+    <string name="error_unsupported_download">અસમર્થિત ડાઉનલોડ: %1$s</string>
+    <string name="error_webhook_human_not_found">વપરાશકર્તા મળ્યો નથી</string>
+    <string name="pip_phone_enter_split">વિભાજિત સ્ક્રીન મોડમાં દાખલ થાઓ</string>
+    <string name="shortcut_splitscreen_short">સ્ક્રીનને વિભાજિત કરો</string>
+    <string name="shortcut_splitscreen_long">ગેમ સાથે સ્પ્લિટ સ્ક્રીન શરૂ કરો</string>
+    <string name="web_refresh">ફરી તાજુ કરો</string>
+    <string name="car_agreement_template"><big><b>ઉપયોગની શરતો</b></big>\n<ul><li>તમારા વાહનમાં %s (“નકશો”) ઉપયોગ કરીને, તમે સહમત થાઓ છો કે તે માત્ર વિકાસ અને પરીક્ષણ માટે છે, તે અચોક્કસ હોઈ શકે છે, તેનો ઉપયોગ તમારા પોતાના જોખમે થાય છે, ડ્રાઇવરોએ તેને ફક્ત વાહન ઉભું હોય અને સુરક્ષિત હોય ત્યારે જ ઉપયોગ કરવો જોઈએ, મુસાફરોએ ડ્રાઇવરને ભટકાવવો નહીં, ટ્રાફિક કાયદાનું પાલન કરવું જોઈએ અને વિકાસકર્તાઓ જવાબદાર નથી.</li></ul></string>
+    <string name="car_agreement_proceed">આગળ વધો</string>
+    <string name="car_toast_complicated_action">કૃપા કરીને આ ક્રિયા તમારા ઉપકરણ પર કરો</string>
+    <string name="car_toast_unsupported_url">લક્ષ્ય વેબપૃષ્ઠ તમારા ઉપકરણ પર ખોલવાનો પ્રયાસ થઈ રહ્યો છે. આ માટે એપ ખોલવી અથવા અન્ય એપ્સ ઉપર બતાવવાની પરવાનગી જરૂરી હોઈ શકે છે</string>
+    <string name="notification_channel_car_site_controller">Android Auto નકશા નિયંત્રણો</string>
+    <string name="notification_car_site_controller_message">સત્ર સમાપ્ત કરવા ટૅપ કરો</string>
+</resources>

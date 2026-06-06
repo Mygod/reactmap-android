@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">Koko näytön sivuston ohjaimet</string>
+    <string name="notification_channel_webhook_failed">Taustasijainnin päivitys epäonnistui</string>
+    <string name="notification_channel_webhook_updated">Taustasijainti päivitetty</string>
+    <string name="notification_channel_webhook_updating">Taustasijaintia päivitetään</string>
+    <string name="notification_site_controller_message">Napauta määrittääksesi</string>
+    <string name="notification_action_restart_game">Aloita peli uudestaan</string>
+    <string name="notification_webhook_failed_title">Sijainnin päivitys epäonnistui</string>
+    <string name="notification_webhook_updated_title">Sijainti päivitetty</string>
+    <string name="notification_webhook_updating_title">Sijaintia päivitetään</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f lähteestä %3$s</string>
+    <string name="config_dialog_title">ReactMapin URL:</string>
+    <string name="config_welcome">Voit palata tähän valintaikkunaan myöhemmin napauttamalla ilmoitusta.</string>
+    <string name="config_switch_webhook_follow_location">Anna hälytysten seurata sijaintia taustalla\n(huomaa, että jaat sijaintisi kartan kanssa)</string>
+    <string name="restart_game_dialog_title">Valitse uudelleenkäynnistettävä peliversio</string>
+    <string name="restart_game_dialog_message">Tämä ominaisuus vaatii Shizuku/Sui</string>
+    <string name="restart_game_standard">Tavallinen</string>
+    <string name="title_loading">Ladataan…</string>
+    <string name="error_https_only">Vain HTTPS on sallittu</string>
+    <string name="error_missing_bg_location_permission">Taustasijainnin käyttöoikeus puuttuu</string>
+    <string name="error_missing_location_permission">Sijainnin käyttöoikeus puuttuu</string>
+    <string name="error_unsupported_download">Ei-tuettu lataus: %1$s</string>
+    <string name="error_webhook_human_not_found">Käyttäjää ei löydy</string>
+    <string name="pip_phone_enter_split">Avaa jaettu näyttö</string>
+    <string name="shortcut_splitscreen_short">Jaettu näyttö</string>
+    <string name="shortcut_splitscreen_long">Käynnistä jaettu näyttö pelin kanssa</string>
+    <string name="web_refresh">Päivitä</string>
+    <string name="car_agreement_template"><big><b>Käyttöehdot</b></big>\n<ul><li>Käyttämällä %s (“karttaa”) ajoneuvossasi hyväksyt, että se on vain kehitys- ja testikäyttöön, voi olla epätarkka, sitä käytetään omalla vastuulla, kuljettajat saavat käyttää sitä vain ajoneuvon ollessa paikallaan ja kun se on turvallista, matkustajat eivät saa häiritä kuljettajaa, liikennesääntöjä on noudatettava eikä kehittäjillä ole vastuuta.</li></ul></string>
+    <string name="car_agreement_proceed">Jatka</string>
+    <string name="car_toast_complicated_action">Tee tämä toiminto laitteellasi</string>
+    <string name="car_toast_unsupported_url">Kohdeverkkosivua yritetään avata laitteellasi. Tämä voi edellyttää sovelluksen avaamista tai lupaa näyttää muiden sovellusten päällä</string>
+    <string name="notification_channel_car_site_controller">Android Auto -karttaohjaimet</string>
+    <string name="notification_car_site_controller_message">Napauta lopettaaksesi istunnon</string>
+</resources>

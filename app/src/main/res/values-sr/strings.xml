@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">Контроле сајта преко целог екрана</string>
+    <string name="notification_channel_webhook_failed">Ажурирање локације у позадини није успело</string>
+    <string name="notification_channel_webhook_updated">Локација у позадини је ажурирана</string>
+    <string name="notification_channel_webhook_updating">Локација у позадини се ажурира</string>
+    <string name="notification_site_controller_message">Додирните за подешавање</string>
+    <string name="notification_action_restart_game">Поновно покретање игре</string>
+    <string name="notification_webhook_failed_title">Ажурирање локације није успело</string>
+    <string name="notification_webhook_updated_title">Локација је ажурирана</string>
+    <string name="notification_webhook_updating_title">Локација се ажурира</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f из %3$s</string>
+    <string name="config_dialog_title">URL ReactMap-а:</string>
+    <string name="config_welcome">Касније се можете вратити на овај дијалог додиром обавештења.</string>
+    <string name="config_switch_webhook_follow_location">Нека упозорења прате локацију у позадини\n(имајте на уму да ћете делити локацију са мапом)</string>
+    <string name="restart_game_dialog_title">Изаберите верзију игре за поновно покретање</string>
+    <string name="restart_game_dialog_message">Ова функција захтева Shizuku/Sui</string>
+    <string name="restart_game_standard">Обично</string>
+    <string name="title_loading">Учитавам…</string>
+    <string name="error_https_only">Дозвољен је само HTTPS</string>
+    <string name="error_missing_bg_location_permission">Недостаје дозвола за локацију у позадини</string>
+    <string name="error_missing_location_permission">Недостаје дозвола за локацију</string>
+    <string name="error_unsupported_download">Неподржано преузимање: %1$s</string>
+    <string name="error_webhook_human_not_found">Корисник није пронађен</string>
+    <string name="pip_phone_enter_split">Уђи на подељени екран</string>
+    <string name="shortcut_splitscreen_short">Подељени екран</string>
+    <string name="shortcut_splitscreen_long">Покрени подељени екран са игром</string>
+    <string name="web_refresh">Освежи</string>
+    <string name="car_agreement_template"><big><b>Услови коришћења</b></big>\n<ul><li>Коришћењем %s („Мапе“) у возилу сагласни сте да је само за развој и тестирање, може бити нетачна, користи се на сопствени ризик, возачи смеју да је користе само док возило стоји и када је безбедно, путници не смеју да ометају возача, саобраћајни прописи морају да се поштују, а програмери не сносе одговорност.</li></ul></string>
+    <string name="car_agreement_proceed">Настави</string>
+    <string name="car_toast_complicated_action">Обавите ову радњу на свом уређају</string>
+    <string name="car_toast_unsupported_url">Покушава се отварање циљне веб-странице на вашем уређају. Ово може захтевати отварање апликације или дозволу за приказ преко других апликација</string>
+    <string name="notification_channel_car_site_controller">Контроле Android Auto мапе</string>
+    <string name="notification_car_site_controller_message">Додирните да завршите сесију</string>
+</resources>

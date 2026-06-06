@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">Vidhibiti vya tovuti ya skrini nzima</string>
+    <string name="notification_channel_webhook_failed">Kusasisha mahali chinichini kumeshindikana</string>
+    <string name="notification_channel_webhook_updated">Mahali pa chinichini pamesasishwa</string>
+    <string name="notification_channel_webhook_updating">Mahali pa chinichini panasasishwa</string>
+    <string name="notification_site_controller_message">Gusa ili kusanidi</string>
+    <string name="notification_action_restart_game">Anzisha mchezo upya</string>
+    <string name="notification_webhook_failed_title">Imeshindikana kusasisha mahali</string>
+    <string name="notification_webhook_updated_title">Mahali pamesasishwa</string>
+    <string name="notification_webhook_updating_title">Mahali panasasishwa</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f kutoka %3$s</string>
+    <string name="config_dialog_title">URL ya ReactMap:</string>
+    <string name="config_welcome">Unaweza kurudi kwenye kisanduku hiki baadaye kwa kugusa arifa.</string>
+    <string name="config_switch_webhook_follow_location">Ruhusu arifa zifuate mahali chinichini\n(kumbuka kuwa utashiriki mahali ulipo na ramani)</string>
+    <string name="restart_game_dialog_title">Chagua toleo la mchezo la kuanzisha upya</string>
+    <string name="restart_game_dialog_message">Kipengele hiki kinahitaji Shizuku/Sui</string>
+    <string name="restart_game_standard">Muundo-msingi</string>
+    <string name="title_loading">Inapakia…</string>
+    <string name="error_https_only">HTTPS pekee inaruhusiwa</string>
+    <string name="error_missing_bg_location_permission">Ruhusa ya mahali chinichini inakosekana</string>
+    <string name="error_missing_location_permission">Ruhusa ya mahali inakosekana</string>
+    <string name="error_unsupported_download">Upakuaji hautumiki: %1$s</string>
+    <string name="error_webhook_human_not_found">Mtumiaji hakupatikana</string>
+    <string name="pip_phone_enter_split">Weka skrini iliyogawanywa</string>
+    <string name="shortcut_splitscreen_short">Gawa skrini</string>
+    <string name="shortcut_splitscreen_long">Anzisha skrini iliyogawanywa na mchezo</string>
+    <string name="web_refresh">Onyesha upya</string>
+    <string name="car_agreement_template"><big><b>Masharti ya matumizi</b></big>\n<ul><li>Kwa kutumia %s (“Ramani”) kwenye gari lako, unakubali kuwa ni kwa maendeleo na majaribio tu, inaweza isiwe sahihi, unaitumia kwa hatari yako mwenyewe, madereva waitumie tu gari likiwa limesimama na ni salama, abiria wasimkengeushe dereva, sheria za trafiki zifuatwe, na watengenezaji hawawajibiki.</li></ul></string>
+    <string name="car_agreement_proceed">Endelea</string>
+    <string name="car_toast_complicated_action">Tafadhali fanya kitendo hiki kwenye kifaa chako</string>
+    <string name="car_toast_unsupported_url">Inajaribu kufungua ukurasa lengwa kwenye kifaa chako. Huenda ikahitaji kufungua programu au ruhusa ya kuonyesha juu ya programu nyingine</string>
+    <string name="notification_channel_car_site_controller">Vidhibiti vya ramani ya Android Auto</string>
+    <string name="notification_car_site_controller_message">Gusa ili kumaliza kipindi</string>
+</resources>

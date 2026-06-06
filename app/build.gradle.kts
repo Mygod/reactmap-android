@@ -75,7 +75,6 @@ android {
         providers.gradleProperty("reactmap.appName").orNull
             ?.let { resValue("string", "app_name", it) }
         buildConfigField("String", "DEFAULT_DOMAIN", "\"$defaultDomain\"")
-        androidResources.localeFilters += listOf("en-rUS", "pl")
         externalNativeBuild.cmake.arguments += listOf("-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON")   // TODO remove for NDK r28
     }
     dependenciesInfo {

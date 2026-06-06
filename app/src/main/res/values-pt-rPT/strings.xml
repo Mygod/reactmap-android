@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_action_restart_game">Reiniciar jogo</string>
+    <string name="title_loading">A carregar…</string>
+    <string name="pip_phone_enter_split">Aceder ao ecrã dividido</string>
+    <string name="shortcut_splitscreen_short">Ecrã dividido</string>
+</resources>

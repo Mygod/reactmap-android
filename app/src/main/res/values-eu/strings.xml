@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">Pantaila osoko gunearen kontrolak</string>
+    <string name="notification_channel_webhook_failed">Atzeko planoko kokapen-eguneratzeak huts egin du</string>
+    <string name="notification_channel_webhook_updated">Atzeko planoko kokapena eguneratu da</string>
+    <string name="notification_channel_webhook_updating">Atzeko planoko kokapena eguneratzen</string>
+    <string name="notification_site_controller_message">Sakatu konfiguratzeko</string>
+    <string name="notification_action_restart_game">Berrabiarazi jokoa</string>
+    <string name="notification_webhook_failed_title">Ezin izan da kokapena eguneratu</string>
+    <string name="notification_webhook_updated_title">Kokapena eguneratu da</string>
+    <string name="notification_webhook_updating_title">Kokapena eguneratzen</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f hemendik: %3$s</string>
+    <string name="config_dialog_title">ReactMap URLa:</string>
+    <string name="config_welcome">Jakinarazpena sakatuta geroago itzul zaitezke elkarrizketa honetara.</string>
+    <string name="config_switch_webhook_follow_location">Alertak atzeko planoan kokapenari jarrai diezaioten\n(kontuan izan zure kokapena maparekin partekatuko duzula)</string>
+    <string name="restart_game_dialog_title">Hautatu berrabiarazteko jokoaren bertsioa</string>
+    <string name="restart_game_dialog_message">Eginbide honek Shizuku/Sui behar du</string>
+    <string name="restart_game_standard">Arrunta</string>
+    <string name="title_loading">Kargatzen…</string>
+    <string name="error_https_only">HTTPS bakarrik onartzen da</string>
+    <string name="error_missing_bg_location_permission">Atzeko planoko kokapen-baimena falta da</string>
+    <string name="error_missing_location_permission">Kokapen-baimena falta da</string>
+    <string name="error_unsupported_download">Onartzen ez den deskarga: %1$s</string>
+    <string name="error_webhook_human_not_found">Erabiltzailea ez da aurkitu</string>
+    <string name="pip_phone_enter_split">Sartu pantaila zatituan</string>
+    <string name="shortcut_splitscreen_short">Zatitu pantaila</string>
+    <string name="shortcut_splitscreen_long">Hasi pantaila zatitua jokoarekin</string>
+    <string name="web_refresh">Freskatu</string>
+    <string name="car_agreement_template"><big><b>Erabilera-baldintzak</b></big>\n<ul><li>Zure ibilgailuan %s (“Mapa”) erabiltzean onartzen duzu garapen eta probetarako bakarrik dela, zehaztasun gabeziak izan ditzakeela, zure ardurapean erabiltzen dela, gidariek ibilgailua geldirik eta segurua denean bakarrik erabili behar dutela, bidaiariek ez dutela gidaria distraitu behar, trafiko-legeak bete behar direla eta garatzaileak ez direla erantzule.</li></ul></string>
+    <string name="car_agreement_proceed">Jarraitu</string>
+    <string name="car_toast_complicated_action">Egin ekintza hau zure gailuan</string>
+    <string name="car_toast_unsupported_url">Helburuko webgunea zure gailuan irekitzen saiatzen ari da. Baliteke aplikazioa irekitzea edo beste aplikazioen gainean erakusteko baimena behar izatea</string>
+    <string name="notification_channel_car_site_controller">Android Auto maparen kontrolak</string>
+    <string name="notification_car_site_controller_message">Sakatu saioa amaitzeko</string>
+</resources>

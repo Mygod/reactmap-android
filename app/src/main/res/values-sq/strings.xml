@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">Kontrollet e sajtit në ekran të plotë</string>
+    <string name="notification_channel_webhook_failed">Përditësimi i vendndodhjes në sfond dështoi</string>
+    <string name="notification_channel_webhook_updated">Vendndodhja në sfond u përditësua</string>
+    <string name="notification_channel_webhook_updating">Vendndodhja në sfond po përditësohet</string>
+    <string name="notification_site_controller_message">Prekni për ta konfiguruar</string>
+    <string name="notification_action_restart_game">Rinis lojën</string>
+    <string name="notification_webhook_failed_title">Përditësimi i vendndodhjes dështoi</string>
+    <string name="notification_webhook_updated_title">Vendndodhja u përditësua</string>
+    <string name="notification_webhook_updating_title">Po përditësohet vendndodhja</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f nga %3$s</string>
+    <string name="config_dialog_title">URL e ReactMap:</string>
+    <string name="config_welcome">Mund të ktheheni te ky dialog më vonë duke prekur njoftimin.</string>
+    <string name="config_switch_webhook_follow_location">Lejo që sinjalizimet të ndjekin vendndodhjen në sfond\n(kini parasysh se do ta ndani vendndodhjen me hartën)</string>
+    <string name="restart_game_dialog_title">Zgjidhni versionin e lojës për rinisje</string>
+    <string name="restart_game_dialog_message">Kjo veçori kërkon Shizuku/Sui</string>
+    <string name="restart_game_standard">Standarde</string>
+    <string name="title_loading">Duke ngarkuar...</string>
+    <string name="error_https_only">Lejohet vetëm HTTPS</string>
+    <string name="error_missing_bg_location_permission">Mungon leja e vendndodhjes në sfond</string>
+    <string name="error_missing_location_permission">Mungon leja e vendndodhjes</string>
+    <string name="error_unsupported_download">Shkarkim i pambështetur: %1$s</string>
+    <string name="error_webhook_human_not_found">Përdoruesi nuk u gjet</string>
+    <string name="pip_phone_enter_split">Hyr në ekranin e ndarë</string>
+    <string name="shortcut_splitscreen_short">Ekrani i ndarë</string>
+    <string name="shortcut_splitscreen_long">Nis ekran të ndarë me lojën</string>
+    <string name="web_refresh">Rifresko</string>
+    <string name="car_agreement_template"><big><b>Kushtet e përdorimit</b></big>\n<ul><li>Duke përdorur %s (“Hartën”) në automjet, pranoni se është vetëm për zhvillim dhe testim, mund të jetë e pasaktë, përdoret me rrezikun tuaj, drejtuesit duhet ta përdorin vetëm kur automjeti është i ndaluar dhe është e sigurt, pasagjerët nuk duhet të shpërqendrojnë drejtuesin, ligjet e trafikut duhet të respektohen dhe zhvilluesit nuk janë përgjegjës.</li></ul></string>
+    <string name="car_agreement_proceed">Vazhdo</string>
+    <string name="car_toast_complicated_action">Kryeni këtë veprim në pajisjen tuaj</string>
+    <string name="car_toast_unsupported_url">Po tentohet të hapet faqja e synuar në pajisjen tuaj. Kjo mund të kërkojë hapjen e aplikacionit ose lejen për t’u shfaqur mbi aplikacione të tjera</string>
+    <string name="notification_channel_car_site_controller">Kontrollet e hartës Android Auto</string>
+    <string name="notification_car_site_controller_message">Prekni për të përfunduar seancën</string>
+</resources>

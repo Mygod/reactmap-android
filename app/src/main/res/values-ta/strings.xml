@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">முழுத்திரை தளக் கட்டுப்பாடுகள்</string>
+    <string name="notification_channel_webhook_failed">பின்னணி இருப்பிடப் புதுப்பிப்பு தோல்வியடைந்தது</string>
+    <string name="notification_channel_webhook_updated">பின்னணி இருப்பிடம் புதுப்பிக்கப்பட்டது</string>
+    <string name="notification_channel_webhook_updating">பின்னணி இருப்பிடம் புதுப்பிக்கப்படுகிறது</string>
+    <string name="notification_site_controller_message">அமைக்க தட்டவும்</string>
+    <string name="notification_action_restart_game">விளையாட்டை மறுதொடங்கு</string>
+    <string name="notification_webhook_failed_title">இருப்பிடத்தை புதுப்பிக்க முடியவில்லை</string>
+    <string name="notification_webhook_updated_title">இருப்பிடம் புதுப்பிக்கப்பட்டது</string>
+    <string name="notification_webhook_updating_title">இருப்பிடம் புதுப்பிக்கப்படுகிறது</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f %3$s இலிருந்து</string>
+    <string name="config_welcome">அறிவிப்பைத் தட்டுவதன் மூலம் பின்னர் இந்த உரையாடலுக்கு திரும்பலாம்.</string>
+    <string name="config_switch_webhook_follow_location">எச்சரிக்கைகள் பின்னணியில் இருப்பிடத்தைப் பின்தொடரட்டும்\n(உங்கள் இருப்பிடத்தை வரைபடத்துடன் பகிர்வீர்கள் என்பதை நினைவில் கொள்ளுங்கள்)</string>
+    <string name="restart_game_dialog_title">மறுதொடங்க விளையாட்டு பதிப்பைத் தேர்ந்தெடுக்கவும்</string>
+    <string name="restart_game_dialog_message">இந்த அம்சத்திற்கு Shizuku/Sui தேவை</string>
+    <string name="restart_game_standard">செந்தரம்</string>
+    <string name="title_loading">ஏற்றுகிறது...</string>
+    <string name="error_https_only">HTTPS மட்டும் அனுமதிக்கப்படுகிறது</string>
+    <string name="error_missing_bg_location_permission">பின்னணி இருப்பிட அனுமதி இல்லை</string>
+    <string name="error_missing_location_permission">இருப்பிட அனுமதி இல்லை</string>
+    <string name="error_unsupported_download">ஆதரிக்கப்படாத பதிவிறக்கம்: %1$s</string>
+    <string name="error_webhook_human_not_found">பயனர் கிடைக்கவில்லை</string>
+    <string name="pip_phone_enter_split">திரைப் பிரிப்பு பயன்முறைக்குச் செல்</string>
+    <string name="shortcut_splitscreen_short">திரைப் பிரிப்பு</string>
+    <string name="shortcut_splitscreen_long">விளையாட்டுடன் பிளவு திரை தொடங்கு</string>
+    <string name="web_refresh">புதுப்பி</string>
+    <string name="car_agreement_template"><big><b>பயன்பாட்டு விதிமுறைகள்</b></big>\n<ul><li>உங்கள் வாகனத்தில் %s (“வரைபடம்”) பயன்படுத்துவதன் மூலம், இது மேம்பாடு மற்றும் சோதனைக்காக மட்டுமே, தவறாக இருக்கலாம், உங்கள் சொந்த ஆபத்தில் பயன்படுத்தப்படுகிறது, ஓட்டுநர்கள் வாகனம் நின்றும் பாதுகாப்பாக இருக்கும் போதும் மட்டுமே பயன்படுத்த வேண்டும், பயணிகள் ஓட்டுநரை கவனச்சிதறச் செய்யக்கூடாது, போக்குவரத்து சட்டங்கள் பின்பற்றப்பட வேண்டும், உருவாக்குநர்கள் பொறுப்பல்ல என்பதை ஒப்புக்கொள்கிறீர்கள்.</li></ul></string>
+    <string name="car_agreement_proceed">தொடரவும்</string>
+    <string name="car_toast_complicated_action">இந்த செயலை உங்கள் சாதனத்தில் செய்யவும்</string>
+    <string name="car_toast_unsupported_url">இலக்கு வலைப்பக்கத்தை உங்கள் சாதனத்தில் திறக்க முயற்சிக்கிறது. இதற்கு பயன்பாட்டைத் திறப்பது அல்லது பிற பயன்பாடுகளின் மேல் காட்ட அனுமதி தேவைப்படலாம்</string>
+    <string name="notification_channel_car_site_controller">Android Auto வரைபடக் கட்டுப்பாடுகள்</string>
+    <string name="notification_car_site_controller_message">அமர்வை முடிக்க தட்டவும்</string>
+</resources>

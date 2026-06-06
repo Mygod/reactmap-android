@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">Kawalan tapak skrin penuh</string>
+    <string name="notification_channel_webhook_failed">Kemas kini lokasi latar belakang gagal</string>
+    <string name="notification_channel_webhook_updated">Lokasi latar belakang dikemas kini</string>
+    <string name="notification_channel_webhook_updating">Mengemas kini lokasi latar belakang</string>
+    <string name="notification_site_controller_message">Ketik untuk mengkonfigurasi</string>
+    <string name="notification_action_restart_game">Mula semula permainan</string>
+    <string name="notification_webhook_failed_title">Gagal mengemas kini lokasi</string>
+    <string name="notification_webhook_updated_title">Lokasi dikemas kini</string>
+    <string name="notification_webhook_updating_title">Mengemas kini lokasi</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f dari %3$s</string>
+    <string name="config_dialog_title">URL ReactMap:</string>
+    <string name="config_welcome">Anda boleh kembali ke dialog ini kemudian dengan mengetik pemberitahuan.</string>
+    <string name="config_switch_webhook_follow_location">Biarkan amaran mengikuti lokasi di latar belakang\n(ambil perhatian bahawa anda akan berkongsi lokasi anda dengan peta)</string>
+    <string name="restart_game_dialog_title">Pilih versi permainan untuk dimulakan semula</string>
+    <string name="restart_game_dialog_message">Ciri ini memerlukan Shizuku/Sui</string>
+    <string name="restart_game_standard">Piawai</string>
+    <string name="title_loading">Memuatkan…</string>
+    <string name="error_https_only">Hanya HTTPS dibenarkan</string>
+    <string name="error_missing_bg_location_permission">Kebenaran lokasi latar belakang tiada</string>
+    <string name="error_missing_location_permission">Kebenaran lokasi tiada</string>
+    <string name="error_unsupported_download">Muat turun tidak disokong: %1$s</string>
+    <string name="error_webhook_human_not_found">Pengguna tidak ditemui</string>
+    <string name="pip_phone_enter_split">Masuk skrin pisah</string>
+    <string name="shortcut_splitscreen_short">Skrin pisah</string>
+    <string name="shortcut_splitscreen_long">Mulakan skrin pisah dengan permainan</string>
+    <string name="web_refresh">Segar Semula</string>
+    <string name="car_agreement_template"><big><b>Syarat Penggunaan</b></big>\n<ul><li>Dengan menggunakan %s (“Peta”) dalam kenderaan anda, anda bersetuju bahawa ia hanya untuk pembangunan dan ujian, mungkin tidak tepat, digunakan atas risiko anda sendiri, pemandu hanya harus menggunakannya apabila kenderaan berhenti dan selamat, penumpang tidak boleh mengganggu pemandu, undang-undang lalu lintas mesti dipatuhi dan pembangun tidak bertanggungjawab.</li></ul></string>
+    <string name="car_agreement_proceed">Teruskan</string>
+    <string name="car_toast_complicated_action">Sila lakukan tindakan ini pada peranti anda</string>
+    <string name="car_toast_unsupported_url">Cuba membuka halaman web sasaran pada peranti anda. Ini mungkin memerlukan membuka aplikasi atau kebenaran untuk dipaparkan di atas aplikasi lain</string>
+    <string name="notification_channel_car_site_controller">Kawalan peta Android Auto</string>
+    <string name="notification_car_site_controller_message">Ketik untuk menamatkan sesi</string>
+</resources>

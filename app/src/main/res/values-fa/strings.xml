@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">کنترل‌های سایت تمام‌صفحه</string>
+    <string name="notification_channel_webhook_failed">به‌روزرسانی مکان در پس‌زمینه ناموفق بود</string>
+    <string name="notification_channel_webhook_updated">مکان در پس‌زمینه به‌روزرسانی شد</string>
+    <string name="notification_channel_webhook_updating">در حال به‌روزرسانی مکان در پس‌زمینه</string>
+    <string name="notification_site_controller_message">برای پیکربندی ضربه بزنید</string>
+    <string name="notification_action_restart_game">شروع دوبارهٔ بازی</string>
+    <string name="notification_webhook_failed_title">به‌روزرسانی مکان ناموفق بود</string>
+    <string name="notification_webhook_updated_title">مکان به‌روزرسانی شد</string>
+    <string name="notification_webhook_updating_title">در حال به‌روزرسانی مکان</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f از %3$s</string>
+    <string name="config_dialog_title">نشانی ReactMap:</string>
+    <string name="config_welcome">می‌توانید بعداً با ضربه زدن روی اعلان به این گفت‌وگو برگردید.</string>
+    <string name="config_switch_webhook_follow_location">هشدارها در پس‌زمینه مکان را دنبال کنند\n(توجه داشته باشید که مکان خود را با نقشه به اشتراک می‌گذارید)</string>
+    <string name="restart_game_dialog_title">نسخه بازی را برای راه‌اندازی دوباره انتخاب کنید</string>
+    <string name="restart_game_dialog_message">این قابلیت به Shizuku/Sui نیاز دارد</string>
+    <string name="restart_game_standard">استاندارد</string>
+    <string name="title_loading">بار کردن…</string>
+    <string name="error_https_only">فقط HTTPS مجاز است</string>
+    <string name="error_missing_bg_location_permission">مجوز مکان پس‌زمینه وجود ندارد</string>
+    <string name="error_missing_location_permission">مجوز مکان وجود ندارد</string>
+    <string name="error_unsupported_download">بارگیری پشتیبانی‌نشده: %1$s</string>
+    <string name="error_webhook_human_not_found">کاربر پیدا نشد</string>
+    <string name="pip_phone_enter_split">ورود به حالت «صفحهٔ دونیمه»</string>
+    <string name="shortcut_splitscreen_short">صفحهٔ دونیمه</string>
+    <string name="shortcut_splitscreen_long">شروع صفحه تقسیم‌شده با بازی</string>
+    <string name="web_refresh">تازه‌سازی</string>
+    <string name="car_agreement_template"><big><b>شرایط استفاده</b></big>\n<ul><li>با استفاده از %s (“نقشه”) در خودروی خود، می‌پذیرید که فقط برای توسعه و آزمایش است، ممکن است نادقیق باشد، با مسئولیت خودتان استفاده می‌شود، رانندگان فقط زمانی که خودرو متوقف است و استفاده امن است باید از آن استفاده کنند، سرنشینان نباید حواس راننده را پرت کنند، قوانین راهنمایی و رانندگی باید رعایت شود و توسعه‌دهندگان مسئولیتی ندارند.</li></ul></string>
+    <string name="car_agreement_proceed">ادامه</string>
+    <string name="car_toast_complicated_action">لطفاً این کار را روی دستگاه خود انجام دهید</string>
+    <string name="car_toast_unsupported_url">در حال تلاش برای باز کردن صفحه وب مقصد روی دستگاه شما. این کار ممکن است نیاز به باز کردن برنامه یا مجوز نمایش روی برنامه‌های دیگر داشته باشد</string>
+    <string name="notification_channel_car_site_controller">کنترل‌های نقشه Android Auto</string>
+    <string name="notification_car_site_controller_message">برای پایان جلسه ضربه بزنید</string>
+</resources>

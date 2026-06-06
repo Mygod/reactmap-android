@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">Kontroller til fuldskærmswebsted</string>
+    <string name="notification_channel_webhook_failed">Baggrundsopdatering af placering mislykkedes</string>
+    <string name="notification_channel_webhook_updated">Baggrundsplacering opdateret</string>
+    <string name="notification_channel_webhook_updating">Baggrundsplacering opdateres</string>
+    <string name="notification_site_controller_message">Tryk for at konfigurere</string>
+    <string name="notification_action_restart_game">Genstart spil</string>
+    <string name="notification_webhook_failed_title">Placering kunne ikke opdateres</string>
+    <string name="notification_webhook_updated_title">Placering opdateret</string>
+    <string name="notification_webhook_updating_title">Placering opdateres</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f fra %3$s</string>
+    <string name="config_dialog_title">ReactMap-URL:</string>
+    <string name="config_welcome">Du kan vende tilbage til denne dialog senere ved at trykke på notifikationen.</string>
+    <string name="config_switch_webhook_follow_location">Lad advarsler følge placeringen i baggrunden\n(bemærk, at du deler din placering med kortet)</string>
+    <string name="restart_game_dialog_title">Vælg spilversion, der skal genstartes</string>
+    <string name="restart_game_dialog_message">Denne funktion kræver Shizuku/Sui</string>
+    <string name="title_loading">Indlæser …</string>
+    <string name="error_https_only">Kun HTTPS er tilladt</string>
+    <string name="error_missing_bg_location_permission">Mangler tilladelse til baggrundsplacering</string>
+    <string name="error_missing_location_permission">Mangler placeringstilladelse</string>
+    <string name="error_unsupported_download">Ikke-understøttet download: %1$s</string>
+    <string name="error_webhook_human_not_found">Bruger ikke fundet</string>
+    <string name="pip_phone_enter_split">Åbn opdelt skærm</string>
+    <string name="shortcut_splitscreen_short">Opdel skærm</string>
+    <string name="shortcut_splitscreen_long">Start delt skærm med spillet</string>
+    <string name="web_refresh">Opdatér</string>
+    <string name="car_agreement_template"><big><b>Vilkår for brug</b></big>\n<ul><li>Ved at bruge %s (“kortet”) i dit køretøj accepterer du, at det kun er til udvikling og test, kan være unøjagtigt, bruges på egen risiko, at førere kun må bruge det, når køretøjet holder stille og det er sikkert, passagerer må ikke distrahere føreren, færdselsloven skal overholdes, og udviklerne er ikke ansvarlige.</li></ul></string>
+    <string name="car_agreement_proceed">Fortsæt</string>
+    <string name="car_toast_complicated_action">Udfør denne handling på din enhed i stedet</string>
+    <string name="car_toast_unsupported_url">Forsøger at åbne målwebsiden på din enhed. Dette kan kræve, at appen åbnes, eller tilladelse til at vise over andre apps</string>
+    <string name="notification_channel_car_site_controller">Android Auto-kortkontroller</string>
+    <string name="notification_car_site_controller_message">Tryk for at afslutte sessionen</string>
+</resources>

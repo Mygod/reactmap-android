@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">Kontrol situs layar penuh</string>
+    <string name="notification_channel_webhook_failed">Pembaruan lokasi latar belakang gagal</string>
+    <string name="notification_channel_webhook_updated">Lokasi latar belakang diperbarui</string>
+    <string name="notification_channel_webhook_updating">Memperbarui lokasi latar belakang</string>
+    <string name="notification_site_controller_message">Ketuk untuk mengonfigurasi</string>
+    <string name="notification_action_restart_game">Ulangi permainan</string>
+    <string name="notification_webhook_failed_title">Gagal memperbarui lokasi</string>
+    <string name="notification_webhook_updated_title">Lokasi diperbarui</string>
+    <string name="notification_webhook_updating_title">Memperbarui lokasi</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f dari %3$s</string>
+    <string name="config_dialog_title">URL ReactMap:</string>
+    <string name="config_welcome">Anda dapat kembali ke dialog ini nanti dengan mengetuk notifikasi.</string>
+    <string name="config_switch_webhook_follow_location">Buat peringatan mengikuti lokasi di latar belakang\n(perhatikan bahwa Anda akan membagikan lokasi Anda dengan peta)</string>
+    <string name="restart_game_dialog_title">Pilih versi game untuk dimulai ulang</string>
+    <string name="restart_game_dialog_message">Fitur ini memerlukan Shizuku/Sui</string>
+    <string name="restart_game_standard">Standar</string>
+    <string name="title_loading">Memuat…</string>
+    <string name="error_https_only">Hanya HTTPS yang diizinkan</string>
+    <string name="error_missing_bg_location_permission">Izin lokasi latar belakang tidak ada</string>
+    <string name="error_missing_location_permission">Izin lokasi tidak ada</string>
+    <string name="error_unsupported_download">Unduhan tidak didukung: %1$s</string>
+    <string name="error_webhook_human_not_found">Pengguna tidak ditemukan</string>
+    <string name="pip_phone_enter_split">Masuk ke mode layar terpisah</string>
+    <string name="shortcut_splitscreen_short">Layar terpisah</string>
+    <string name="shortcut_splitscreen_long">Mulai layar terbagi dengan game</string>
+    <string name="web_refresh">Segarkan</string>
+    <string name="car_agreement_template"><big><b>Ketentuan Penggunaan</b></big>\n<ul><li>Dengan menggunakan %s (“Peta”) di kendaraan Anda, Anda setuju bahwa ini hanya untuk pengembangan dan pengujian, dapat tidak akurat, digunakan atas risiko Anda sendiri, pengemudi hanya boleh menggunakannya saat kendaraan berhenti dan aman, penumpang tidak boleh mengganggu pengemudi, hukum lalu lintas harus dipatuhi, dan pengembang tidak bertanggung jawab.</li></ul></string>
+    <string name="car_agreement_proceed">Lanjutkan</string>
+    <string name="car_toast_complicated_action">Lakukan tindakan ini di perangkat Anda</string>
+    <string name="car_toast_unsupported_url">Mencoba membuka halaman web target di perangkat Anda. Ini mungkin memerlukan pembukaan aplikasi atau izin untuk tampil di atas aplikasi lain</string>
+    <string name="notification_channel_car_site_controller">Kontrol peta Android Auto</string>
+    <string name="notification_car_site_controller_message">Ketuk untuk mengakhiri sesi</string>
+</resources>

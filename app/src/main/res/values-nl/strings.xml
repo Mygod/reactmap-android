@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_site_controller">Sitebediening op volledig scherm</string>
+    <string name="notification_channel_webhook_failed">Bijwerken van achtergrondlocatie mislukt</string>
+    <string name="notification_channel_webhook_updated">Achtergrondlocatie bijgewerkt</string>
+    <string name="notification_channel_webhook_updating">Achtergrondlocatie wordt bijgewerkt</string>
+    <string name="notification_site_controller_message">Tik om te configureren</string>
+    <string name="notification_action_restart_game">Spel herstarten</string>
+    <string name="notification_webhook_failed_title">Locatie bijwerken mislukt</string>
+    <string name="notification_webhook_updated_title">Locatie bijgewerkt</string>
+    <string name="notification_webhook_updating_title">Locatie wordt bijgewerkt</string>
+    <string name="notification_webhook_updating_message">%1$f,%2$f van %3$s</string>
+    <string name="config_dialog_title">ReactMap-URL:</string>
+    <string name="config_welcome">Je kunt later naar dit dialoogvenster terugkeren door op de melding te tikken.</string>
+    <string name="config_switch_webhook_follow_location">Laat meldingen de locatie op de achtergrond volgen\n(let op: je deelt je locatie met de kaart)</string>
+    <string name="restart_game_dialog_title">Kies de spelversie om opnieuw te starten</string>
+    <string name="restart_game_dialog_message">Deze functie vereist Shizuku/Sui</string>
+    <string name="restart_game_standard">Standaard</string>
+    <string name="title_loading">Laden…</string>
+    <string name="error_https_only">Alleen HTTPS is toegestaan</string>
+    <string name="error_missing_bg_location_permission">Toestemming voor achtergrondlocatie ontbreekt</string>
+    <string name="error_missing_location_permission">Locatietoestemming ontbreekt</string>
+    <string name="error_unsupported_download">Niet-ondersteunde download: %1$s</string>
+    <string name="error_webhook_human_not_found">Gebruiker niet gevonden</string>
+    <string name="pip_phone_enter_split">Gesplitst scherm openen</string>
+    <string name="shortcut_splitscreen_short">Gesplitst scherm</string>
+    <string name="shortcut_splitscreen_long">Gesplitst scherm met spel starten</string>
+    <string name="web_refresh">Verversen</string>
+    <string name="car_agreement_template"><big><b>Gebruiksvoorwaarden</b></big>\n<ul><li>Door %s (“de kaart”) in je voertuig te gebruiken, ga je ermee akkoord dat deze alleen bedoeld is voor ontwikkeling en testen, onnauwkeurig kan zijn, op eigen risico wordt gebruikt, bestuurders deze alleen gebruiken wanneer het voertuig stilstaat en het veilig is, passagiers de bestuurder niet afleiden, verkeersregels worden nageleefd en de ontwikkelaars niet aansprakelijk zijn.</li></ul></string>
+    <string name="car_agreement_proceed">Doorgaan</string>
+    <string name="car_toast_complicated_action">Voer deze actie uit op je apparaat</string>
+    <string name="car_toast_unsupported_url">Er wordt geprobeerd de doelwebpagina op je apparaat te openen. Hiervoor moet mogelijk de app worden geopend of toestemming worden gegeven om boven andere apps te tonen</string>
+    <string name="notification_channel_car_site_controller">Android Auto-kaartbediening</string>
+    <string name="notification_car_site_controller_message">Tik om de sessie te beëindigen</string>
+</resources>
