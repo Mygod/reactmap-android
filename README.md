@@ -1,13 +1,9 @@
 # ReactMap for Android
 
-[![CircleCI](https://circleci.com/gh/Mygod/reactmap-android.svg?style=shield)](https://circleci.com/gh/Mygod/reactmap-android)
-[![API](https://img.shields.io/badge/API-26%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=26)
 [![Releases](https://img.shields.io/github/downloads/Mygod/reactmap-android/total.svg)](https://github.com/Mygod/reactmap-android/releases)
-[![Language: Kotlin](https://img.shields.io/github/languages/top/Mygod/reactmap-android.svg)](https://github.com/Mygod/reactmap-android/search?l=kotlin)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/58a48b28278d46edad1b5c82bf648607)](https://app.codacy.com/gh/Mygod/reactmap-android/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
-[![License](https://img.shields.io/github/license/Mygod/reactmap-android.svg)](LICENSE)
+[![Android 8-16.1](https://img.shields.io/badge/Android-8--16.1-3DDC84?logo=android&logoColor=white)](app/build.gradle.kts)
 
-[![Get it on Obtainium](https://github.com/ImranR98/Obtainium/blob/main/assets/graphics/badge_obtainium.png)](https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/Mygod/reactmap-android)
+[![Get it on Obtainium](https://github.com/ImranR98/Obtainium/raw/main/assets/graphics/badge_obtainium.png)](https://apps.obtainium.imranr.dev/redirect.html?r=obtainium%3A%2F%2Fapp%2F%257B%2522id%2522%253A%2522be.mygod.reactmap%2522%252C%2522url%2522%253A%2522https%253A%252F%252Fgithub.com%252FMygod%252Freactmap-android%2522%252C%2522author%2522%253A%2522%2522%252C%2522name%2522%253A%2522%2522%252C%2522additionalSettings%2522%253A%2522%257B%257D%2522%257D)
 
 Use ReactMap as an Android app with battery improvements, including:
 
