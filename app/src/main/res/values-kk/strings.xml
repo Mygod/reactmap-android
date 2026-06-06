@@ -26,6 +26,8 @@
     <string name="shortcut_splitscreen_short">Экранды бөлу</string>
     <string name="shortcut_splitscreen_long">Ойынмен бөлінген экранды бастау</string>
     <string name="web_refresh">Жаңарту</string>
+    <string name="accuweather_forecast_wind">^1 км/сағ</string>
+    <string name="accuweather_forecast_wind_gust">^1-^2 км/сағ</string>
     <string name="car_agreement_template"><big><b>Пайдалану шарттары</b></big>\n<ul><li>Көлігіңізде %s (“Карта”) пайдалану арқылы оның тек әзірлеу және сынау үшін екенін, дәл болмауы мүмкін екенін, өз тәуекеліңізбен пайдаланатыныңызды, жүргізушілер оны көлік тоқтағанда және қауіпсіз болғанда ғана қолдануы тиіс екенін, жолаушылар жүргізушіні алаңдатпауы керек екенін, жол қозғалысы заңдарын сақтау қажет екенін және әзірлеушілер жауапты емес екенін мойындайсыз.</li></ul></string>
     <string name="car_agreement_proceed">Жалғастыру</string>
     <string name="car_toast_complicated_action">Бұл әрекетті құрылғыңызда орындаңыз</string>

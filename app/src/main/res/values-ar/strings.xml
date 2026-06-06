@@ -26,6 +26,8 @@
     <string name="shortcut_splitscreen_short">تقسيم الشاشة</string>
     <string name="shortcut_splitscreen_long">بدء تقسيم الشاشة مع اللعبة</string>
     <string name="web_refresh">حدّث</string>
+    <string name="accuweather_forecast_wind">^1 كم/س</string>
+    <string name="accuweather_forecast_wind_gust">^1-^2 كم/س</string>
     <string name="car_agreement_template"><big><b>شروط الاستخدام</b></big>\n<ul><li>باستخدام %s (“الخريطة”) في مركبتك، فإنك توافق على أنها مخصصة للتطوير والاختبار فقط، وقد تكون غير دقيقة، وتُستخدم على مسؤوليتك الخاصة، وأن السائقين لا يستخدمونها إلا عندما تكون المركبة متوقفة ويكون ذلك آمنًا، وألا يشتت الركاب انتباه السائق، وأنه يجب الالتزام بقوانين المرور، وأن المطورين غير مسؤولين.</li></ul></string>
     <string name="car_agreement_proceed">متابعة</string>
     <string name="car_toast_complicated_action">يرجى تنفيذ هذا الإجراء على جهازك بدلًا من ذلك</string>

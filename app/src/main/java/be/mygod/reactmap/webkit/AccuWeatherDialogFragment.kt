@@ -8,6 +8,7 @@ import android.os.Parcelable
 import android.text.Html
 import android.text.Spannable
 import android.text.SpannableStringBuilder
+import android.text.TextUtils
 import android.text.style.ImageSpan
 import android.view.ViewGroup
 import android.webkit.WebSettings
@@ -383,13 +384,11 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
                 append("  ")
                 setSpan(ImageSpan(requireContext(), icon), i, i + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
-            append(row.timeText)
-            append('\n')
-            append(row.phrase)
-            append(". ")
-            append(row.windSpeed.toString())
-            row.windGust?.let { append("-$it") }
-            append(" km/h")
+            append(TextUtils.expandTemplate(getText(R.string.accuweather_forecast_row), row.timeText, row.phrase,
+                row.windGust?.let { gust ->
+                    TextUtils.expandTemplate(getText(R.string.accuweather_forecast_wind_gust),
+                        row.windSpeed.toString(), gust.toString())
+                } ?: TextUtils.expandTemplate(getText(R.string.accuweather_forecast_wind), row.windSpeed.toString())))
         }
     }
 

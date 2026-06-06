@@ -25,6 +25,8 @@
     <string name="shortcut_splitscreen_short">Delt skjerm</string>
     <string name="shortcut_splitscreen_long">Start delt skjerm med spillet</string>
     <string name="web_refresh">Oppdater</string>
+    <string name="accuweather_forecast_wind">^1 km/t</string>
+    <string name="accuweather_forecast_wind_gust">^1-^2 km/t</string>
     <string name="car_agreement_template"><big><b>Vilkår for bruk</b></big>\n<ul><li>Ved å bruke %s (“kartet”) i kjøretøyet godtar du at det bare er for utvikling og testing, kan være unøyaktig, brukes på eget ansvar, at førere bare må bruke det når kjøretøyet står stille og det er trygt, passasjerer ikke må distrahere føreren, trafikkregler må følges, og utviklerne ikke er ansvarlige.</li></ul></string>
     <string name="car_agreement_proceed">Fortsett</string>
     <string name="car_toast_complicated_action">Utfør denne handlingen på enheten din</string>

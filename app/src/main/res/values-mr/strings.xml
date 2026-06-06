@@ -25,6 +25,8 @@
     <string name="shortcut_splitscreen_short">स्प्लिट स्क्रीन</string>
     <string name="shortcut_splitscreen_long">गेमसह स्प्लिट स्क्रीन सुरू करा</string>
     <string name="web_refresh">पुन्ह दाखल करा</string>
+    <string name="accuweather_forecast_wind">^1 किमी/ता</string>
+    <string name="accuweather_forecast_wind_gust">^1-^2 किमी/ता</string>
     <string name="car_agreement_template"><big><b>वापराच्या अटी</b></big>\n<ul><li>तुमच्या वाहनात %s (“नकाशा”) वापरून तुम्ही मान्य करता की तो फक्त विकास व चाचणीसाठी आहे, अचूक नसू शकतो, तुम्ही तो स्वतःच्या जोखमीवर वापरता, चालकांनी तो वाहन थांबलेले आणि सुरक्षित असताना फक्त वापरावा, प्रवाशांनी चालकाचे लक्ष विचलित करू नये, वाहतूक कायदे पाळावेत आणि विकासक जबाबदार नाहीत.</li></ul></string>
     <string name="car_agreement_proceed">पुढे जा</string>
     <string name="car_toast_complicated_action">कृपया ही क्रिया तुमच्या डिव्हाइसवर करा</string>

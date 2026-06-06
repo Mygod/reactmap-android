@@ -25,6 +25,7 @@
     <string name="shortcut_splitscreen_short">分割画面</string>
     <string name="shortcut_splitscreen_long">ゲームと分割画面を開始</string>
     <string name="web_refresh">更新</string>
+    <string name="accuweather_forecast_row">^1\n^2。^3</string>
     <string name="car_agreement_template"><big><b>利用規約</b></big>\n<ul><li>車両内で %s（「マップ」）を使用することで、これは開発およびテスト専用であり、不正確な場合があり、自己責任で使用すること、運転者は車両が停止して安全な場合にのみ使用すること、同乗者は運転者の注意をそらさないこと、交通法規を守ること、開発者は責任を負わないことに同意します。</li></ul></string>
     <string name="car_agreement_proceed">続行</string>
     <string name="car_toast_complicated_action">この操作は端末で行ってください</string>

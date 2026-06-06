@@ -26,6 +26,9 @@
     <string name="shortcut_splitscreen_short">የተከፈለ ማያ ገጽ</string>
     <string name="shortcut_splitscreen_long">ከጨዋታ ጋር የተከፈለ ማያ ገጽ ጀምር</string>
     <string name="web_refresh">በድጋሚ ጀምር</string>
+    <string name="accuweather_forecast_row">^1\n^2። ^3</string>
+    <string name="accuweather_forecast_wind">^1 ኪሜ/ሰ</string>
+    <string name="accuweather_forecast_wind_gust">^1-^2 ኪሜ/ሰ</string>
     <string name="car_agreement_template"><big><b>የአጠቃቀም ውሎች</b></big>\n<ul><li>%s (“ካርታው”) በተሽከርካሪዎ ላይ በመጠቀም ይህ ለልማትና ለሙከራ ብቻ እንደሆነ፣ ስህተቶች ሊኖሩት እንደሚችል፣ በራስዎ ኃላፊነት እንደሚጠቀሙት፣ አሽከርካሪዎች ተሽከርካሪው ቆሞ እና ደህንነት ሲኖር ብቻ መጠቀም እንዳለባቸው፣ ተሳፋሪዎች አሽከርካሪውን ማስተናገድ እንደሌለባቸው፣ የትራፊክ ሕጎች መከተል እንዳለባቸው እና ገንቢዎቹ ኃላፊ እንዳልሆኑ ተስማምተዋል።</li></ul></string>
     <string name="car_agreement_proceed">ቀጥል</string>
     <string name="car_toast_complicated_action">እባክዎ ይህን እርምጃ በመሣሪያዎ ላይ ያከናውኑ</string>

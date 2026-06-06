@@ -26,6 +26,8 @@
     <string name="shortcut_splitscreen_short">ეკრანის გაყოფა</string>
     <string name="shortcut_splitscreen_long">გაყოფილი ეკრანის დაწყება თამაშთან ერთად</string>
     <string name="web_refresh">განახლება</string>
+    <string name="accuweather_forecast_wind">^1 კმ/სთ</string>
+    <string name="accuweather_forecast_wind_gust">^1-^2 კმ/სთ</string>
     <string name="car_agreement_template"><big><b>გამოყენების პირობები</b></big>\n<ul><li>თქვენს მანქანაში %s-ის (“რუკა”) გამოყენებით ეთანხმებით, რომ ის მხოლოდ განვითარებისა და ტესტირებისთვისაა, შეიძლება იყოს არაზუსტი, გამოიყენება თქვენი რისკით, მძღოლებმა უნდა გამოიყენონ მხოლოდ გაჩერებულ მანქანაში და უსაფრთხო პირობებში, მგზავრებმა არ უნდა გადაატანინონ მძღოლს ყურადღება, საგზაო წესები უნდა დაიცვათ და დეველოპერები პასუხისმგებელი არ არიან.</li></ul></string>
     <string name="car_agreement_proceed">გაგრძელება</string>
     <string name="car_toast_complicated_action">გთხოვთ ეს მოქმედება თქვენს მოწყობილობაზე შეასრულოთ</string>

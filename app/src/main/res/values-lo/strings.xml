@@ -26,6 +26,8 @@
     <string name="shortcut_splitscreen_short">ແບ່ງໜ້າຈໍ</string>
     <string name="shortcut_splitscreen_long">ເລີ່ມຈໍແບ່ງກັບເກມ</string>
     <string name="web_refresh">ໂຫຼດຂໍ້ມູນໃໝ່</string>
+    <string name="accuweather_forecast_wind">^1 ກມ/ຊມ</string>
+    <string name="accuweather_forecast_wind_gust">^1-^2 ກມ/ຊມ</string>
     <string name="car_agreement_template"><big><b>ເງື່ອນໄຂການໃຊ້</b></big>\n<ul><li>ໂດຍໃຊ້ %s (“ແຜນທີ່”) ໃນລົດ ທ່ານຍອມຮັບວ່າມັນໃຊ້ເພື່ອພັດທະນາແລະທົດສອບເທົ່ານັ້ນ, ອາດບໍ່ແນ່ນອນ, ໃຊ້ດ້ວຍຄວາມສ່ຽງຂອງທ່ານ, ຄົນຂັບໃຊ້ໄດ້ເມື່ອລົດຢຸດແລະປອດໄພ, ຜູ້ໂດຍສານບໍ່ຄວນລົບກວນຄົນຂັບ, ຕ້ອງປະຕິບັດກົດຈະລາຈອນ ແລະນັກພັດທະນາບໍ່ຮັບຜິດຊອບ.</li></ul></string>
     <string name="car_agreement_proceed">ດຳເນີນຕໍ່</string>
     <string name="car_toast_complicated_action">ກະລຸນາເຮັດການກະທຳນີ້ໃນອຸປະກອນ</string>

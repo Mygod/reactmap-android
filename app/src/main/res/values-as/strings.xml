@@ -25,6 +25,9 @@
     <string name="shortcut_splitscreen_short">বিভাজিত স্ক্ৰীন</string>
     <string name="shortcut_splitscreen_long">খেলৰ সৈতে বিভক্ত পৰ্দা আৰম্ভ কৰক</string>
     <string name="web_refresh">সতেজ কৰক</string>
+    <string name="accuweather_forecast_row">^1\n^2। ^3</string>
+    <string name="accuweather_forecast_wind">^1 কিমি/ঘণ্টা</string>
+    <string name="accuweather_forecast_wind_gust">^1-^2 কিমি/ঘণ্টা</string>
     <string name="car_agreement_template"><big><b>ব্যৱহাৰৰ চৰ্ত</b></big>\n<ul><li>আপোনাৰ বাহনত %s (“মানচিত্ৰ”) ব্যৱহাৰ কৰিলে আপুনি স্বীকাৰ কৰে যে ই কেৱল উন্নয়ন আৰু পৰীক্ষাৰ বাবে, ভুল থাকিব পাৰে, নিজৰ দায়িত্বত ব্যৱহাৰ কৰিব, চালকে বাহন থমকি থকা আৰু নিৰাপদ অৱস্থাতহে ব্যৱহাৰ কৰিব, যাত্ৰীয়ে চালকক বিচলিত কৰিব নালাগে, যান-বাহন আইন মানিব লাগিব, আৰু বিকাশকাৰীসকল দায়বদ্ধ নহয়।</li></ul></string>
     <string name="car_agreement_proceed">আগবাঢ়ক</string>
     <string name="car_toast_complicated_action">অনুগ্ৰহ কৰি এই কাৰ্য্য আপোনাৰ ডিভাইচত সম্পন্ন কৰক</string>

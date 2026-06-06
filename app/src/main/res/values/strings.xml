@@ -33,6 +33,9 @@
     <string name="shortcut_splitscreen_short">Split screen</string>
     <string name="shortcut_splitscreen_long">Start split screen with game</string>
     <string name="web_refresh">Refresh</string>
+    <string name="accuweather_forecast_row">^1\n^2. ^3</string>
+    <string name="accuweather_forecast_wind">^1 km/h</string>
+    <string name="accuweather_forecast_wind_gust">^1-^2 km/h</string>
 
     <string name="car_agreement_template"><big><b>Terms of Use</b></big>\nBy using %s (“the Map”) on your vehicle, you
         acknowledge and agree to the following terms:\n<ul><li><b>Development Purposes Only:</b>

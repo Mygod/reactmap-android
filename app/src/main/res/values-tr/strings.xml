@@ -26,6 +26,8 @@
     <string name="shortcut_splitscreen_short">Bölünmüş ekran</string>
     <string name="shortcut_splitscreen_long">Oyunla bölünmüş ekran başlat</string>
     <string name="web_refresh">Yenile</string>
+    <string name="accuweather_forecast_wind">^1 km/sa</string>
+    <string name="accuweather_forecast_wind_gust">^1-^2 km/sa</string>
     <string name="car_agreement_template"><big><b>Kullanım Şartları</b></big>\n<ul><li>Aracınızda %s (“Harita”) kullanarak bunun yalnızca geliştirme ve test için olduğunu, hatalı olabileceğini, kendi riskinizle kullandığınızı, sürücülerin yalnızca araç dururken ve güvenliyken kullanması gerektiğini, yolcuların sürücünün dikkatini dağıtmaması gerektiğini, trafik yasalarına uyulması gerektiğini ve geliştiricilerin sorumlu olmadığını kabul edersiniz.</li></ul></string>
     <string name="car_agreement_proceed">Devam et</string>
     <string name="car_toast_complicated_action">Lütfen bu işlemi cihazınızda yapın</string>

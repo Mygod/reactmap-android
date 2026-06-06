@@ -25,6 +25,8 @@
     <string name="shortcut_splitscreen_short">Išskaidyto ekrano režimas</string>
     <string name="shortcut_splitscreen_long">Paleisti padalytą ekraną su žaidimu</string>
     <string name="web_refresh">Atnaujinti</string>
+    <string name="accuweather_forecast_wind">^1 km/val.</string>
+    <string name="accuweather_forecast_wind_gust">^1-^2 km/val.</string>
     <string name="car_agreement_template"><big><b>Naudojimo sąlygos</b></big>\n<ul><li>Naudodami %s („žemėlapį“) savo transporto priemonėje sutinkate, kad jis skirtas tik kūrimui ir bandymams, gali būti netikslus, naudojamas jūsų rizika, vairuotojai turi jį naudoti tik transporto priemonei stovint ir kai saugu, keleiviai neturi blaškyti vairuotojo, reikia laikytis eismo įstatymų, o kūrėjai neatsako.</li></ul></string>
     <string name="car_agreement_proceed">Tęsti</string>
     <string name="car_toast_complicated_action">Atlikite šį veiksmą savo įrenginyje</string>

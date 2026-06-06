@@ -25,6 +25,9 @@
     <string name="shortcut_splitscreen_short">ਸਪਲਿਟ ਸਕ੍ਰੀਨ</string>
     <string name="shortcut_splitscreen_long">ਗੇਮ ਨਾਲ ਵੰਡਿਆ ਸਕ੍ਰੀਨ ਸ਼ੁਰੂ ਕਰੋ</string>
     <string name="web_refresh">ਤਾਜ਼ਾ ਕਰੋ</string>
+    <string name="accuweather_forecast_row">^1\n^2। ^3</string>
+    <string name="accuweather_forecast_wind">^1 ਕਿਮੀ/ਘੰਟਾ</string>
+    <string name="accuweather_forecast_wind_gust">^1-^2 ਕਿਮੀ/ਘੰਟਾ</string>
     <string name="car_agreement_template"><big><b>ਵਰਤੋਂ ਦੀਆਂ ਸ਼ਰਤਾਂ</b></big>\n<ul><li>ਆਪਣੀ ਗੱਡੀ ਵਿੱਚ %s (“ਨਕਸ਼ਾ”) ਵਰਤ ਕੇ ਤੁਸੀਂ ਸਹਿਮਤ ਹੁੰਦੇ ਹੋ ਕਿ ਇਹ ਕੇਵਲ ਵਿਕਾਸ ਅਤੇ ਟੈਸਟ ਲਈ ਹੈ, ਗਲਤ ਹੋ ਸਕਦਾ ਹੈ, ਆਪਣੇ ਜੋਖਮ ਤੇ ਵਰਤਿਆ ਜਾਂਦਾ ਹੈ, ਡਰਾਈਵਰ ਇਸਨੂੰ ਸਿਰਫ਼ ਗੱਡੀ ਰੁਕੀ ਹੋਣ ਅਤੇ ਸੁਰੱਖਿਅਤ ਹੋਣ ਤੇ ਵਰਤਣ, ਯਾਤਰੀ ਡਰਾਈਵਰ ਨੂੰ ਭਟਕਾਉਣ ਨਾ, ਟ੍ਰੈਫਿਕ ਕਾਨੂੰਨ ਪਾਲਣੇ ਲਾਜ਼ਮੀ ਹਨ ਅਤੇ ਡਿਵੈਲਪਰ ਜ਼ਿੰਮੇਵਾਰ ਨਹੀਂ।</li></ul></string>
     <string name="car_agreement_proceed">ਅੱਗੇ ਵਧੋ</string>
     <string name="car_toast_complicated_action">ਕਿਰਪਾ ਕਰਕੇ ਇਹ ਕਾਰਵਾਈ ਆਪਣੇ ਡਿਵਾਈਸ ਤੇ ਕਰੋ</string>

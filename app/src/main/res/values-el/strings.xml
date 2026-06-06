@@ -26,6 +26,8 @@
     <string name="shortcut_splitscreen_short">Διαχωρισμός οθόνης</string>
     <string name="shortcut_splitscreen_long">Έναρξη διαίρεσης οθόνης με το παιχνίδι</string>
     <string name="web_refresh">Ανανέωση</string>
+    <string name="accuweather_forecast_wind">^1 χλμ/ώρα</string>
+    <string name="accuweather_forecast_wind_gust">^1-^2 χλμ/ώρα</string>
     <string name="car_agreement_template"><big><b>Όροι χρήσης</b></big>\n<ul><li>Χρησιμοποιώντας το %s (“ο Χάρτης”) στο όχημά σας, συμφωνείτε ότι προορίζεται μόνο για ανάπτυξη και δοκιμές, μπορεί να είναι ανακριβές, χρησιμοποιείται με δική σας ευθύνη, οι οδηγοί πρέπει να το χρησιμοποιούν μόνο όταν το όχημα είναι σταματημένο και είναι ασφαλές, οι επιβάτες δεν πρέπει να αποσπούν την προσοχή του οδηγού, πρέπει να τηρούνται οι νόμοι κυκλοφορίας και οι προγραμματιστές δεν ευθύνονται.</li></ul></string>
     <string name="car_agreement_proceed">Συνέχεια</string>
     <string name="car_toast_complicated_action">Εκτελέστε αυτή την ενέργεια στη συσκευή σας</string>

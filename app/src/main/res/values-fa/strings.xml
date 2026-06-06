@@ -26,6 +26,8 @@
     <string name="shortcut_splitscreen_short">صفحهٔ دونیمه</string>
     <string name="shortcut_splitscreen_long">شروع صفحه تقسیم‌شده با بازی</string>
     <string name="web_refresh">تازه‌سازی</string>
+    <string name="accuweather_forecast_wind">^1 کیلومتر/ساعت</string>
+    <string name="accuweather_forecast_wind_gust">^1-^2 کیلومتر/ساعت</string>
     <string name="car_agreement_template"><big><b>شرایط استفاده</b></big>\n<ul><li>با استفاده از %s (“نقشه”) در خودروی خود، می‌پذیرید که فقط برای توسعه و آزمایش است، ممکن است نادقیق باشد، با مسئولیت خودتان استفاده می‌شود، رانندگان فقط زمانی که خودرو متوقف است و استفاده امن است باید از آن استفاده کنند، سرنشینان نباید حواس راننده را پرت کنند، قوانین راهنمایی و رانندگی باید رعایت شود و توسعه‌دهندگان مسئولیتی ندارند.</li></ul></string>
     <string name="car_agreement_proceed">ادامه</string>
     <string name="car_toast_complicated_action">لطفاً این کار را روی دستگاه خود انجام دهید</string>

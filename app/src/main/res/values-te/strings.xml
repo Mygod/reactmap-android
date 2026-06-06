@@ -25,6 +25,8 @@
     <string name="shortcut_splitscreen_short">స్క్రీన్‌ను విభజించు</string>
     <string name="shortcut_splitscreen_long">గేమ్‌తో స్ప్లిట్ స్క్రీన్ ప్రారంభించండి</string>
     <string name="web_refresh">తాజాపరుచు</string>
+    <string name="accuweather_forecast_wind">^1 కిమీ/గం</string>
+    <string name="accuweather_forecast_wind_gust">^1-^2 కిమీ/గం</string>
     <string name="car_agreement_template"><big><b>వినియోగ నిబంధనలు</b></big>\n<ul><li>మీ వాహనంలో %s (“మ్యాప్”) ఉపయోగించడం ద్వారా ఇది అభివృద్ధి మరియు పరీక్ష కోసం మాత్రమే, తప్పుగా ఉండవచ్చు, మీ స్వంత ప్రమాదంతో ఉపయోగిస్తున్నారని, డ్రైవర్లు వాహనం ఆగి సురక్షితంగా ఉన్నప్పుడు మాత్రమే ఉపయోగించాలని, ప్రయాణికులు డ్రైవర్‌ను దారి తప్పించకూడదని, ట్రాఫిక్ చట్టాలు పాటించాల్సిన అవసరం ఉందని మరియు డెవలపర్లు బాధ్యత వహించరని మీరు అంగీకరిస్తారు.</li></ul></string>
     <string name="car_agreement_proceed">కొనసాగించు</string>
     <string name="car_toast_complicated_action">దయచేసి ఈ చర్యను మీ పరికరంలో చేయండి</string>

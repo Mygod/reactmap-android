@@ -25,6 +25,9 @@
     <string name="shortcut_splitscreen_short">স্প্লিট স্ক্রিন</string>
     <string name="shortcut_splitscreen_long">গেমসহ স্প্লিট স্ক্রিন শুরু করুন</string>
     <string name="web_refresh">রিফ্রেশ</string>
+    <string name="accuweather_forecast_row">^1\n^2। ^3</string>
+    <string name="accuweather_forecast_wind">^1 কিমি/ঘণ্টা</string>
+    <string name="accuweather_forecast_wind_gust">^1-^2 কিমি/ঘণ্টা</string>
     <string name="car_agreement_template"><big><b>ব্যবহারের শর্তাবলি</b></big>\n<ul><li>আপনার গাড়িতে %s (“মানচিত্র”) ব্যবহার করলে আপনি সম্মত হচ্ছেন যে এটি শুধু উন্নয়ন ও পরীক্ষার জন্য, ভুল হতে পারে, আপনি নিজের ঝুঁকিতে ব্যবহার করবেন, চালক কেবল গাড়ি থেমে থাকলে এবং নিরাপদ হলে ব্যবহার করবেন, যাত্রীরা চালককে বিভ্রান্ত করবেন না, ট্রাফিক আইন মানতে হবে, এবং ডেভেলপাররা দায়ী নন।</li></ul></string>
     <string name="car_agreement_proceed">চালিয়ে যান</string>
     <string name="car_toast_complicated_action">অনুগ্রহ করে এই কাজটি আপনার ডিভাইসে করুন</string>

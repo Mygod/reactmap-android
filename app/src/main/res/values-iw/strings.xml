@@ -26,6 +26,8 @@
     <string name="shortcut_splitscreen_short">מסך מפוצל</string>
     <string name="shortcut_splitscreen_long">הפעלת מסך מפוצל עם המשחק</string>
     <string name="web_refresh">רענון</string>
+    <string name="accuweather_forecast_wind">^1 קמ״ש</string>
+    <string name="accuweather_forecast_wind_gust">^1-^2 קמ״ש</string>
     <string name="car_agreement_template"><big><b>תנאי שימוש</b></big>\n<ul><li>בשימוש ב-%s (“המפה”) ברכב שלך, אתה מסכים שהיא מיועדת לפיתוח ולבדיקות בלבד, עלולה להיות לא מדויקת, משמשת על אחריותך בלבד, נהגים ישתמשו בה רק כשהרכב עומד וכאשר הדבר בטוח, נוסעים לא יסיחו את דעת הנהג, יש לציית לחוקי התעבורה והמפתחים אינם אחראים.</li></ul></string>
     <string name="car_agreement_proceed">המשך</string>
     <string name="car_toast_complicated_action">נא לבצע פעולה זו במכשיר שלך</string>

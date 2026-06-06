@@ -26,6 +26,8 @@
     <string name="shortcut_splitscreen_short">Ekran bölünməsi</string>
     <string name="shortcut_splitscreen_long">Oyunu bölünmüş ekranda başladın</string>
     <string name="web_refresh">Təzələ</string>
+    <string name="accuweather_forecast_wind">^1 km/saat</string>
+    <string name="accuweather_forecast_wind_gust">^1-^2 km/saat</string>
     <string name="car_agreement_template"><big><b>İstifadə şərtləri</b></big>\n<ul><li>Avtomobilinizdə %s (“Xəritə”) istifadə etməklə onun yalnız inkişaf və sınaq üçün olduğunu, qeyri-dəqiq ola biləcəyini, öz riskinizlə istifadə etdiyinizi, sürücülərin onu yalnız avtomobil dayananda və təhlükəsiz olduqda istifadə etməli olduğunu, sərnişinlərin sürücünü yayındırmamalı olduğunu, yol qaydalarına əməl edilməli olduğunu və tərtibatçıların məsuliyyət daşımadığını qəbul edirsiniz.</li></ul></string>
     <string name="car_agreement_proceed">Davam et</string>
     <string name="car_toast_complicated_action">Bu əməliyyatı cihazınızda yerinə yetirin</string>

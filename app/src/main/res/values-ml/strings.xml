@@ -25,6 +25,8 @@
     <string name="shortcut_splitscreen_short">സ്‌ക്രീൻ വിഭജന മോഡ്</string>
     <string name="shortcut_splitscreen_long">ഗെയിമിനൊപ്പം സ്പ്ലിറ്റ് സ്ക്രീൻ ആരംഭിക്കുക</string>
     <string name="web_refresh">പുതുക്കുക</string>
+    <string name="accuweather_forecast_wind">^1 കിമീ/മണിക്കൂർ</string>
+    <string name="accuweather_forecast_wind_gust">^1-^2 കിമീ/മണിക്കൂർ</string>
     <string name="car_agreement_template"><big><b>ഉപയോഗ നിബന്ധനകൾ</b></big>\n<ul><li>നിങ്ങളുടെ വാഹനത്തിൽ %s (“മാപ്പ്”) ഉപയോഗിക്കുന്നതിലൂടെ, ഇത് വികസനത്തിനും പരീക്ഷണത്തിനും മാത്രമാണെന്നും, കൃത്യമല്ലാതിരിക്കാമെന്നും, നിങ്ങളുടെ സ്വന്തം അപകടസാധ്യതയിൽ ഉപയോഗിക്കുന്നതാണെന്നും, ഡ്രൈവർമാർ വാഹനം നിൽക്കുമ്പോഴും സുരക്ഷിതമായിരിക്കുമ്പോഴും മാത്രമേ ഉപയോഗിക്കാവൂ എന്നും, യാത്രക്കാർ ഡ്രൈവറെ ശ്രദ്ധതിരിക്കരുതെന്നും, ഗതാഗത നിയമങ്ങൾ പാലിക്കണമെന്നും, ഡെവലപ്പർമാർ ഉത്തരവാദികളല്ലെന്നും നിങ്ങൾ സമ്മതിക്കുന്നു.</li></ul></string>
     <string name="car_agreement_proceed">തുടരുക</string>
     <string name="car_toast_complicated_action">ദയവായി ഈ പ്രവർത്തനം നിങ്ങളുടെ ഉപകരണത്തിൽ ചെയ്യുക</string>

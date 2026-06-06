@@ -25,6 +25,8 @@
     <string name="shortcut_splitscreen_short">திரைப் பிரிப்பு</string>
     <string name="shortcut_splitscreen_long">விளையாட்டுடன் பிளவு திரை தொடங்கு</string>
     <string name="web_refresh">புதுப்பி</string>
+    <string name="accuweather_forecast_wind">^1 கிமீ/மணி</string>
+    <string name="accuweather_forecast_wind_gust">^1-^2 கிமீ/மணி</string>
     <string name="car_agreement_template"><big><b>பயன்பாட்டு விதிமுறைகள்</b></big>\n<ul><li>உங்கள் வாகனத்தில் %s (“வரைபடம்”) பயன்படுத்துவதன் மூலம், இது மேம்பாடு மற்றும் சோதனைக்காக மட்டுமே, தவறாக இருக்கலாம், உங்கள் சொந்த ஆபத்தில் பயன்படுத்தப்படுகிறது, ஓட்டுநர்கள் வாகனம் நின்றும் பாதுகாப்பாக இருக்கும் போதும் மட்டுமே பயன்படுத்த வேண்டும், பயணிகள் ஓட்டுநரை கவனச்சிதறச் செய்யக்கூடாது, போக்குவரத்து சட்டங்கள் பின்பற்றப்பட வேண்டும், உருவாக்குநர்கள் பொறுப்பல்ல என்பதை ஒப்புக்கொள்கிறீர்கள்.</li></ul></string>
     <string name="car_agreement_proceed">தொடரவும்</string>
     <string name="car_toast_complicated_action">இந்த செயலை உங்கள் சாதனத்தில் செய்யவும்</string>

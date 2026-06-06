@@ -26,6 +26,9 @@
     <string name="shortcut_splitscreen_short">分屏</string>
     <string name="shortcut_splitscreen_long">与游戏一起启动分屏</string>
     <string name="web_refresh">刷新</string>
+    <string name="accuweather_forecast_row">^1\n^2。^3</string>
+    <string name="accuweather_forecast_wind">^1 公里/小时</string>
+    <string name="accuweather_forecast_wind_gust">^1-^2 公里/小时</string>
     <string name="car_agreement_template"><big><b>使用条款</b></big>\n<ul><li>在车辆中使用 %s（“地图”）即表示你同意：它仅用于开发和测试，可能不准确，由你自行承担风险使用；驾驶员只能在车辆静止且安全时使用；乘客不得分散驾驶员注意力；必须遵守交通法规；开发者不承担责任。</li></ul></string>
     <string name="car_agreement_proceed">继续</string>
     <string name="car_toast_complicated_action">请改在你的设备上执行此操作</string>

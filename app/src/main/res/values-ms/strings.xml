@@ -26,6 +26,8 @@
     <string name="shortcut_splitscreen_short">Skrin pisah</string>
     <string name="shortcut_splitscreen_long">Mulakan skrin pisah dengan permainan</string>
     <string name="web_refresh">Segar Semula</string>
+    <string name="accuweather_forecast_wind">^1 km/j</string>
+    <string name="accuweather_forecast_wind_gust">^1-^2 km/j</string>
     <string name="car_agreement_template"><big><b>Syarat Penggunaan</b></big>\n<ul><li>Dengan menggunakan %s (“Peta”) dalam kenderaan anda, anda bersetuju bahawa ia hanya untuk pembangunan dan ujian, mungkin tidak tepat, digunakan atas risiko anda sendiri, pemandu hanya harus menggunakannya apabila kenderaan berhenti dan selamat, penumpang tidak boleh mengganggu pemandu, undang-undang lalu lintas mesti dipatuhi dan pembangun tidak bertanggungjawab.</li></ul></string>
     <string name="car_agreement_proceed">Teruskan</string>
     <string name="car_toast_complicated_action">Sila lakukan tindakan ini pada peranti anda</string>

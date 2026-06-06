@@ -25,6 +25,9 @@
     <string name="shortcut_splitscreen_short">ସ୍କ୍ରିନ‌କୁ ସ୍ପ୍ଲିଟ୍ କରନ୍ତୁ</string>
     <string name="shortcut_splitscreen_long">ଗେମ୍ ସହ ବିଭକ୍ତ ସ୍କ୍ରିନ୍ ଆରମ୍ଭ କରନ୍ତୁ</string>
     <string name="web_refresh">ସତେଜନ କରନ୍ତୁ</string>
+    <string name="accuweather_forecast_row">^1\n^2। ^3</string>
+    <string name="accuweather_forecast_wind">^1 କିମି/ଘଣ୍ଟା</string>
+    <string name="accuweather_forecast_wind_gust">^1-^2 କିମି/ଘଣ୍ଟା</string>
     <string name="car_agreement_template"><big><b>ବ୍ୟବହାର ସର୍ତ୍ତାବଳୀ</b></big>\n<ul><li>ଆପଣଙ୍କ ଯାନରେ %s (“ମାନଚିତ୍ର”) ବ୍ୟବହାର କଲେ ଆପଣ ସହମତ ଯେ ଏହା କେବଳ ବିକାଶ ଓ ପରୀକ୍ଷା ପାଇଁ, ଅସଠିକ୍ ହୋଇପାରେ, ନିଜ ଝୁମ୍ପରେ ବ୍ୟବହୃତ, ଚାଳକମାନେ ଯାନ ରୁକିଥିବା ଏବଂ ସୁରକ୍ଷିତ ଥିବାବେଳେ ମାତ୍ର ବ୍ୟବହାର କରିବେ, ଯାତ୍ରୀମାନେ ଚାଳକଙ୍କୁ ବିଚଳିତ କରିବେ ନାହିଁ, ଯାତାୟାତ ନିୟମ ପାଳନ ହେବ ଏବଂ ଡେଭେଲପରମାନେ ଦାୟୀ ନୁହନ୍ତି।</li></ul></string>
     <string name="car_agreement_proceed">ଆଗକୁ ବଢ଼ନ୍ତୁ</string>
     <string name="car_toast_complicated_action">ଦୟାକରି ଏହି କାର୍ଯ୍ୟଟି ଆପଣଙ୍କ ଡିଭାଇସରେ କରନ୍ତୁ</string>

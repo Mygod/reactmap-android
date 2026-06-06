@@ -26,6 +26,8 @@
     <string name="shortcut_splitscreen_short">Ekrani i ndarë</string>
     <string name="shortcut_splitscreen_long">Nis ekran të ndarë me lojën</string>
     <string name="web_refresh">Rifresko</string>
+    <string name="accuweather_forecast_wind">^1 km/orë</string>
+    <string name="accuweather_forecast_wind_gust">^1-^2 km/orë</string>
     <string name="car_agreement_template"><big><b>Kushtet e përdorimit</b></big>\n<ul><li>Duke përdorur %s (“Hartën”) në automjet, pranoni se është vetëm për zhvillim dhe testim, mund të jetë e pasaktë, përdoret me rrezikun tuaj, drejtuesit duhet ta përdorin vetëm kur automjeti është i ndaluar dhe është e sigurt, pasagjerët nuk duhet të shpërqendrojnë drejtuesin, ligjet e trafikut duhet të respektohen dhe zhvilluesit nuk janë përgjegjës.</li></ul></string>
     <string name="car_agreement_proceed">Vazhdo</string>
     <string name="car_toast_complicated_action">Kryeni këtë veprim në pajisjen tuaj</string>

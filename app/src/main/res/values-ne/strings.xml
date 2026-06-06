@@ -25,6 +25,9 @@
     <string name="shortcut_splitscreen_short">स्प्लिट स्क्रिन</string>
     <string name="shortcut_splitscreen_long">खेलसँग स्प्लिट स्क्रिन सुरु गर्नुहोस्</string>
     <string name="web_refresh">ताजा पार्नुहोस्</string>
+    <string name="accuweather_forecast_row">^1\n^2। ^3</string>
+    <string name="accuweather_forecast_wind">^1 किमी/घन्टा</string>
+    <string name="accuweather_forecast_wind_gust">^1-^2 किमी/घन्टा</string>
     <string name="car_agreement_template"><big><b>प्रयोगका सर्तहरू</b></big>\n<ul><li>आफ्नो सवारीमा %s (“नक्सा”) प्रयोग गर्दा तपाईं सहमत हुनुहुन्छ कि यो विकास र परीक्षणका लागि मात्र हो, गलत हुन सक्छ, आफ्नै जोखिममा प्रयोग हुन्छ, चालकहरूले सवारी रोकिएको र सुरक्षित हुँदा मात्र प्रयोग गर्नुपर्छ, यात्रुले चालकलाई विचलित गर्नु हुँदैन, ट्राफिक कानुन पालना गर्नुपर्छ र विकासकर्ताहरू जिम्मेवार हुँदैनन्।</li></ul></string>
     <string name="car_agreement_proceed">अगाडि बढ्नुहोस्</string>
     <string name="car_toast_complicated_action">कृपया यो कार्य आफ्नो उपकरणमा गर्नुहोस्</string>

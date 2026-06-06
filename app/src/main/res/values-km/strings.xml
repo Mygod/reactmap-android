@@ -26,6 +26,9 @@
     <string name="shortcut_splitscreen_short">មុខងារ​បំបែកអេក្រង់</string>
     <string name="shortcut_splitscreen_long">ចាប់ផ្តើមអេក្រង់បំបែកជាមួយហ្គេម</string>
     <string name="web_refresh">ធ្វើ​ឲ្យ​ស្រស់</string>
+    <string name="accuweather_forecast_row">^1\n^2។ ^3</string>
+    <string name="accuweather_forecast_wind">^1 គម/ម៉</string>
+    <string name="accuweather_forecast_wind_gust">^1-^2 គម/ម៉</string>
     <string name="car_agreement_template"><big><b>លក្ខខណ្ឌប្រើប្រាស់</b></big>\n<ul><li>ដោយប្រើ %s (“ផែនទី”) នៅក្នុងយានយន្តរបស់អ្នក អ្នកយល់ព្រមថាវាសម្រាប់ការអភិវឌ្ឍ និងការសាកល្បងប៉ុណ្ណោះ អាចមិនត្រឹមត្រូវ ប្រើដោយហានិភ័យផ្ទាល់ខ្លួន អ្នកបើកបរត្រូវប្រើតែពេលយានយន្តឈប់ និងមានសុវត្ថិភាព អ្នកដំណើរមិនត្រូវរំខានអ្នកបើកបរ ត្រូវគោរពច្បាប់ចរាចរណ៍ ហើយអ្នកអភិវឌ្ឍន៍មិនទទួលខុសត្រូវ។</li></ul></string>
     <string name="car_agreement_proceed">បន្ត</string>
     <string name="car_toast_complicated_action">សូមអនុវត្តសកម្មភាពនេះលើឧបករណ៍របស់អ្នក</string>

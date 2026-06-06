@@ -26,6 +26,8 @@
     <string name="shortcut_splitscreen_short">Ekranni ikkiga ajratish</string>
     <string name="shortcut_splitscreen_long">O‘yin bilan bo‘lingan ekranni boshlash</string>
     <string name="web_refresh">Yangilash</string>
+    <string name="accuweather_forecast_wind">^1 km/soat</string>
+    <string name="accuweather_forecast_wind_gust">^1-^2 km/soat</string>
     <string name="car_agreement_template"><big><b>Foydalanish shartlari</b></big>\n<ul><li>Transport vositangizda %s (“Xarita”)dan foydalanib, u faqat ishlab chiqish va sinov uchun ekaniga, noto‘g‘ri bo‘lishi mumkinligiga, o‘z xavfingiz ostida foydalanishingizga, haydovchilar uni faqat mashina to‘xtagan va xavfsiz bo‘lganida ishlatishi kerakligiga, yo‘lovchilar haydovchini chalg‘itmasligiga, yo‘l harakati qonunlariga rioya qilinishiga va ishlab chiquvchilar javobgar emasligiga rozilik bildirasiz.</li></ul></string>
     <string name="car_agreement_proceed">Davom etish</string>
     <string name="car_toast_complicated_action">Iltimos, bu amalni qurilmangizda bajaring</string>

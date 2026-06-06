@@ -25,6 +25,8 @@
     <string name="shortcut_splitscreen_short">බෙදුම් තිරය</string>
     <string name="shortcut_splitscreen_long">ක්‍රීඩාව සමඟ බෙදු තිරය ආරම්භ කරන්න</string>
     <string name="web_refresh">නැවුම් කරන්න</string>
+    <string name="accuweather_forecast_wind">^1 කිමී/පැ</string>
+    <string name="accuweather_forecast_wind_gust">^1-^2 කිමී/පැ</string>
     <string name="car_agreement_template"><big><b>භාවිත නියමයන්</b></big>\n<ul><li>ඔබගේ වාහනයේ %s (“සිතියම”) භාවිතයෙන් එය සංවර්ධන හා පරීක්ෂණ සඳහා පමණක් බව, වැරදි විය හැකි බව, ඔබගේම අවදානමෙන් භාවිත කරන බව, රියදුරන් වාහනය නතරව ඇති සහ ආරක්ෂිත විට පමණක් භාවිත කළ යුතු බව, මගීන් රියදුරා අවධානයෙන් ඉවත් නොකළ යුතු බව, රථවාහන නීති පිළිපැදිය යුතු බව සහ සංවර්ධකයින් වගකිව නොහැකි බව ඔබ එකඟ වේ.</li></ul></string>
     <string name="car_agreement_proceed">ඉදිරියට</string>
     <string name="car_toast_complicated_action">කරුණාකර මෙම ක්‍රියාව ඔබගේ උපාංගයේ කරන්න</string>

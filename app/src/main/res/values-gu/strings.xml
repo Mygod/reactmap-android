@@ -25,6 +25,8 @@
     <string name="shortcut_splitscreen_short">સ્ક્રીનને વિભાજિત કરો</string>
     <string name="shortcut_splitscreen_long">ગેમ સાથે સ્પ્લિટ સ્ક્રીન શરૂ કરો</string>
     <string name="web_refresh">ફરી તાજુ કરો</string>
+    <string name="accuweather_forecast_wind">^1 કિમી/કલાક</string>
+    <string name="accuweather_forecast_wind_gust">^1-^2 કિમી/કલાક</string>
     <string name="car_agreement_template"><big><b>ઉપયોગની શરતો</b></big>\n<ul><li>તમારા વાહનમાં %s (“નકશો”) ઉપયોગ કરીને, તમે સહમત થાઓ છો કે તે માત્ર વિકાસ અને પરીક્ષણ માટે છે, તે અચોક્કસ હોઈ શકે છે, તેનો ઉપયોગ તમારા પોતાના જોખમે થાય છે, ડ્રાઇવરોએ તેને ફક્ત વાહન ઉભું હોય અને સુરક્ષિત હોય ત્યારે જ ઉપયોગ કરવો જોઈએ, મુસાફરોએ ડ્રાઇવરને ભટકાવવો નહીં, ટ્રાફિક કાયદાનું પાલન કરવું જોઈએ અને વિકાસકર્તાઓ જવાબદાર નથી.</li></ul></string>
     <string name="car_agreement_proceed">આગળ વધો</string>
     <string name="car_toast_complicated_action">કૃપા કરીને આ ક્રિયા તમારા ઉપકરણ પર કરો</string>

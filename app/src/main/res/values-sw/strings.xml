@@ -26,6 +26,8 @@
     <string name="shortcut_splitscreen_short">Gawa skrini</string>
     <string name="shortcut_splitscreen_long">Anzisha skrini iliyogawanywa na mchezo</string>
     <string name="web_refresh">Onyesha upya</string>
+    <string name="accuweather_forecast_wind">^1 km/saa</string>
+    <string name="accuweather_forecast_wind_gust">^1-^2 km/saa</string>
     <string name="car_agreement_template"><big><b>Masharti ya matumizi</b></big>\n<ul><li>Kwa kutumia %s (“Ramani”) kwenye gari lako, unakubali kuwa ni kwa maendeleo na majaribio tu, inaweza isiwe sahihi, unaitumia kwa hatari yako mwenyewe, madereva waitumie tu gari likiwa limesimama na ni salama, abiria wasimkengeushe dereva, sheria za trafiki zifuatwe, na watengenezaji hawawajibiki.</li></ul></string>
     <string name="car_agreement_proceed">Endelea</string>
     <string name="car_toast_complicated_action">Tafadhali fanya kitendo hiki kwenye kifaa chako</string>

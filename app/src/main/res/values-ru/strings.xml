@@ -26,6 +26,8 @@
     <string name="shortcut_splitscreen_short">Разделить экран</string>
     <string name="shortcut_splitscreen_long">Запустить разделенный экран с игрой</string>
     <string name="web_refresh">Обновить</string>
+    <string name="accuweather_forecast_wind">^1 км/ч</string>
+    <string name="accuweather_forecast_wind_gust">^1-^2 км/ч</string>
     <string name="car_agreement_template"><big><b>Условия использования</b></big>\n<ul><li>Используя %s («Карту») в автомобиле, вы соглашаетесь, что она предназначена только для разработки и тестирования, может быть неточной, используется на ваш риск, водители должны пользоваться ей только при неподвижном автомобиле и когда это безопасно, пассажиры не должны отвлекать водителя, правила дорожного движения должны соблюдаться, а разработчики не несут ответственности.</li></ul></string>
     <string name="car_agreement_proceed">Продолжить</string>
     <string name="car_toast_complicated_action">Выполните это действие на своем устройстве</string>
