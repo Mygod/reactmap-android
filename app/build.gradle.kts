@@ -1,6 +1,28 @@
 
+import com.android.build.api.variant.BuildConfigField
 import com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
+private fun String?.splitDomains() = this?.split(',').orEmpty()
+    .map(String::trim)
+    .filter(String::isNotEmpty)
+    .distinct()
+
+private fun String.javaStringLiteral() = buildString {
+    append('"')
+    for (char in this@javaStringLiteral) when (char) {
+        '\\' -> append("\\\\")
+        '"' -> append("\\\"")
+        '\n' -> append("\\n")
+        '\r' -> append("\\r")
+        '\t' -> append("\\t")
+        else -> append(char)
+    }
+    append('"')
+}
+
+private fun Iterable<String>.toBuildConfigStringArray() =
+    joinToString(prefix = "new String[] {", postfix = "}") { it.javaStringLiteral() }
 
 abstract class GenerateMainManifestTask : DefaultTask() {
     @get:InputFile
@@ -34,20 +56,57 @@ abstract class GenerateMainManifestTask : DefaultTask() {
     }
 }
 
+abstract class GenerateBuildTypeSupportedDomainsManifestTask : DefaultTask() {
+    @get:Input
+    abstract val additionalDomains: ListProperty<String>
+
+    @get:OutputFile
+    abstract val generatedManifest: RegularFileProperty
+
+    @TaskAction
+    fun generate() {
+        val supportedDomains = additionalDomains.get()
+            .map(String::trim)
+            .filter(String::isNotEmpty)
+            .distinct()
+        val domains = supportedDomains.joinToString("\n") { """                <data android:host="$it" />""" }
+        val manifestText = """
+        |<?xml version="1.0" encoding="utf-8"?>
+        |<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+        |    <application>
+        |        <activity android:name=".MainActivity">
+        |            <intent-filter android:autoVerify="true">
+        |                <action android:name="android.intent.action.VIEW" />
+        |
+        |                <category android:name="android.intent.category.DEFAULT" />
+        |                <category android:name="android.intent.category.BROWSABLE" />
+        |
+        |                <data android:scheme="http" />
+        |                <data android:scheme="https" />
+        |$domains
+        |            </intent-filter>
+        |        </activity>
+        |    </application>
+        |</manifest>
+        |
+        """.trimMargin()
+        generatedManifest.get().asFile.apply {
+            parentFile.mkdirs()
+            writeText(manifestText)
+        }
+    }
+}
+
 private val javaVersion = JavaVersion.VERSION_11
 private val defaultDomain = providers.gradleProperty("reactmap.defaultDomain").orNull
     ?: error("Missing required gradle property reactmap.defaultDomain")
-private val supportedDomainsProperty = providers.gradleProperty("reactmap.supportedDomains").orNull
+private val supportedDomains = providers.gradleProperty("reactmap.supportedDomains").orNull.splitDomains()
 val baseMainManifest = layout.projectDirectory.file("src/main/AndroidManifest.xml")
 val generatedMainManifest = layout.buildDirectory.file("generated/local-manifest/AndroidManifest.xml")
 val generateMainManifest by tasks.registering(GenerateMainManifestTask::class) {
     baseManifest.set(baseMainManifest)
     primaryDomain.set(defaultDomain)
-    additionalDomains.set(supportedDomainsProperty
-        ?.split(',')
-        .orEmpty()
-        .map(String::trim)
-        .filter(String::isNotEmpty))
+    additionalDomains.set(supportedDomains)
     generatedManifest.set(generatedMainManifest)
 }
 
@@ -74,7 +133,7 @@ android {
 
         providers.gradleProperty("reactmap.appName").orNull
             ?.let { resValue("string", "app_name", it) }
-        buildConfigField("String", "DEFAULT_DOMAIN", "\"$defaultDomain\"")
+        buildConfigField("String", "DEFAULT_DOMAIN", defaultDomain.javaStringLiteral())
         externalNativeBuild.cmake.arguments += listOf("-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON")   // TODO remove for NDK r28
     }
     dependenciesInfo {
@@ -125,6 +184,26 @@ android {
 
 tasks.named("preBuild").configure {
     dependsOn(generateMainManifest)
+}
+
+androidComponents {
+    onVariants(selector().all()) { variant ->
+        val buildType = variant.buildType ?: return@onVariants
+        val buildTypeSupportedDomains = providers.gradleProperty("reactmap.$buildType.supportedDomains").orNull.splitDomains()
+        val variantSupportedDomains = (listOf(defaultDomain) + supportedDomains + buildTypeSupportedDomains).distinct()
+        checkNotNull(variant.buildConfigFields).put(
+            "SUPPORTED_DOMAINS",
+            BuildConfigField("String[]", variantSupportedDomains.toBuildConfigStringArray(), "Supported ReactMap domains."),
+        )
+        if (buildTypeSupportedDomains.isNotEmpty()) {
+            val generateManifest = tasks.register<GenerateBuildTypeSupportedDomainsManifestTask>(
+                variant.computeTaskName("generate", "supportedDomainsManifest")
+            ) {
+                additionalDomains.set(buildTypeSupportedDomains)
+            }
+            variant.sources.manifests.addGeneratedManifestFile(generateManifest) { it.generatedManifest }
+        }
+    }
 }
 
 tasks.withType<JavaCompile>().configureEach {

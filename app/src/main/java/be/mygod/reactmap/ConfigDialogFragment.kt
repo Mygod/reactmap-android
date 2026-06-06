@@ -28,7 +28,7 @@ class ConfigDialogFragment : AlertDialogFragment<ConfigDialogFragment.Arg, Empty
     @Parcelize
     data class Arg(val welcome: Boolean) : Parcelable
 
-    private lateinit var historyUrl: Set<String?>
+    private lateinit var historyUrl: Set<String>
     private lateinit var urlEdit: MaterialAutoCompleteTextView
     private lateinit var followerSwitch: SwitchCompat
 
@@ -55,10 +55,11 @@ class ConfigDialogFragment : AlertDialogFragment<ConfigDialogFragment.Arg, Empty
 
     override fun onCreateDialog(savedInstanceState: Bundle?) = super.onCreateDialog(savedInstanceState).apply {
         create()
-        historyUrl = app.pref.getStringSet(KEY_HISTORY_URL, null) ?: setOf("https://${BuildConfig.DEFAULT_DOMAIN}")
+        historyUrl = app.pref.getStringSet(KEY_HISTORY_URL, null).orEmpty()
+        val suggestedUrls = (BuildConfig.SUPPORTED_DOMAINS.map { "https://$it" } + historyUrl).distinct()
         val context = requireContext()
         urlEdit = findViewById(android.R.id.edit)!!
-        urlEdit.setSimpleItems(historyUrl.toTypedArray())
+        urlEdit.setSimpleItems(suggestedUrls.toTypedArray())
         urlEdit.setText(app.activeUrl)
         followerSwitch = findViewById(android.R.id.switch_widget)!!
         followerSwitch.isChecked = BackgroundLocationReceiver.enabled && (context.checkSelfPermission(
