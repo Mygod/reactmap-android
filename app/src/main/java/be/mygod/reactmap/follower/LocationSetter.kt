@@ -117,22 +117,40 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
         notifyError(e.readableMessage)
         Result.failure()
     }
-    private fun notifyErrors(response: String, json: JSONObject? = null): Boolean {
-        var shouldWarn = true
-        notifyError(try {
+
+    private enum class ErrorDisposition { FAIL, RETRY_LOG_ONLY, RETRY_AND_REPORT }
+    private data class WebhookErrors(val message: String, val disposition: ErrorDisposition)
+    private suspend fun finishWithErrors(response: String, json: JSONObject? = null, statusCode: Int = 200): Result {
+        val errors = try {
             val errors = (json ?: JSONObject(response)).getJSONArray("errors")
-            (0 until errors.length()).joinToString("\n") {
-                val error = errors.getJSONObject(it)
-                if (error.optJSONObject("extensions")?.optString("code") == "INTERNAL_SERVER_ERROR") {
-                    shouldWarn = false
+            val parsed = List(errors.length()) { errors.getJSONObject(it) }
+            if (parsed.isEmpty()) WebhookErrors(response, ErrorDisposition.RETRY_AND_REPORT) else {
+                val codes = parsed.map { it.optJSONObject("extensions")?.optString("code") }
+                val disposition = when {
+                    "PERMS_CHANGED" in codes -> ErrorDisposition.FAIL
+                    codes.all { it == "INTERNAL_SERVER_ERROR" || it == "TOO_MANY_SESSIONS" } ->
+                        ErrorDisposition.RETRY_LOG_ONLY
+                    else -> ErrorDisposition.RETRY_AND_REPORT
                 }
-                error.getString("message")
+                WebhookErrors(parsed.joinToString("\n") { it.getString("message") }, disposition)
             }
         } catch (_: JSONException) {
-            response
-        })
-        return shouldWarn
+            WebhookErrors(response, ErrorDisposition.RETRY_AND_REPORT)
+        }
+        notifyError(errors.message)
+        if (statusCode == 401 || statusCode == 511 || errors.disposition == ErrorDisposition.FAIL) {
+            withContext(Dispatchers.Main) { BackgroundLocationReceiver.stop() }
+            return Result.failure()
+        }
+        val logMessage = if (statusCode == 200) response else "$statusCode $response"
+        return if (errors.disposition != ErrorDisposition.RETRY_LOG_ONLY) Result.retry().also {
+            when (statusCode) {
+                404, 500, 502, 520, 522, 523, 530 -> Timber.d(logMessage)
+                else -> Timber.w(Exception(logMessage))
+            }
+        } else Result.retry().also { Timber.w(logMessage) }
     }
+
     private suspend fun doWork(lat: Double, lon: Double, time: Long, apiUrl: String, conn: HttpURLConnection): Result {
         return when (val code = conn.responseCode) {
             200 -> {
@@ -140,10 +158,7 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
                 val human = try {
                     val obj = JSONObject(response)
                     val webhook = obj.getJSONObject("data").optJSONObject("webhook")
-                    if (webhook == null) {
-                        if (notifyErrors(response, obj)) Timber.w(Exception(response)) else Timber.w(response)
-                        return Result.retry()
-                    }
+                        ?: return finishWithErrors(response, obj)
                     if (webhook["human"] == JSONObject.NULL) {
                         withContext(Dispatchers.Main) { BackgroundLocationReceiver.stop() }
                         notifyError(app.getText(R.string.error_webhook_human_not_found))
@@ -180,20 +195,7 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
                 ReactMapHttpEngine.detectBrotliError(conn)?.let { notifyError(it) }
                 Result.retry()
             }
-            else -> {
-                val error = conn.findErrorStream.bufferedReader().readText()
-                notifyErrors(error)
-                if (code == 401 || code == 511) {
-                    withContext(Dispatchers.Main) { BackgroundLocationReceiver.stop() }
-                    Result.failure()
-                } else {
-                    if (code == 404 ||
-                        code == 500 || code == 502 || code == 520 || code == 522 || code == 523 || code == 530) {
-                        Timber.d(Exception("$code $error"))
-                    } else Timber.w(Exception("$code $error"))
-                    Result.retry()
-                }
-            }
+            else -> finishWithErrors(conn.findErrorStream.bufferedReader().readText(), statusCode = code)
         }
     }
 
