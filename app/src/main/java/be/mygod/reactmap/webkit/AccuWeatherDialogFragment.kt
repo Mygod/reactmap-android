@@ -42,9 +42,7 @@ import com.google.mlkit.genai.prompt.TextPart
 import com.google.mlkit.genai.prompt.generateContentRequest
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
@@ -132,9 +130,8 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
         private val dailyWeatherGuessPromptPrefix = PromptPrefix(dailyWeatherGuessPromptPrefixText)
 
         private fun URLConnection.setAccuWeatherHeaders(context: Context) {
-            setRequestProperty("User-Agent", runCatching {
-                WebSettings.getDefaultUserAgent(context)
-            }.getOrDefault("Mozilla/5.0 (Linux; Android 10)"))
+            setRequestProperty("User-Agent",
+                WebSettings.getDefaultUserAgent(context) ?: "Mozilla/5.0 (Linux; Android 10)")
             setRequestProperty("Priority", "u=0, i")
             setRequestProperty("Sec-Fetch-Dest", "document")
             setRequestProperty("Sec-Fetch-Mode", "navigate")
@@ -144,9 +141,7 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
         private val dailyWeatherGuessModelOnDevice by lazy {
             Firebase.ai.generativeModel(
                 modelName = dailyWeatherGuessModelName,
-                generationConfig = generationConfig {
-                    temperature = 0f
-                },
+                generationConfig = generationConfig { temperature = 0f },
                 onDeviceConfig = OnDeviceConfig(
                     mode = InferenceMode.ONLY_ON_DEVICE,
                     temperature = 0f,
@@ -164,7 +159,7 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
             onDeviceDownloadDeferred?.takeUnless { it.isCompleted }?.let { return it }
             return CompletableDeferred<Boolean>().also { deferred ->
                 onDeviceDownloadDeferred = deferred
-                CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
+                GlobalScope.launch {
                     try {
                         when (dailyWeatherGuessOnDevice.checkStatus()) {
                             OnDeviceModelStatus.AVAILABLE -> {
@@ -303,10 +298,7 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
                         dailyWeatherGuessModelOnDevice.generateContent(onDevicePrompt).text?.trim()
                     }
                     if (onDeviceRaw != null) {
-                        val onDeviceLabel = onDeviceRaw.lineSequence()
-                            .map { it.trim() }
-                            .filter { it.isNotEmpty() }
-                            .lastOrNull()
+                        val onDeviceLabel = onDeviceRaw.lineSequence().map { it.trim() }.lastOrNull { it.isNotEmpty() }
                         Timber.d(
                             "AI daily weather guesses $onDeviceRaw (parsed label: $onDeviceLabel) via " +
                                 "$onDeviceInferenceSource from: $onDevicePrompt"
@@ -430,15 +422,11 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
             if (frame.childCount > 1) frame.removeViewAt(0)
         }
         val locales = resources.configuration.locales
-        val language = (if (locales.isEmpty) null else locales[0])
-            ?.language
-            ?.lowercase(Locale.ROOT)
-            ?.takeUnless { it.isBlank() || it == "und" } ?: "en"
+        val language = locales[0].language.lowercase(Locale.ROOT).takeUnless { it.isBlank() || it == "und" } ?: "en"
         val rows = try {
-            ReactMapHttpEngine.connectCancellable(
-                "https://www.accuweather.com/$language/${arg.locationDescription}/${if (daily) {
-                    "dai"
-                } else "hour"}ly-weather-forecast/${arg.locationKey}?unit=c$param") { conn ->
+            ReactMapHttpEngine.connectCancellable("https://www.accuweather.com/$language/${
+                arg.locationDescription}/${if (daily) "dai" else "hour"}ly-weather-forecast/${
+                    arg.locationKey}?unit=c$param") { conn ->
                 conn.setAccuWeatherHeaders(requireContext())
                 conn.setRequestProperty("Accept-Language", locales.toLanguageTags().ifBlank { "en" })
                 if (conn.responseCode != 200) throw Exception(
@@ -455,14 +443,14 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
                     val originalWeatherCode = matcher.group(2)!!.toInt()
                     rows.add(ForecastRow(
                         timeText = if (daily) try {
-                        dayFormat.parse(matcher.group(1), calendar, ParsePosition(0))
-                        format.format(calendar.time)
-                    } catch (e: ParseException) {
-                        Timber.w(Exception(matcher.group(1)).initCause(e))
-                        matcher.group(1)
-                    } else {
-                        format.format(matcher.group(1)!!.toLong() * 1000)
-                    },
+                            dayFormat.parse(matcher.group(1), calendar, ParsePosition(0))
+                            format.format(calendar.time)
+                        } catch (e: ParseException) {
+                            Timber.w(Exception(matcher.group(1)).initCause(e))
+                            matcher.group(1)
+                        } else {
+                            format.format(matcher.group(1)!!.toLong() * 1000)
+                        },
                         phrase = Html.fromHtml(matcher.group(3), Html.FROM_HTML_MODE_LEGACY),
                         windSpeed = matcher.group(4)!!.toInt(),
                         windGust = matcher.group(5)?.toInt(),
