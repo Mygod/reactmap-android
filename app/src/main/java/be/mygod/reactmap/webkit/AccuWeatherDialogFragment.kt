@@ -2,8 +2,6 @@ package be.mygod.reactmap.webkit
 
 import android.content.Context
 import android.content.DialogInterface
-import android.icu.text.SimpleDateFormat
-import android.icu.util.Calendar
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
@@ -49,39 +47,24 @@ import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import java.io.IOException
 import java.net.URLConnection
-import java.text.ParseException
-import java.text.ParsePosition
 import java.util.Locale
-import java.util.regex.Pattern
+import kotlin.time.Duration.Companion.milliseconds
 
 class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.Arg, Empty>() {
     @OptIn(PublicPreviewAPI::class)
     companion object {
-        private const val dailyWeatherGuessModelName = "gemini-2.5-flash"
-        private val weatherForecastMatcher = "^/en/([^/]*/[^/]*/[^/]*)/weather-forecast/([^?]*)".toRegex()
-        private val hourlyMatcher = (
-            "<div id=\"(\\d+)\"[^>]*class=\"accordion-item hour\"[^>]*>" +
-                "(?:(?!<div id=\"\\d+\"[^>]*class=\"accordion-item hour\").)*?" +
-                "<img class=\"icon\" src=\"/images/weathericons/(?:v2a/)?(\\d+)\\.svg\"" +
-                "(?:(?!<div id=\"\\d+\"[^>]*class=\"accordion-item hour\").)*?" +
-                "<div class=\"phrase\">([^<]*)</div>" +
-                "(?:(?!<div id=\"\\d+\"[^>]*class=\"accordion-item hour\").)*?" +
-                "<p(?: class=\"panel-item\")?>Wind<span class=\"value\">[^<]*?(\\d+) km/h</span></p>" +
-                "(?:(?:(?!<div id=\"\\d+\"[^>]*class=\"accordion-item hour\").)*?" +
-                "<p(?: class=\"panel-item\")?>Wind Gusts<span class=\"value\">[^<]*?(\\d+) km/h</span></p>)?"
-            ).toPattern(Pattern.DOTALL)
-        private val dailyMatcher = (
-            "<span class=\"module-header sub date\">([^<]*)</span>" +
-                "(?:(?!<div class=\"daily-wrapper\").)*?" +
-                "<img class=\"icon\" src=\"/images/weathericons/(?:v2a/)?(\\d+)\\.svg\"" +
-                "(?:(?!<div class=\"daily-wrapper\").)*?" +
-                "<div class=\"phrase\">([^<]*)</div>" +
-                "(?:(?!<div class=\"daily-wrapper\").)*?" +
-                "<p(?: class=\"panel-item\")?>Wind<span class=\"value\">[^<]*?(\\d+) km/h</span></p>" +
-                "(?:(?:(?!<div class=\"daily-wrapper\").)*?" +
-                "<p(?: class=\"panel-item\")?>Wind Gusts<span class=\"value\">[^<]*?(\\d+) km/h</span></p>)?"
-            ).toPattern(Pattern.DOTALL)
-        private val dayFormat = SimpleDateFormat("M/d", Locale.US)
+        private val weatherForecastMatcher = "^/[^/]+/([^/]*/[^/]*/[^/]*)/weather-forecast/([^?]*)".toRegex()
+        private val hourlyRowMatcher =
+            "<div id=\"(\\d+)\"[^>]*class=\"[^\"]*accordion-item hour[^\"]*\"[^>]*>".toRegex()
+        private val dailyRowMatcher =
+            "<div[^>]*class=\"[^\"]*daily-wrapper[^\"]*\"[^>]*data-qa=\"dailyCard\\d+\"[^>]*>".toRegex()
+        private val iconMatcher = "<img class=\"icon\" src=\"/images/weathericons/(?:v2a/)?(\\d+)\\.svg\"".toRegex()
+        private val phraseMatcher = "<div class=\"phrase\">(.*?)</div>".toRegex(RegexOption.DOT_MATCHES_ALL)
+        private val dailyDateMatcher = "<h2 class=\"date\">(.*?)</h2>".toRegex(RegexOption.DOT_MATCHES_ALL)
+        private val panelValueMatcher =
+            "<p(?:\\s+class=\"panel-item\")?>(.*?)<span class=\"value\">(.*?)</span>\\s*</p>"
+                .toRegex(RegexOption.DOT_MATCHES_ALL)
+        private val numberMatcher = "\\d+".toRegex()
         private val aiGuessedDailyIconIds = setOf(30, 31)
         private val aiGuessableConditions = mapOf(
             "Sunny" to 1,
@@ -140,7 +123,7 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
         }
         private val dailyWeatherGuessModelOnDevice by lazy {
             Firebase.ai.generativeModel(
-                modelName = dailyWeatherGuessModelName,
+                modelName = "gemini-2.5-flash",
                 generationConfig = generationConfig { temperature = 0f },
                 onDeviceConfig = OnDeviceConfig(
                     mode = InferenceMode.ONLY_ON_DEVICE,
@@ -223,7 +206,7 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
                                         }
                                         break
                                     }
-                                    OnDeviceModelStatus.DOWNLOADING -> delay(250)
+                                    OnDeviceModelStatus.DOWNLOADING -> delay(250.milliseconds)
                                     OnDeviceModelStatus.UNAVAILABLE -> {
                                         Timber.i("On-device AI model is unavailable while waiting")
                                         deferred.complete(false)
@@ -371,7 +354,6 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
         ).build(), resources.configuration.locales[0]), daily = true)
     }
 
-    private val calendar = Calendar.getInstance()
     private fun buildForecastText(rows: List<ForecastRow>) = SpannableStringBuilder().apply {
         rows.forEachIndexed { index, row ->
             if (index != 0) appendLine()
@@ -410,6 +392,60 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
             append(" km/h")
         }
     }
+
+    private fun parseForecastRows(response: String, daily: Boolean, format: DateTimeFormatter): List<ForecastRow>? {
+        val rowMatches = (if (daily) dailyRowMatcher else hourlyRowMatcher).findAll(response).toList()
+        if (rowMatches.isEmpty()) {
+            Timber.w(Exception("AccuWeather parser mismatch: found no ${if (daily) "daily" else {
+                "hourly"
+            }} forecast rows"))
+            return null
+        }
+        val rows = mutableListOf<ForecastRow>()
+        rowMatches.forEachIndexed { index, rowMatch ->
+            val rowHtml = response.substring(
+                rowMatch.range.first,
+                rowMatches.getOrNull(index + 1)?.range?.first ?: response.length,
+            )
+            val originalWeatherCode = iconMatcher.find(rowHtml)?.groupValues?.get(1)?.toIntOrNull()
+            val phraseHtml = phraseMatcher.find(rowHtml)?.groupValues?.get(1)
+            val speeds = panelValueMatcher.findAll(rowHtml).mapNotNull { match ->
+                val rawValueHtml = match.groupValues[2]
+                if (rawValueHtml.contains("<span", ignoreCase = true)) return@mapNotNull null
+                val valueText = Html.fromHtml(rawValueHtml, Html.FROM_HTML_MODE_LEGACY).toString()
+                if (!valueText.any { it.isDigit() } ||
+                    valueText.any { it == '°' || it == '%' || it == '(' || it == ')' }) {
+                    return@mapNotNull null
+                }
+                numberMatcher.findAll(valueText).lastOrNull()?.value?.toIntOrNull()
+            }.toList()
+            if (originalWeatherCode == null || phraseHtml == null || speeds.isEmpty()) {
+                Timber.w("Skipping AccuWeather ${if (daily) "daily" else "hourly"} row with incomplete data")
+                return@forEachIndexed
+            }
+            rows.add(ForecastRow(
+                timeText = if (daily) {
+                    Html.fromHtml(dailyDateMatcher.find(rowHtml)?.groupValues?.get(1)
+                        ?: return@forEachIndexed Timber.w("Skipping AccuWeather daily row with missing date"),
+                        Html.FROM_HTML_MODE_LEGACY)
+                } else format.format(1000 * (rowMatch.groupValues[1].toLongOrNull() ?: return@forEachIndexed Timber.w(
+                    "Skipping AccuWeather hourly row with invalid timestamp"))),
+                phrase = Html.fromHtml(phraseHtml, Html.FROM_HTML_MODE_LEGACY),
+                windSpeed = speeds[0],
+                windGust = if (daily) null else speeds.getOrNull(1),
+                weatherCode = originalWeatherCode,
+                aiContextHtml = if (daily && originalWeatherCode in aiGuessedDailyIconIds) rowHtml else null,
+            ))
+        }
+        if (rows.isEmpty()) {
+            Timber.w(Exception("AccuWeather parser mismatch: no complete ${if (daily) "daily" else {
+                "hourly"
+            }} forecast rows from ${rowMatches.size} row containers"))
+            return null
+        }
+        return rows
+    }
+
     private fun AlertDialog.fetchData(id: Int, format: DateTimeFormatter, param: String = "",
                                       daily: Boolean = false) = lifecycleScope.launch {
         val frame = findViewById<ViewGroup>(id)!!
@@ -432,35 +468,7 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
                 if (conn.responseCode != 200) throw Exception(
                     "${conn.responseCode}: ${conn.findErrorStream.bufferedReader().readText()}"
                 )
-                val response = conn.inputStream.bufferedReader().readText()
-                val matcher = (if (daily) dailyMatcher else hourlyMatcher).matcher(response)
-                if (!matcher.find()) {
-                    Timber.w("AccuWeather parser mismatch for ${if (daily) "daily" else "hourly"} forecast page")
-                    return@connectCancellable null
-                }
-                val rows = mutableListOf<ForecastRow>()
-                do {
-                    val originalWeatherCode = matcher.group(2)!!.toInt()
-                    rows.add(ForecastRow(
-                        timeText = if (daily) try {
-                            dayFormat.parse(matcher.group(1), calendar, ParsePosition(0))
-                            format.format(calendar.time)
-                        } catch (e: ParseException) {
-                            Timber.w(Exception(matcher.group(1)).initCause(e))
-                            matcher.group(1)
-                        } else {
-                            format.format(matcher.group(1)!!.toLong() * 1000)
-                        },
-                        phrase = Html.fromHtml(matcher.group(3), Html.FROM_HTML_MODE_LEGACY),
-                        windSpeed = matcher.group(4)!!.toInt(),
-                        windGust = matcher.group(5)?.toInt(),
-                        weatherCode = originalWeatherCode,
-                        aiContextHtml = if (daily && originalWeatherCode in aiGuessedDailyIconIds) {
-                            matcher.group(0)
-                        } else null,
-                    ))
-                } while (matcher.find())
-                rows
+                parseForecastRows(conn.inputStream.bufferedReader().readText(), daily, format)
             }
         } catch (e: IOException) {
             Timber.d(e)
