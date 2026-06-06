@@ -8,9 +8,9 @@ import android.os.Bundle
 import android.view.WindowManager
 import android.webkit.WebView
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.core.content.res.use
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.commit
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
@@ -31,7 +31,7 @@ import kotlinx.coroutines.withContext
 import rikka.shizuku.Shizuku
 import timber.log.Timber
 
-class MainActivity : FragmentActivity(), Shizuku.OnRequestPermissionResultListener {
+class MainActivity : AppCompatActivity(), Shizuku.OnRequestPermissionResultListener {
     companion object {
         const val ACTION_CONFIGURE = "be.mygod.reactmap.action.CONFIGURE"
         const val ACTION_RESTART_GAME = "be.mygod.reactmap.action.RESTART_GAME"

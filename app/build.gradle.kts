@@ -141,6 +141,7 @@ dependencies {
     coreLibraryDesugaring(libs.desugar)
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
     implementation(libs.activity)
+    implementation(libs.appcompat)
     implementation(libs.browser)
     implementation(libs.core.i18n)
     implementation(libs.core.ktx)
