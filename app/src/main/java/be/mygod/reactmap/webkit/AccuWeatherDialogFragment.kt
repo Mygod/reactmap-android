@@ -36,6 +36,10 @@ import com.google.firebase.ai.OnDeviceModelStatus
 import com.google.firebase.ai.ai
 import com.google.firebase.ai.type.PublicPreviewAPI
 import com.google.firebase.ai.type.generationConfig
+import com.google.mlkit.genai.prompt.Generation
+import com.google.mlkit.genai.prompt.PromptPrefix
+import com.google.mlkit.genai.prompt.TextPart
+import com.google.mlkit.genai.prompt.generateContentRequest
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
@@ -114,6 +118,18 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
             setOf(RegexOption.IGNORE_CASE, RegexOption.DOT_MATCHES_ALL),
         )
         private val aiGuessableConditionLabels = aiGuessableConditions.keys.toList()
+        private val dailyWeatherGuessPromptPrefixText = buildString {
+            append("Classify this AccuWeather daily forecast HTML snippet. ")
+            append("Choose the single best label based only on weather content.\n\n")
+            append("You may reason briefly before answering. ")
+            append("If the forecast phrase closely matches one allowed label, return the most specific matching label. ")
+            append("If an allowed label appears verbatim or nearly verbatim in the forecast phrase, return that label instead of a broader one. ")
+            append("The very last non-empty line must be exactly one allowed label and nothing else.\n\n")
+            append("Allowed labels:\n")
+            append(aiGuessableConditionLabels.joinToString("\n") { "- $it" })
+            append("\n\nForecast HTML snippet:\n")
+        }
+        private val dailyWeatherGuessPromptPrefix = PromptPrefix(dailyWeatherGuessPromptPrefixText)
 
         private fun URLConnection.setAccuWeatherHeaders(context: Context) {
             setRequestProperty("User-Agent", runCatching {
@@ -140,6 +156,7 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
         private val dailyWeatherGuessOnDevice get() = checkNotNull(dailyWeatherGuessModelOnDevice.onDeviceExtension) {
             "On-device AI extension is unavailable"
         }
+        private val dailyWeatherGuessPromptModel by lazy { Generation.getClient() }
         private var onDeviceDownloadDeferred: CompletableDeferred<Boolean>? = null
 
         @Synchronized
@@ -245,18 +262,7 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
 
         private suspend fun guessDailyIconFromAi(contextHtml: String): Int? {
             val normalizedContext = contextHtml.replace(aiContextCleanupRegex, " ").trim()
-            val onDevicePrompt = buildString {
-                append("Classify this AccuWeather daily forecast HTML snippet. ")
-                append("Choose the single best label based only on weather content.\n\n")
-                append("You may reason briefly before answering. ")
-                append("If the forecast phrase closely matches one allowed label, return the most specific matching label. ")
-                append("If an allowed label appears verbatim or nearly verbatim in the forecast phrase, return that label instead of a broader one. ")
-                append("The very last non-empty line must be exactly one allowed label and nothing else.\n\n")
-                append("Allowed labels:\n")
-                append(aiGuessableConditionLabels.joinToString("\n") { "- $it" })
-                append("\n\nForecast HTML snippet:\n")
-                append(normalizedContext)
-            }
+            val onDevicePrompt = dailyWeatherGuessPromptPrefixText + normalizedContext
             try {
                 val onDeviceModelReady = when (dailyWeatherGuessOnDevice.checkStatus()) {
                     OnDeviceModelStatus.AVAILABLE -> true
@@ -267,15 +273,43 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
                     else -> false
                 }
                 if (onDeviceModelReady) {
-                    val onDeviceResponse = dailyWeatherGuessModelOnDevice.generateContent(onDevicePrompt)
-                    val onDeviceRaw = onDeviceResponse.text?.trim()
+                    var onDeviceInferenceSource = "on-device"
+                    val prefixCachingAvailable = try {
+                        dailyWeatherGuessPromptModel.isCachingFeatureAvailable()
+                    } catch (e: CancellationException) {
+                        throw e
+                    } catch (e: Exception) {
+                        Timber.w(e, "Failed to check ML Kit prefix caching availability")
+                        false
+                    }
+                    val onDeviceRaw = if (prefixCachingAvailable) {
+                        try {
+                            onDeviceInferenceSource = "on-device prefix cache"
+                            val onDeviceRequest = generateContentRequest(TextPart(normalizedContext)) {
+                                promptPrefix = dailyWeatherGuessPromptPrefix
+                                temperature = 0f
+                            }
+                            dailyWeatherGuessPromptModel.generateContent(onDeviceRequest).candidates
+                                .firstOrNull()?.text?.trim()
+                        } catch (e: CancellationException) {
+                            throw e
+                        } catch (e: Exception) {
+                            Timber.w(e, "ML Kit prefix-cached AccuWeather AI inference failed")
+                            onDeviceInferenceSource = "on-device"
+                            dailyWeatherGuessModelOnDevice.generateContent(onDevicePrompt).text?.trim()
+                        }
+                    } else {
+                        Timber.i("Running uncached AccuWeather AI inference because ML Kit prefix caching is unavailable")
+                        dailyWeatherGuessModelOnDevice.generateContent(onDevicePrompt).text?.trim()
+                    }
                     if (onDeviceRaw != null) {
                         val onDeviceLabel = onDeviceRaw.lineSequence()
                             .map { it.trim() }
                             .filter { it.isNotEmpty() }
                             .lastOrNull()
                         Timber.d(
-                            "AI daily weather guesses $onDeviceRaw (parsed label: $onDeviceLabel) via on-device from: $onDevicePrompt"
+                            "AI daily weather guesses $onDeviceRaw (parsed label: $onDeviceLabel) via " +
+                                "$onDeviceInferenceSource from: $onDevicePrompt"
                         )
                         aiGuessableConditions[onDeviceLabel]?.let { return it }
                         Timber.w(Exception("Unsupported on-device daily weather guess output: $onDeviceRaw"))

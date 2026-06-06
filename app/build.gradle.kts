@@ -152,6 +152,7 @@ dependencies {
     implementation(libs.fragment.ktx)
     implementation(libs.hiddenapibypass)
     implementation(libs.material)
+    implementation(libs.mlkit.genai.prompt)
     implementation(libs.play.services.location)
     implementation(libs.s2.geometry)
     implementation(libs.shizuku.api)
