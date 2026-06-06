@@ -34,11 +34,9 @@ import com.google.firebase.ai.InferenceMode
 import com.google.firebase.ai.OnDeviceConfig
 import com.google.firebase.ai.OnDeviceModelStatus
 import com.google.firebase.ai.ai
-import com.google.firebase.ai.type.GenerativeBackend
 import com.google.firebase.ai.type.PublicPreviewAPI
-import com.google.firebase.ai.type.QuotaExceededException
-import com.google.firebase.ai.type.Schema
 import com.google.firebase.ai.type.generationConfig
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -127,18 +125,8 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
             setRequestProperty("Sec-Fetch-Site", "none")
             setRequestProperty("Sec-Fetch-User", "?1")
         }
-        private val dailyWeatherGuessModelCloud by lazy {
-            Firebase.ai(backend = GenerativeBackend.googleAI()).generativeModel(
-                modelName = dailyWeatherGuessModelName,
-                generationConfig = generationConfig {
-                    responseMimeType = "text/x.enum"
-                    responseSchema = Schema.enumeration(aiGuessableConditionLabels)
-                    temperature = 0f
-                },
-            )
-        }
         private val dailyWeatherGuessModelOnDevice by lazy {
-            Firebase.ai(backend = GenerativeBackend.googleAI()).generativeModel(
+            Firebase.ai.generativeModel(
                 modelName = dailyWeatherGuessModelName,
                 generationConfig = generationConfig {
                     temperature = 0f
@@ -290,29 +278,17 @@ class AccuWeatherDialogFragment : AlertDialogFragment<AccuWeatherDialogFragment.
                             "AI daily weather guesses $onDeviceRaw (parsed label: $onDeviceLabel) via on-device from: $onDevicePrompt"
                         )
                         aiGuessableConditions[onDeviceLabel]?.let { return it }
-                        Timber.w(Exception("Falling back to cloud-only daily weather guess after unsupported on-device output: $onDeviceRaw"))
+                        Timber.w(Exception("Unsupported on-device daily weather guess output: $onDeviceRaw"))
                     }
                 } else {
-                    Timber.i("Falling back to cloud-only daily weather guess because the on-device model is unavailable")
+                    Timber.i("Skipping AI daily weather guess because the on-device model is unavailable")
                 }
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Exception) {
-                Timber.w(e, "Falling back to cloud-only daily weather guess after on-device failure")
+                Timber.w(e, "On-device AI daily weather guess failed")
             }
-            val cloudPrompt = "Classify this AccuWeather daily forecast HTML snippet. " +
-                "Choose the single best label based only on weather content.\n\n" +
-                normalizedContext
-            val cloudResponse = try {
-                dailyWeatherGuessModelCloud.generateContent(cloudPrompt)
-            } catch (e: QuotaExceededException) {
-                Timber.d(e.localizedMessage)
-                return null
-            } catch (e: Exception) {
-                Timber.w(e, "AI daily weather guess failed for $cloudPrompt")
-                return null
-            }
-            val cloudRaw = cloudResponse.text?.trim() ?: return null
-            Timber.d("AI daily weather guesses $cloudRaw via cloud from: $cloudPrompt")
-            return aiGuessableConditions[cloudRaw]
+            return null
         }
 
         suspend fun newInstance(cell: S2LatLng): AccuWeatherDialogFragment {
