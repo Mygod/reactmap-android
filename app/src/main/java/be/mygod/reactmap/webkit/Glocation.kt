@@ -63,7 +63,7 @@ class Glocation(private val web: WebView, private val fragment: BaseReactMapFrag
             if (availability.isLocationAvailable) return
             val ids = activeListeners.joinToString()
             web.evaluateJavascript(
-                "navigator.geolocation._watchPositionSuccess([$ids], { code: $POSITION_UNAVAILABLE }))", null)
+                "navigator.geolocation._watchPositionError([$ids], { code: $POSITION_UNAVAILABLE })", null)
         }
 
         override fun onLocationResult(result: LocationResult) {
