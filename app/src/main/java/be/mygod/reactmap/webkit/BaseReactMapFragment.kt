@@ -323,17 +323,11 @@ abstract class BaseReactMapFragment : Fragment(), DownloadListener {
     private fun handleSettings(request: WebResourceRequest) = buildResponse(request) { reader ->
         val response = reader.readText()
         try {
-            val config = JSONObject(response)
-            onConfigAvailable(config)
-            val mapConfig = config.getJSONObject("map")
-            if (mapConfig.optJSONArray("holidayEffects")?.length() != 0) {
-                mapConfig.put("holidayEffects", JSONArray())
-                config.toString()
-            } else response
+            onConfigAvailable(JSONObject(response))
         } catch (e: JSONException) {
             Timber.w(e)
-            response
         }
+        response
     }
     private fun handleTranslation(request: WebResourceRequest) = buildResponse(request) { reader ->
         val response = reader.readText()
