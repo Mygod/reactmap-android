@@ -5,7 +5,9 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo
-import android.icu.text.DecimalFormat
+import android.icu.text.MeasureFormat
+import android.icu.util.Measure
+import android.icu.util.MeasureUnit
 import android.location.Location
 import android.text.format.DateUtils
 import androidx.work.CoroutineWorker
@@ -54,25 +56,34 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
             }.build())
         }
 
-        private val secondFormat = DecimalFormat(".###")
         private fun formatTimeSpanFrom(from: Long): String {
-            var t = (System.currentTimeMillis() - from) * .001
-            if (t < 60) return "${secondFormat.format(t)}s"
-            if (t < 60 * 60) {
-                val s = (t % 60).toInt()
-                if (s == 0) return "${t.toInt()}m"
-                return "${(t / 60).toInt()}m ${s}s"
+            val formatter = MeasureFormat.getInstance(
+                app.resources.configuration.locales[0],
+                MeasureFormat.FormatWidth.NUMERIC,
+            )
+            var remaining = (System.currentTimeMillis() - from).coerceAtLeast(0)
+            val measures = ArrayList<Measure>(2)
+            val units = arrayOf(
+                86_400_000L to MeasureUnit.DAY,
+                3_600_000L to MeasureUnit.HOUR,
+                60_000L to MeasureUnit.MINUTE,
+                1_000L to MeasureUnit.SECOND,
+                1L to MeasureUnit.MILLISECOND,
+            )
+            for (i in units.indices) {
+                val (unitMillis, unit) = units[i]
+                val count = remaining / unitMillis
+                if (count <= 0) continue
+                measures += Measure(count, unit)
+                remaining %= unitMillis
+                units.getOrNull(i + 1)?.let { (nextUnitMillis, nextUnit) ->
+                    val nextCount = remaining / nextUnitMillis
+                    if (nextCount > 0) measures += Measure(nextCount, nextUnit)
+                }
+                break
             }
-            t /= 60
-            if (t < 24 * 60) {
-                val m = (t % 60).toInt()
-                if (m == 0) return "${t.toInt()}h"
-                return "${(t / 60).toInt()}h ${m}m"
-            }
-            t /= 60
-            val h = (t % 24).toInt()
-            if (h == 0) return "${t.toInt()}d"
-            return "${(t / 24).toInt()}d ${h}h"
+            if (measures.isEmpty()) measures += Measure(0, MeasureUnit.MILLISECOND)
+            return formatter.formatMeasures(*measures.toTypedArray())
         }
     }
 
