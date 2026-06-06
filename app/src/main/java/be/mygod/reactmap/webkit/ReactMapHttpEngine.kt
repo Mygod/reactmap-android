@@ -131,9 +131,10 @@ object ReactMapHttpEngine {
     fun detectBrotliError(conn: HttpURLConnection): String? {
         val path = conn.headerLocation
         if (path.startsWith("/error/")) return Uri.decode(path.substring(7)).also {
-            if (conn.url.host == app.activeUrl.toUri().host && it == "unsupported content encoding \"br\"") app.pref.edit { putBoolean(KEY_BROTLI, false) }
+            if (conn.url.host == app.activeUrl.toUri().host && it == "unsupported content encoding \"br\"") {
+                app.pref.edit { putBoolean(KEY_BROTLI, false) }
+            } else Timber.w(Exception(path))
         }
-        Timber.w(Exception(path))
         return path
     }
 }
