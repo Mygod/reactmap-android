@@ -145,7 +145,7 @@ class LocationSetter(appContext: Context, workerParams: WorkerParameters) : Coro
         val logMessage = if (statusCode == 200) response else "$statusCode $response"
         return if (errors.disposition != ErrorDisposition.RETRY_LOG_ONLY) Result.retry().also {
             when (statusCode) {
-                404, 500, 502, 520, 522, 523, 530 -> Timber.d(logMessage)
+                404, 500, 502, 503, 520, 522, 523, 530 -> Timber.d(logMessage)
                 else -> Timber.w(Exception(logMessage))
             }
         } else Result.retry().also { Timber.w(logMessage) }
