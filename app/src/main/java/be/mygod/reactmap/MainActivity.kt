@@ -3,14 +3,18 @@ package be.mygod.reactmap
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Configuration
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.view.WindowManager
 import android.webkit.WebView
+import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.core.content.res.use
+import androidx.core.view.WindowCompat
 import androidx.fragment.app.commit
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
@@ -46,10 +50,21 @@ class MainActivity : AppCompatActivity(), Shizuku.OnRequestPermissionResultListe
         }
     }
 
+    var statusBarBackgroundIsDark: Boolean? = null
+        set(value) {
+            field = value
+            if (value != null) {
+                WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = !value
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        enableEdgeToEdge()
+        enableEdgeToEdge(statusBarStyle = SystemBarStyle.auto(Color.TRANSPARENT, Color.TRANSPARENT) { resources ->
+            statusBarBackgroundIsDark ?: (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK ==
+                    Configuration.UI_MODE_NIGHT_YES)
+        })
         if (BuildConfig.DEBUG) WebView.setWebContentsDebuggingEnabled(true)
         setContentView(R.layout.layout_main)
         if (savedInstanceState == null) {

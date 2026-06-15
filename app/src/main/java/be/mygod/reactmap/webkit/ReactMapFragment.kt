@@ -9,7 +9,6 @@ import android.webkit.WebChromeClient.FileChooserParams
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
-import androidx.core.view.WindowCompat
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.lifecycleScope
 import be.mygod.reactmap.App.Companion.app
@@ -39,7 +38,6 @@ class ReactMapFragment : BaseReactMapFragment() {
 
     private lateinit var siteController: SiteController
     private val mainActivity by lazy { activity as MainActivity }
-    private val windowInsetsController by lazy { WindowCompat.getInsetsController(mainActivity.window, web) }
 
     private val requestLocation = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
@@ -122,9 +120,9 @@ class ReactMapFragment : BaseReactMapFragment() {
         lifecycleScope.launch {
             web.evaluateJavascript("JSON.parse(localStorage.getItem('local-state')).state.settings.tileServers") {
                 val name = JSONTokener(it).nextValue() as? String
-                windowInsetsController.isAppearanceLightStatusBars =
-                    (tileServers.length() - 1 downTo 0).asSequence().map { i -> tileServers.getJSONObject(i) }
-                        .firstOrNull { obj -> obj.getString("name") == name }?.optString("style") != "dark"
+                mainActivity.statusBarBackgroundIsDark = (tileServers.length() - 1 downTo 0).asSequence()
+                    .map { i -> tileServers.getJSONObject(i) }
+                    .firstOrNull { obj -> obj.getString("name") == name }?.optString("style") == "dark"
             }
         }
     }
