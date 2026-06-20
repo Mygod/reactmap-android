@@ -30,5 +30,5 @@ work = "androidx.work:work-runtime:2.11.2"
 [plugins]
 androidApplication = "com.android.application:9.2.1"
 firebaseCrashlytics = "com.google.firebase.crashlytics:3.0.7"
-googleServices = "com.google.gms.google-services:4.4.4"
+googleServices = "com.google.gms.google-services:4.5.0"
 gradleVersions = "com.github.ben-manes.versions:0.54.0"
